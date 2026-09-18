@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#000000">
+    <title>ملوك التنجيد | Muluk QMS</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-box {
+            width: 92%;
+            max-width: 420px;
+            background: white;
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.12);
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 34px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .system-name {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 18px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: #111827;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        #message {
+            margin-top: 18px;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-box">
+
+    <div class="logo">ملوك التنجيد</div>
+
+    <div class="system-name">
+        Muluk QMS
+        <br>
+        نظام إدارة ملوك التنجيد
+    </div>
+
+    <form id="loginForm">
+
+        <label>اسم المستخدم</label>
+        <input
+            type="text"
+            id="username"
+            placeholder="أدخل اسم المستخدم"
+            required
+        >
+
+        <label>كلمة المرور</label>
+        <input
+            type="password"
+            id="password"
+            placeholder="أدخل كلمة المرور"
+            required
+        >
+
+        <button type="submit">
+            تسجيل الدخول
+        </button>
+
+    </form>
+
+    <div id="message"></div>
+
+</div>
+
+<script>
+document.getElementById('loginForm').addEventListener('submit', async function(e) {
+
+    e.preventDefault();
+
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const message = document.getElementById('message');
+
+    message.textContent = 'جاري تسجيل الدخول...';
+
+    try {
+
+        const response = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+
+            if (data.token) {
+                localStorage.setItem('token', data.token);
+            }
+
+            message.textContent = 'تم تسجيل الدخول بنجاح';
+            setTimeout(() => {
+                window.location.href = '/dashboard.html';
+            }, 300);
+
+        } else {
+
+            message.textContent =
+                data.message || 'اسم المستخدم أو كلمة المرور غير صحيحة';
+
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        message.textContent =
+            'تعذر الاتصال بالخادم';
+
+    }
+
+});
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+            .catch(err => console.error('Service Worker:', err));
+    });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الفروع - ملوك التنجيد</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f6f8;
+    color: #222;
+}
+
+header {
+    background: #111;
+    color: white;
+    padding: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.back {
+    color: white;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+.container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+button {
+    border: 0;
+    border-radius: 8px;
+    padding: 11px 18px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.primary {
+    background: #111;
+    color: white;
+}
+
+.message {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,.05);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+th,
+td {
+    padding: 13px 10px;
+    border-bottom: 1px solid #eee;
+    text-align: right;
+}
+
+th {
+    background: #f0f0f0;
+}
+
+.status {
+    font-weight: bold;
+}
+
+@media (max-width: 700px) {
+    .container {
+        padding: 10px;
+    }
+
+    table {
+        font-size: 13px;
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    th,
+    td {
+        padding: 9px 6px;
+    }
+}
+
+/* ===== الهوية الموحدة - الفروع ===== */
+
+.unified-header {
+    background: linear-gradient(135deg, #17365f, #285c9f);
+    color: white;
+    padding: 14px 18px;
+    border-radius: 0 0 24px 24px;
+    box-shadow: 0 5px 20px rgba(0,0,0,.12);
+}
+
+.unified-header-inner {
+    max-width: 1250px;
+    min-height: 72px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 20px;
+}
+
+.unified-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.unified-logo {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    background: white;
+    padding: 3px;
+    border-radius: 13px;
+}
+
+.unified-brand h1 {
+    margin: 0 0 4px;
+    font-size: 22px;
+    color: white;
+}
+
+.unified-brand p {
+    margin: 0;
+    color: rgba(255,255,255,.82);
+    font-size: 13px;
+}
+
+.unified-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-self: start;
+}
+
+.unified-user small {
+    display: block;
+    opacity: .75;
+    margin-bottom: 3px;
+}
+
+.unified-user strong {
+    font-size: 14px;
+}
+
+.unified-user-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+    background: rgba(255,255,255,.14);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.unified-back {
+    justify-self: end;
+    border: 1px solid rgba(255,255,255,.25);
+    background: rgba(255,255,255,.12);
+    color: white;
+    border-radius: 12px;
+    padding: 11px 16px;
+    cursor: pointer;
+    font: inherit;
+    font-weight: bold;
+}
+
+@media (max-width:650px) {
+    .unified-header {
+        padding: 10px 12px;
+    }
+
+    .unified-header-inner {
+        min-height: 62px;
+        grid-template-columns: auto 1fr auto;
+        gap: 8px;
+    }
+
+    .unified-user {
+        display: none;
+    }
+
+    .unified-logo {
+        width: 50px;
+        height: 50px;
+    }
+
+    .unified-brand {
+        justify-content: flex-start;
+        gap: 7px;
+    }
+
+    .unified-brand h1 {
+        font-size: 18px;
+    }
+
+    .unified-brand p {
+        font-size: 11px;
+    }
+
+    .unified-back {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="unified-header">
+    <div class="unified-header-inner">
+
+        <div class="unified-user">
+            <div class="unified-user-avatar">👤</div>
+            <div>
+                <small>مرحبًا</small>
+                <strong>إدارة الفروع</strong>
+            </div>
+        </div>
+
+        <div class="unified-brand">
+            <img src="/muluk-logo.jpg"
+                 alt="ملوك التنجيد"
+                 class="unified-logo">
+            <div>
+                <h1>ملوك التنجيد</h1>
+                <p>إدارة الفروع</p>
+            </div>
+        </div>
+
+        <button type="button"
+                class="unified-back"
+                onclick="window.location.href='/dashboard.html'">
+            ← الرئيسية
+        </button>
+
+    </div>
+</header>
+
+<div class="container">
+
+    <div class="toolbar">
+        <button class="primary" onclick="loadBranches()">
+            🔄 تحديث
+        </button>
+        <button class="primary" onclick="showAddBranch()">
+            ➕ إضافة فرع
+        </button>
+    </div>
+
+    <div id="content" class="message">
+        جاري تحميل الفروع...
+    </div>
+
+</div>
+
+
+<div id="addBranchBox" style="display:none; margin:20px 0; padding:20px; border:1px solid #ddd; border-radius:12px;">
+    <h2>➕ إضافة فرع جديد</h2>
+
+    <input id="branchCode" type="text" placeholder="كود الفرع">
+    <input id="branchName" type="text" placeholder="اسم الفرع">
+    <input id="branchAddress" type="text" placeholder="العنوان">
+    <input id="branchPhone" type="text" placeholder="رقم الهاتف">
+
+    <select id="branchStatus">
+        <option value="ACTIVE">نشط</option>
+        <option value="INACTIVE">غير نشط</option>
+    </select>
+
+    <br><br>
+
+    <button class="primary" onclick="saveBranchForm()">💾 حفظ</button>
+    <button onclick="hideAddBranch()">❌ إلغاء</button>
+</div>
+
+<script>
+function showAddBranch() {
+    document.getElementById('addBranchBox').style.display = 'block';
+}
+
+function hideAddBranch() {
+    document.getElementById('addBranchBox').style.display = 'none';
+}
+</script>
+\n<script>
+
+
+
+let editingBranchId = null;
+
+async function editBranch(id) {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        alert('انتهت جلسة تسجيل الدخول، يرجى تسجيل الدخول مرة أخرى.');
+        window.location.href = '/';
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/branches/' + id, {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            alert('❌ ' + (data.message || 'تعذر تحميل بيانات الفرع'));
+            return;
+        }
+
+        const branch = data.branch;
+
+        editingBranchId = id;
+
+        document.getElementById('branchCode').value = branch.branch_code || '';
+        document.getElementById('branchName').value = branch.branch_name || '';
+        document.getElementById('branchAddress').value = branch.address || '';
+        document.getElementById('branchPhone').value = branch.phone || '';
+        document.getElementById('branchStatus').value = branch.status || 'ACTIVE';
+
+        document.getElementById('addBranchBox').style.display = 'block';
+
+        const title = document.querySelector('#addBranchBox h2');
+        if (title) title.textContent = '✏️ تعديل بيانات الفرع';
+
+        const saveButton = document.querySelector('#addBranchBox button.primary');
+        if (saveButton) saveButton.textContent = '💾 حفظ التعديل';
+
+    } catch (error) {
+        console.error('Edit branch error:', error);
+        alert('❌ تعذر الاتصال بالخادم');
+    }
+}
+
+async function saveBranchForm() {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        alert('انتهت جلسة تسجيل الدخول، يرجى تسجيل الدخول مرة أخرى.');
+        window.location.href = '/';
+        return;
+    }
+
+    const branch_code = document.getElementById('branchCode').value.trim();
+    const branch_name = document.getElementById('branchName').value.trim();
+    const address = document.getElementById('branchAddress').value.trim();
+    const phone = document.getElementById('branchPhone').value.trim();
+    const status = document.getElementById('branchStatus').value;
+
+    if (!branch_code || !branch_name) {
+        alert('يرجى إدخال كود الفرع واسم الفرع.');
+        return;
+    }
+
+    try {
+        const url = editingBranchId
+            ? '/api/branches/' + editingBranchId
+            : '/api/branches';
+
+        const response = await fetch(url, {
+            method: editingBranchId ? 'PATCH' : 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({
+                branch_code,
+                branch_name,
+                address,
+                phone,
+                status
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert('❌ ' + (data.message || 'تعذر إضافة الفرع'));
+            return;
+        }
+
+        alert(editingBranchId
+            ? '✅ تم تعديل الفرع بنجاح'
+            : '✅ تم إضافة الفرع بنجاح');
+
+        editingBranchId = null;
+
+        document.getElementById('branchCode').value = '';
+        document.getElementById('branchName').value = '';
+        document.getElementById('branchAddress').value = '';
+        document.getElementById('branchPhone').value = '';
+        document.getElementById('branchStatus').value = 'ACTIVE';
+
+        const title = document.querySelector('#addBranchBox h2');
+        if (title) title.textContent = '➕ إضافة فرع جديد';
+
+        const saveButton = document.querySelector('#addBranchBox button.primary');
+        if (saveButton) saveButton.textContent = '💾 حفظ';
+
+        hideAddBranch();
+        loadBranches();
+
+    } catch (error) {
+        console.error('Save branch error:', error);
+        alert('❌ تعذر الاتصال بالخادم');
+    }
+}
+
+async function loadBranches() {
+
+    const token = localStorage.getItem('token');
+    const content = document.getElementById('content');
+
+    if (!token) {
+        window.location.href = '/login.html';
+        return;
+    }
+
+    try {
+
+        const res = await fetch('/api/branches', {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            content.innerHTML =
+                '❌ ' + (data.message || 'تعذر تحميل الفروع');
+            return;
+        }
+
+        const rows = data.branches || [];
+
+        if (rows.length === 0) {
+            content.innerHTML =
+                'لا توجد فروع مسجلة حاليًا.';
+            return;
+        }
+
+        let html = `
+            <table>
+                <thead>
+                    <tr>
+                        <th>الكود</th>
+                        <th>اسم الفرع</th>
+                        <th>العنوان</th>
+                        <th>الهاتف</th>
+                        <th>الحالة</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        rows.forEach(branch => {
+
+            const status =
+                branch.status === 'ACTIVE'
+                    ? '🟢 نشط'
+                    : '🔴 غير نشط';
+
+            html += `
+                <tr>
+                    <td>${branch.branch_code || ''}</td>
+                    <td>${branch.branch_name || ''}</td>
+                    <td>${branch.address || ''}</td>
+                    <td>${branch.phone || '—'}</td>
+                    <td class="status">${status}</td>
+                    <td>
+                        <button onclick="editBranch(${branch.branch_id})">
+                            ✏️ تعديل
+                        </button>
+                    </td>
+                </tr>
+            `;
+        });
+
+        html += `
+                </tbody>
+            </table>
+        `;
+
+        content.innerHTML = html;
+
+    } catch (error) {
+
+        console.error(error);
+
+        content.innerHTML =
+            '❌ حدث خطأ أثناء الاتصال بالخادم';
+    }
+}
+
+loadBranches();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>سند قبض</title>
+
+<style>
+*{box-sizing:border-box}
+
+html,body{
+    margin:0;
+    padding:0;
+    background:#e5e7eb;
+    font-family:Arial,Tahoma,sans-serif;
+}
+
+.preview{
+    width:1536px;
+    height:1024px;
+    position:relative;
+    margin:20px auto;
+    background:#fff url('/Mloktangeed.png') center center / 100% 100% no-repeat;
+    overflow:hidden;
+}
+
+.field{
+    position:absolute;
+    color:#111;
+    font-weight:700;
+    text-align:center;
+    white-space:nowrap;
+}
+
+/* بيانات رأس السند */
+.receipt-no{
+    left:55px;
+    top:325px;
+    width:330px;
+}
+
+.receipt-date{
+    left:1160px;
+    top:325px;
+    width:300px;
+}
+
+.customer-name{
+    left:1010px;
+    top:325px;
+    width:150px;
+}
+
+/* بيانات المبلغ */
+.amount-number{
+    left:1120px;
+    top:575px;
+    width:300px;
+    font-size:24px;
+}
+
+.amount-text{
+    left:400px;
+    top:220px;
+    width:620px;
+    font-size:18px;
+}
+
+/* البيانات الرئيسية */
+.from-name{
+    left:120px;
+    top:423px;
+    width:680px;
+}
+
+.amount-words{
+    left:120px;
+    top:477px;
+    width:680px;
+}
+
+.purpose{
+    left:120px;
+    top:531px;
+    width:680px;
+}
+
+.work-order{
+    left:500px;
+    top:632px;
+    width:300px;
+}
+
+.due-date{
+    left:70px;
+    top:632px;
+    width:300px;
+}
+
+/* المبالغ */
+.total{
+    left:1050px;
+    top:690px;
+    width:300px;
+}
+
+.paid{
+    left:650px;
+    top:690px;
+    width:300px;
+}
+
+.balance{
+    left:300px;
+    top:690px;
+    width:300px;
+}
+
+/* الملاحظات */
+.notes{
+    left:120px;
+    top:710px;
+    width:760px;
+    white-space:normal;
+    line-height:1.7;
+}
+
+/* التوقيعات */
+.cashier{
+    position:absolute;
+    left:105px;
+    bottom:115px;
+    width:300px;
+    text-align:center;
+    font-weight:700;
+}
+
+.receiver{
+    position:absolute;
+    right:300px;
+    bottom:115px;
+    width:300px;
+    text-align:center;
+    font-weight:700;
+}
+
+@media print{
+    @page{
+        size:auto;
+        margin:0;
+    }
+
+    html,body{
+        width:1536px;
+        height:1024px;
+        margin:0;
+        padding:0;
+        background:#fff;
+    }
+
+    .preview{
+        width:1536px;
+        height:1024px;
+        margin:0;
+        page-break-after:avoid;
+    }
+}
+
+@media(max-width:800px){
+    body{
+        overflow-x:auto;
+    }
+
+    .preview{
+        margin:0;
+        transform-origin:top left;
+        transform:scale(calc(100vw / 1536));
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="preview">
+
+    <div class="field receipt-no">MK-RC-2026-000001</div>
+    <div class="field receipt-date">14/09/2026</div>
+    <div class="field customer-name">محمد الشامي</div>
+
+    <div class="field amount-number">10,000</div>
+
+    <div class="field from-name">محمد الشامي</div>
+    <div class="field amount-words">عشرة آلاف ريال فقط</div>
+    <div class="field purpose">دفعة من قيمة أمر التشغيل</div>
+
+    <div class="field work-order">MK-WO-2026-000016</div>
+    <div class="field due-date">14 / 09 / 2026</div>
+
+    <div class="field notes">دفعة نقدية</div>
+
+    <div class="cashier">مدير النظام</div>
+    <div class="receiver">محمد الشامي</div>
+
+</div>
+    <div class="field receipt-date">14/09/2026</div>
+
+    <div class="field customer-name">اسم العميل</div>
+    <div class="field customer-phone">رقم الهاتف</div>
+
+    <div class="field amount-number">10,000 ريال</div>
+    <div class="field amount-text">عشرة آلاف ريال فقط</div>
+
+    <div class="field work-order">MK-WO-2026-000016</div>
+    <div class="field payment-method">نقدي</div>
+
+    <div class="field total">20,000 ريال</div>
+    <div class="field paid">20,000 ريال</div>
+    <div class="field balance">0 ريال</div>
+
+    <div class="field notes">ملاحظات السند</div>
+
+    <div class="cashier">المستلم</div>
+    <div class="receiver">العميل</div>
+
+</div>
+
+</body>
+</html>

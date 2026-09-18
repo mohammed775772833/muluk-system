@@ -1,0 +1,2677 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاصيل أمر العمل</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f6f8;
+            color: #222;
+        }
+
+        header {
+            background: #111827;
+            color: white;
+            padding: 18px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .back {
+            text-decoration: none;
+            color: #111827;
+            font-weight: bold;
+        }
+
+        button {
+            border: 0;
+            border-radius: 8px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .primary {
+            background: #111827;
+            color: white;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 18px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.06);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            font-size: 18px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .item {
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .label {
+            color: #6b7280;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .value {
+            font-weight: bold;
+        }
+
+        .money {
+            font-size: 18px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: #e5e7eb;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: right;
+        }
+
+        th {
+            background: #f9fafb;
+        }
+
+        .message {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            th, td {
+                font-size: 13px;
+                padding: 8px 5px;
+            }
+        }
+    
+/* ===== الشعار الرسمي - تفاصيل أمر العمل ===== */
+.details-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    border-radius: 18px;
+    background: white;
+    padding: 3px;
+}
+
+</style>
+
+<style id="luxury-details-ui">
+:root{
+    --gold:#c8a951;
+    --gold-soft:#f5efdc;
+    --dark:#111;
+    --text:#222;
+    --muted:#777;
+    --line:#e8e8e8;
+    --card:#fff;
+    --bg:#f4f3f0;
+}
+body{
+    background:var(--bg)!important;
+    color:var(--text);
+    direction:rtl;
+}
+.page,.container,.content{
+    max-width:1450px;
+    margin:auto;
+}
+.luxury-header{
+    position:relative;
+    overflow:hidden;
+    margin:18px auto 22px;
+    padding:28px;
+    border-radius:28px;
+    color:#fff;
+    background:linear-gradient(135deg,#080808,#1b1b1b 60%,#292313);
+    box-shadow:0 18px 50px rgba(0,0,0,.16);
+}
+.luxury-header:before,
+.luxury-header:after{
+    content:"";
+    position:absolute;
+    border:1px solid rgba(200,169,81,.22);
+    border-radius:50%;
+}
+.luxury-header:before{
+    width:400px;height:400px;
+    left:-180px;top:-260px;
+}
+.luxury-header:after{
+    width:300px;height:300px;
+    right:-130px;bottom:-230px;
+}
+.luxury-header-inner{
+    position:relative;
+    z-index:2;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+}
+.luxury-title{
+    display:flex;
+    align-items:center;
+    gap:16px;
+}
+.luxury-mark{
+    width:68px;height:68px;
+    display:grid;
+    place-items:center;
+    border-radius:20px;
+    font-size:32px;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(200,169,81,.35);
+}
+.luxury-header h1{
+    margin:0 0 7px;
+    font-size:30px;
+}
+.luxury-header p{
+    margin:0;
+    color:#cfcfcf;
+    font-size:14px;
+}
+.luxury-back{
+    border:1px solid rgba(255,255,255,.16);
+    background:rgba(255,255,255,.07);
+    color:#fff;
+    border-radius:14px;
+    padding:12px 18px;
+    cursor:pointer;
+}
+.luxury-section{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:24px;
+    padding:22px;
+    margin-bottom:18px;
+    box-shadow:0 9px 30px rgba(0,0,0,.055);
+}
+.luxury-section h2{
+    margin:0 0 18px;
+    font-size:20px;
+}
+.luxury-section h3{
+    margin-top:20px;
+}
+.luxury-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+}
+.luxury-info{
+    background:#fafafa;
+    border:1px solid #eee;
+    border-radius:16px;
+    padding:15px;
+}
+.luxury-info small{
+    display:block;
+    color:var(--muted);
+    font-size:11px;
+    margin-bottom:6px;
+}
+.luxury-info strong{
+    font-size:14px;
+}
+.luxury-status{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    border-radius:999px;
+    padding:8px 13px;
+    background:var(--gold-soft);
+    color:#66531b;
+    font-size:12px;
+    font-weight:bold;
+}
+#content{
+    min-height:40px;
+}
+@media(max-width:900px){
+    .luxury-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:600px){
+    .luxury-header{
+        margin:10px 10px 16px;
+        padding:22px 18px;
+        border-radius:22px;
+    }
+    .luxury-header-inner{
+        align-items:flex-start;
+    }
+    .luxury-header h1{font-size:23px}
+    .luxury-mark{
+        width:56px;height:56px;
+        font-size:27px;
+    }
+    .luxury-back{
+        padding:10px 12px;
+        font-size:12px;
+    }
+    .luxury-section{
+        margin:0 10px 14px;
+        padding:17px;
+        border-radius:20px;
+    }
+    .luxury-grid{
+        grid-template-columns:1fr 1fr;
+        gap:9px;
+    }
+}
+</style>
+
+
+<style id="muluk-work-order-redesign">
+/* ===== Muluk Work Order - Unified Luxury Design ===== */
+
+body {
+    background: #f5f4f1 !important;
+}
+
+.card,
+.luxury-section {
+    border-radius: 22px !important;
+    border: 1px solid #ece9e2 !important;
+    box-shadow: 0 8px 28px rgba(0,0,0,.06) !important;
+    margin-bottom: 22px !important;
+    overflow: hidden;
+}
+
+.card h2,
+.luxury-section h2 {
+    font-size: 23px !important;
+    font-weight: 800 !important;
+    margin-bottom: 22px !important;
+}
+
+.grid {
+    gap: 14px !important;
+}
+
+.item {
+    background: #f8f8f9 !important;
+    border: 1px solid #eeeeef !important;
+    border-radius: 16px !important;
+    padding: 17px !important;
+    transition: .2s ease;
+}
+
+.item:hover {
+    transform: translateY(-1px);
+}
+
+.label {
+    font-size: 13px !important;
+    color: #777 !important;
+    margin-bottom: 7px !important;
+}
+
+.value {
+    font-size: 18px !important;
+    font-weight: 750 !important;
+    line-height: 1.6 !important;
+}
+
+.work-order-hero {
+    padding: 28px 22px !important;
+    background: linear-gradient(145deg,#ffffff,#faf9f7) !important;
+}
+
+.work-order-hero .status {
+    font-weight: 800 !important;
+    padding: 9px 18px !important;
+    border-radius: 22px !important;
+}
+
+.customer-card {
+    padding: 24px 20px !important;
+}
+
+.customer-card h2 {
+    margin-bottom: 8px !important;
+}
+
+.workflow-card {
+    padding: 24px 20px !important;
+}
+
+.workflow-header {
+    padding-bottom: 18px !important;
+    border-bottom: 1px solid #eee !important;
+}
+
+.workflow-header p {
+    color: #888 !important;
+    margin-top: 6px !important;
+}
+
+.luxury-status {
+    border-radius: 18px !important;
+    padding: 8px 14px !important;
+    font-weight: 700 !important;
+}
+
+button,
+.primary {
+    border-radius: 14px !important;
+    min-height: 46px;
+    font-weight: 700 !important;
+}
+
+textarea,
+input,
+select {
+    border-radius: 13px !important;
+    border: 1px solid #ddd !important;
+}
+
+textarea:focus,
+input:focus,
+select:focus {
+    outline: none !important;
+    border-color: #999 !important;
+}
+
+@media (max-width: 700px) {
+    .card,
+    .luxury-section {
+        border-radius: 20px !important;
+        margin-left: 8px !important;
+        margin-right: 8px !important;
+    }
+
+    .card h2,
+    .luxury-section h2 {
+        font-size: 21px !important;
+    }
+
+    .item {
+        padding: 15px !important;
+    }
+
+    .value {
+        font-size: 17px !important;
+    }
+
+    .work-order-hero {
+        padding: 24px 17px !important;
+    }
+
+    .work-order-hero > div > div:nth-child(2) {
+        font-size: 24px !important;
+        word-break: break-word;
+    }
+
+    .workflow-card {
+        padding: 20px 15px !important;
+    }
+}
+</style>
+
+</head>
+
+<body onload="loadDetails()">
+<div class="luxury-header">
+    <div class="luxury-header-inner">
+        <div class="luxury-title">
+            <div class="luxury-mark">
+    <img src="/muluk-logo.jpg"
+         alt="ملوك التنجيد"
+         class="details-logo">
+</div>
+            <div>
+                <h1>تفاصيل أمر العمل</h1>
+                <p>عرض بيانات أمر العمل والحسابات والدفعات</p>
+            </div>
+        </div>
+        <button class="luxury-back" onclick="window.location.href='/work-orders.html'">
+            ← أوامر العمل
+        </button>
+    </div>
+</div>
+
+
+
+
+<div class="container">
+
+    <div class="topbar">
+        <a class="back" href="/work-orders.html">← العودة إلى أوامر العمل</a>
+        <button class="primary" onclick="loadDetails()">🔄 تحديث</button>
+    </div>
+
+    <div id="content">
+        <div class="message">جاري تحميل البيانات...</div>
+    </div>
+
+</div>
+
+<script>
+
+const token = localStorage.getItem('token');
+
+const params = new URLSearchParams(window.location.search);
+const workOrderId = params.get('id');
+
+const content = document.getElementById('content');
+
+function escapeHtml(value) {
+    return String(value ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+}
+
+async function api(url, options = {}) {
+
+    const response = await fetch(url, {
+        ...options,
+        headers: {
+            'Authorization': 'Bearer ' + token,
+            ...(options.headers || {})
+        }
+    });
+
+    if (response.status === 401) {
+        localStorage.removeItem('token');
+        window.location.href = '/index.html';
+        return null;
+    }
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+        throw new Error(data.message || 'تعذر تحميل البيانات');
+    }
+
+    return data;
+}
+
+async function loadDetails() {
+    if (!token) {
+        window.location.href = '/index.html';
+        return;
+    }
+
+    if (!workOrderId) {
+        content.innerHTML = `
+            <div class="message">
+                <strong>خطأ</strong>
+                <p>لم يتم تحديد رقم أمر العمل.</p>
+            </div>
+        `;
+        return;
+    }
+
+    content.innerHTML = `
+        <div class="message">جاري تحميل تفاصيل أمر العمل...</div>
+    `;
+
+    try {
+        const result = await api(
+            '/api/work-orders/' + encodeURIComponent(workOrderId)
+        );
+
+        if (!result || !result.work_order) {
+            throw new Error('لم يتم العثور على أمر العمل');
+        }
+
+        const order = result.work_order;
+
+        window.currentWorkOrder = order;
+        window.currentOrder = order;
+
+        // تحميل مراحل أمر العمل
+        let workOrderStages = [];
+
+        try {
+            const stagesResult = await api(
+                '/api/work-orders/' +
+                encodeURIComponent(workOrderId) +
+                '/stages'
+            );
+
+            workOrderStages = stagesResult.stages || [];
+        } catch (stageError) {
+            console.warn(
+                'تعذر تحميل مراحل أمر العمل:',
+                stageError
+            );
+        }
+
+        window.currentWorkOrderStages = workOrderStages;
+
+
+        const statusText = {
+            NEW: 'جديد',
+            INSPECTION: 'قيد الفحص',
+            WAITING_CUSTOMER_APPROVAL: 'بانتظار موافقة العميل',
+            APPROVED: 'معتمد',
+            IN_PROGRESS: 'قيد التنفيذ',
+            QUALITY_CHECK: 'فحص الجودة',
+            CORRECTION_REQUIRED: 'يحتاج تصحيح',
+            READY_FOR_DELIVERY: 'جاهز للتسليم',
+            DELIVERED: 'تم التسليم',
+            CLOSED: 'مغلق',
+            CANCELLED: 'ملغي'
+        }[order.status] || order.status || 'غير محدد';
+
+        const priorityText = {
+            URGENT: 'عاجل',
+            HIGH: 'مرتفع',
+            NORMAL: 'عادي',
+            LOW: 'منخفض'
+        }[order.priority] || order.priority || 'غير محدد';
+
+        let html = `
+            <div class="card work-order-hero">
+                <div style="text-align:center;">
+                    <div style="font-size:14px;color:#777;margin-bottom:8px;">
+                        📋 أمر العمل
+                    </div>
+
+                    <div style="font-size:28px;font-weight:800;letter-spacing:.5px;margin-bottom:16px;">
+                        ${escapeHtml(order.work_order_no)}
+                    </div>
+
+                    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+                        <span class="status">
+                            ${escapeHtml(statusText)}
+                        </span>
+
+                        <span style="padding:8px 16px;border-radius:20px;background:#f1f1f1;font-weight:700;">
+                            ${escapeHtml(priorityText)}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>👤 العميل</h2>
+
+                <div class="grid">
+                    <div class="item">
+                        <div class="label">اسم العميل</div>
+                        <div class="value">
+                            ${escapeHtml(order.customer_name || '—')}
+                        </div>
+                    </div>
+
+                    <div class="item">
+                        <div class="label">رقم العميل</div>
+                        <div class="value">
+                            ${escapeHtml(order.customer_no || '—')}
+                        </div>
+                    </div>
+
+                    <div class="item">
+                        <div class="label">رقم الهاتف</div>
+                        <div class="value">
+                            ${escapeHtml(order.customer_phone || '—')}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🚗 السيارة</h2>
+
+                <div class="grid">
+                    <div class="item">
+                        <div class="label">السيارة</div>
+                        <div class="value">
+                            ${escapeHtml(
+                                [order.make, order.model]
+                                    .filter(Boolean)
+                                    .join(' ') || '—'
+                            )}
+                        </div>
+                    </div>
+
+                    <div class="item">
+                        <div class="label">سنة الموديل</div>
+                        <div class="value">
+                            ${escapeHtml(order.model_year || '—')}
+                        </div>
+                    </div>
+
+                    <div class="item">
+                        <div class="label">رقم اللوحة</div>
+                        <div class="value">
+                            ${escapeHtml(order.plate_no || '—')}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="workOrderReadyPlaceholder"></div>
+
+                    <div id="workOrderPaymentsPlaceholder"></div>
+        `;
+
+        content.innerHTML = html;
+
+        renderReadyForDeliveryButton();
+
+    } catch (error) {
+        console.error('Load work order details error:', error);
+
+        content.innerHTML = `
+            <div class="message">
+                <strong>تعذر تحميل أمر العمل</strong>
+                <p>${escapeHtml(error.message || 'حدث خطأ غير متوقع')}</p>
+            </div>
+        `;
+    }
+}
+
+
+function renderReadyForDeliveryButton() {
+    const placeholder = document.getElementById(
+        'workOrderReadyPlaceholder'
+    );
+
+    if (!placeholder) return;
+
+    const stages = window.currentWorkOrderStages || [];
+
+    const readyStage = stages.find(
+        stage => stage.stage_name === 'جاهز للتسليم'
+    );
+
+    if (!readyStage) {
+        placeholder.innerHTML = '';
+        return;
+    }
+
+    if (readyStage.status === 'COMPLETED') {
+        placeholder.innerHTML = `
+            <div class="card" style="margin-top:18px;">
+                <div style="text-align:center;">
+                    <div style="font-size:38px;">🚗</div>
+
+                    <h2 style="margin:8px 0;">
+                        جاهز للتسليم
+                    </h2>
+
+                    <p style="color:#777;">
+                        تم اعتماد العمل كجاهز للتسليم.
+                    </p>
+                </div>
+            </div>
+        `;
+        return;
+    }
+
+    placeholder.innerHTML = `
+        <div class="card" style="margin-top:18px;">
+            <div style="text-align:center;">
+
+                <div style="font-size:38px;">
+                    🚗
+                </div>
+
+                <h2 style="margin:8px 0;">
+                    اعتماد جاهزية العمل
+                </h2>
+
+                <p style="color:#777;margin:8px 0 18px;">
+                    بعد التأكد من اكتمال العمل والفحص النهائي،
+                    يمكنك اعتماد السيارة كجاهزة للتسليم.
+                </p>
+
+                <button
+                    class="primary"
+                    id="readyForDeliveryButton"
+                    onclick="markWorkOrderReadyForDelivery(${readyStage.stage_id})">
+                    ✅ العمل جاهز للتسليم
+                </button>
+
+            </div>
+        </div>
+    `;
+}
+
+
+async function markWorkOrderReadyForDelivery(stageId) {
+
+    const confirmed = confirm(
+        'هل تأكدت من اكتمال العمل والفحص النهائي؟\n\n' +
+        'سيتم اعتماد أمر العمل كـ "جاهز للتسليم".'
+    );
+
+    if (!confirmed) return;
+
+    const button = document.getElementById(
+        'readyForDeliveryButton'
+    );
+
+    if (button) {
+        button.disabled = true;
+        button.textContent =
+            '⏳ جاري اعتماد الجاهزية...';
+    }
+
+    try {
+
+        const result = await api(
+            '/api/work-orders/' +
+            encodeURIComponent(workOrderId) +
+            '/stages/' +
+            encodeURIComponent(stageId),
+            {
+                method: 'PATCH',
+
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+
+                body: JSON.stringify({
+                    status: 'COMPLETED'
+                })
+            }
+        );
+
+        if (!result || !result.success) {
+            throw new Error(
+                result?.message ||
+                'تعذر اعتماد جاهزية العمل'
+            );
+        }
+
+        alert(
+            '✅ تم اعتماد العمل كجاهز للتسليم بنجاح.'
+        );
+
+        await loadDetails();
+
+    } catch (error) {
+
+        console.error(
+            'Mark ready for delivery error:',
+            error
+        );
+
+        alert(
+            'تعذر اعتماد جاهزية العمل:\n' +
+            (error.message ||
+            'حدث خطأ غير متوقع')
+        );
+
+        if (button) {
+            button.disabled = false;
+            button.textContent =
+                '✅ العمل جاهز للتسليم';
+        }
+    }
+}
+
+
+async function createDesignApproval() {
+    const message = document.getElementById('approvalMessage');
+
+    const design_description =
+        document.getElementById('approval_design_description').value.trim();
+
+    const color_specification =
+        document.getElementById('approval_color_specification').value.trim();
+
+    const material_specification =
+        document.getElementById('approval_material_specification').value.trim();
+
+    const modification_description =
+        document.getElementById('approval_modification_description').value.trim();
+
+    if (!design_description || !color_specification || !material_specification) {
+        message.textContent = 'يرجى إدخال وصف التصميم واللون والخامة قبل إنشاء الاعتماد.';
+        message.style.color = '#b00020';
+        return;
+    }
+
+    message.textContent = 'جاري إنشاء الاعتماد...';
+    message.style.color = '';
+
+    try {
+        const result = await api(
+            '/api/work-orders/' + encodeURIComponent(workOrderId) + '/design-approvals',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    design_description,
+                    color_specification,
+                    material_specification,
+                    modification_description,
+                    design_file_url: null
+                })
+            }
+        );
+
+        if (!result.success) {
+            throw new Error(result.message || 'فشل إنشاء الاعتماد');
+        }
+
+        message.textContent =
+            '✅ تم إنشاء اعتماد التصميم بنجاح، وهو الآن بانتظار اعتماد العميل.';
+        message.style.color = 'green';
+
+        await loadDesignApprovalSection();
+
+    } catch (error) {
+        console.error('Create design approval error:', error);
+        message.textContent =
+            '❌ تعذر إنشاء الاعتماد: ' + (error.message || 'خطأ غير معروف');
+        message.style.color = '#b00020';
+    }
+}
+
+async function loadDesignApprovalSection() {
+    const current = document.getElementById('approvalCurrent');
+    const actions = document.getElementById('approvalActions');
+
+    if (!current || !actions) return;
+
+    try {
+        const result = await api(
+            '/api/work-orders/' + encodeURIComponent(workOrderId) + '/design-approvals'
+        );
+
+        const approvals = result.approvals || [];
+        const latest = approvals.length > 0 ? approvals[0] : null;
+
+        if (!latest) {
+            current.innerHTML = '<div>لا يوجد اعتماد حالي.</div>';
+            actions.innerHTML = '';
+            return;
+        }
+
+        current.innerHTML = `
+            <div style="padding:15px;border:1px solid #ddd;border-radius:10px;">
+                <strong>الإصدار رقم ${latest.version_no}</strong><br>
+                الحالة: ${latest.status}<br>
+                💰 السعر المعتمد: ${latest.approved_total_amount != null
+                    ? Number(latest.approved_total_amount).toLocaleString('ar-YE') + ' ريال'
+                    : 'غير محدد'}<br>
+                ${latest.approved_by_customer
+                    ? '✅ معتمد من العميل'
+                    : '⏳ بانتظار اعتماد العميل'}
+            </div>
+        `;
+
+        if (latest.status === 'PENDING') {
+            actions.innerHTML = `
+                <button class="primary" type="button"
+                    onclick="approveDesignApproval(${latest.approval_id})">
+                    ✅ اعتماد العميل
+                </button>
+
+                <button class="secondary" type="button"
+                    onclick="rejectDesignApproval(${latest.approval_id})"
+                    style="margin-right:8px;">
+                    ❌ رفض الاعتماد
+                </button>
+            `;
+        } else {
+            actions.innerHTML = '';
+        }
+
+    } catch (error) {
+        console.error('Load design approval section error:', error);
+        current.innerHTML = 'تعذر قراءة حالة الاعتماد.';
+    }
+}
+
+async function approveDesignApproval(approvalId) {
+    if (!confirm('هل تريد اعتماد التصميم والخامات والسعر؟')) return;
+
+    try {
+        const result = await api(
+            '/api/work-orders/' + encodeURIComponent(workOrderId) +
+            '/design-approvals/' + encodeURIComponent(approvalId),
+            {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    status: 'APPROVED'
+                })
+            }
+        );
+
+        if (!result.success) {
+            throw new Error(result.message || 'فشل اعتماد التصميم');
+        }
+
+        document.getElementById('approvalMessage').textContent =
+            '✅ تم اعتماد التصميم والخامات والسعر بنجاح.';
+
+        await loadDesignApprovalSection();
+        await loadWorkOrder();
+
+    } catch (error) {
+        console.error('Approve design error:', error);
+        document.getElementById('approvalMessage').textContent =
+            '❌ تعذر اعتماد التصميم: ' + (error.message || 'خطأ غير معروف');
+    }
+}
+
+async function rejectDesignApproval(approvalId) {
+    const reason = prompt('اكتب سبب رفض الاعتماد:');
+
+    if (!reason || !reason.trim()) return;
+
+    try {
+        const result = await api(
+            '/api/work-orders/' + encodeURIComponent(workOrderId) +
+            '/design-approvals/' + encodeURIComponent(approvalId),
+            {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    status: 'REJECTED',
+                    rejection_reason: reason.trim()
+                })
+            }
+        );
+
+        if (!result.success) {
+            throw new Error(result.message || 'فشل رفض الاعتماد');
+        }
+
+        document.getElementById('approvalMessage').textContent =
+            '⚠️ تم رفض الاعتماد وتسجيل سبب الرفض.';
+
+        await loadDesignApprovalSection();
+        await loadWorkOrder();
+
+    } catch (error) {
+        console.error('Reject design error:', error);
+        document.getElementById('approvalMessage').textContent =
+            '❌ تعذر رفض الاعتماد: ' + (error.message || 'خطأ غير معروف');
+    }
+}
+
+async function loadDeliverySection(order) {
+    const card = document.getElementById('deliveryCard');
+
+    if (!card) return;
+
+    if (order.status !== 'READY_FOR_DELIVERY') {
+        card.style.display = 'none';
+        return;
+    }
+
+    card.style.display = 'block';
+
+    const receiver = document.getElementById('delivery_receiver');
+
+    if (receiver && !receiver.value) {
+        receiver.value = order.customer_name || '';
+    }
+
+    initSignature();
+}
+
+let signatureCanvas = null;
+let signatureCtx = null;
+let drawing = false;
+let signatureHasDrawing = false;
+
+function initSignature() {
+    signatureCanvas = document.getElementById('signatureCanvas');
+
+    if (!signatureCanvas || signatureCanvas.dataset.ready === '1') return;
+
+    signatureCtx = signatureCanvas.getContext('2d');
+    signatureCtx.lineWidth = 3;
+    signatureCtx.lineCap = 'round';
+    signatureCtx.lineJoin = 'round';
+
+    function point(event) {
+        const rect = signatureCanvas.getBoundingClientRect();
+        const source = event.touches ? event.touches[0] : event;
+
+        return {
+            x: (source.clientX - rect.left) *
+               signatureCanvas.width / rect.width,
+            y: (source.clientY - rect.top) *
+               signatureCanvas.height / rect.height
+        };
+    }
+
+    function start(event) {
+        event.preventDefault();
+        drawing = true;
+        signatureHasDrawing = true;
+
+        const p = point(event);
+        signatureCtx.beginPath();
+        signatureCtx.moveTo(p.x, p.y);
+    }
+
+    function move(event) {
+        if (!drawing) return;
+
+        event.preventDefault();
+
+        const p = point(event);
+        signatureCtx.lineTo(p.x, p.y);
+        signatureCtx.stroke();
+    }
+
+    function end(event) {
+        if (event) event.preventDefault();
+        drawing = false;
+    }
+
+    signatureCanvas.addEventListener('mousedown', start);
+    signatureCanvas.addEventListener('mousemove', move);
+    signatureCanvas.addEventListener('mouseup', end);
+    signatureCanvas.addEventListener('mouseleave', end);
+
+    signatureCanvas.addEventListener('touchstart', start, {passive:false});
+    signatureCanvas.addEventListener('touchmove', move, {passive:false});
+    signatureCanvas.addEventListener('touchend', end, {passive:false});
+
+    signatureCanvas.dataset.ready = '1';
+}
+
+function clearSignature() {
+    if (!signatureCanvas || !signatureCtx) return;
+
+    signatureCtx.clearRect(
+        0,
+        0,
+        signatureCanvas.width,
+        signatureCanvas.height
+    );
+
+    signatureHasDrawing = false;
+}
+
+async function confirmDelivery() {
+    const receiver = document.getElementById('delivery_receiver');
+    const notes = document.getElementById('delivery_notes');
+    const agreement = document.getElementById('delivery_agreement');
+    const message = document.getElementById('deliveryMessage');
+
+    if (!receiver || !receiver.value.trim()) {
+        alert('يرجى إدخال اسم العميل المستلم.');
+        return;
+    }
+
+    if (!signatureHasDrawing) {
+        alert('يرجى تسجيل توقيع العميل.');
+        return;
+    }
+
+    if (!agreement || !agreement.checked) {
+        alert('يجب تأكيد إقرار استلام السيارة.');
+        return;
+    }
+
+    if (!confirm('هل تريد تأكيد تسليم السيارة للعميل؟')) {
+        return;
+    }
+
+    try {
+        message.textContent = 'جاري تسجيل التسليم...';
+
+        const signature =
+            signatureCanvas.toDataURL('image/png');
+
+        const result = await api(
+            '/api/work-orders/' +
+            encodeURIComponent(workOrderId) +
+            '/delivery',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    received_by_customer:
+                        receiver.value.trim(),
+
+                    customer_signature_url:
+                        signature,
+
+                    final_notes:
+                        notes ? notes.value.trim() : null
+                })
+            }
+        );
+
+        message.textContent =
+            '✅ تم تسليم السيارة بنجاح.';
+
+        await loadDetails();
+
+    } catch (error) {
+        console.error(error);
+
+        message.textContent =
+            '❌ ' + escapeHtml(error.message);
+    }
+}
+
+async function loadWarranty() {
+    const box = document.getElementById('warrantyContent');
+
+    if (!box || !workOrderId) {
+        return;
+    }
+
+    try {
+        const result = await api(
+            '/api/work-orders/' + encodeURIComponent(workOrderId) + '/warranty'
+        );
+
+        const warranty = result.warranty;
+
+        box.innerHTML = `
+            <div class="grid">
+                <div class="item">
+                    <div class="label">رقم الضمان</div>
+                    <div class="value">${escapeHtml(warranty.warranty_no)}</div>
+                </div>
+
+                <div class="item">
+                    <div class="label">مدة الضمان</div>
+                    <div class="value">${escapeHtml(warranty.warranty_years)} سنوات</div>
+                </div>
+
+                <div class="item">
+                    <div class="label">تاريخ البداية</div>
+                    <div class="value">${escapeHtml(warranty.start_date)}</div>
+                </div>
+
+                <div class="item">
+                    <div class="label">تاريخ الانتهاء</div>
+                    <div class="value">${escapeHtml(warranty.end_date)}</div>
+                </div>
+
+                <div class="item">
+                    <div class="label">الحالة</div>
+                    <div class="value">${escapeHtml(warranty.status)}</div>
+                </div>
+            </div>
+
+            <hr>
+
+            <p>${escapeHtml(warranty.terms)}</p>
+
+            <br>
+
+            <button class="primary" onclick="openWarrantyCertificate()">
+                🛡️ عرض شهادة الضمان
+            </button>
+        `;
+    } catch (error) {
+        if (error.message === 'Warranty certificate not found') {
+            const orderResult = await api(
+                '/api/work-orders/' + encodeURIComponent(workOrderId)
+            );
+
+            const order = orderResult.work_order;
+
+            if (order.status === 'DELIVERED' || order.delivered_at) {
+                box.innerHTML = `
+                    <div class="message">
+                        <strong>🚗 تم تسليم السيارة</strong>
+                        <p>يمكن الآن إصدار شهادة الضمان.</p>
+                        <button class="primary" onclick="issueWarranty()">
+                            🛡️ إصدار شهادة الضمان
+                        </button>
+                    </div>
+                `;
+            } else {
+                box.innerHTML = `
+                    <div class="message">
+                        ⏳ لا توجد شهادة ضمان لهذا الأمر حاليًا.
+                        <br>
+                        يتم إصدار شهادة الضمان بعد تسليم السيارة.
+                    </div>
+                `;
+            }
+
+            return;
+        }
+
+        console.error('Load warranty error:', error);
+
+        box.innerHTML = `
+            <div class="message">
+                تعذر التحقق من شهادة الضمان.
+            </div>
+        `;
+    }
+}
+
+async function issueWarranty() {
+    if (!confirm('هل تريد إصدار شهادة ضمان لمدة 5 سنوات لهذا الأمر؟')) {
+        return;
+    }
+
+    const box = document.getElementById('warrantyContent');
+
+    try {
+        box.innerHTML = '<div class="message">جاري إصدار شهادة الضمان...</div>';
+
+        const result = await api(
+            '/api/work-orders/' + encodeURIComponent(workOrderId) + '/warranty',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+        );
+
+        alert('تم إصدار شهادة الضمان بنجاح');
+
+        await loadWarranty();
+    } catch (error) {
+        console.error('Issue warranty error:', error);
+
+        box.innerHTML = `
+            <div class="message">
+                <strong>تعذر إصدار شهادة الضمان</strong>
+                <p>${escapeHtml(error.message)}</p>
+                <button class="primary" onclick="loadWarranty()">
+                    إعادة المحاولة
+                </button>
+            </div>
+        `;
+    }
+}
+
+function openWarrantyCertificate() {
+    window.open(
+        '/warranty-certificate.html?id=' +
+        encodeURIComponent(workOrderId),
+        '_blank'
+    );
+}
+
+
+async function loadServices() {
+
+    const list = document.getElementById('servicesList');
+    const select = document.getElementById('service_id');
+
+    try {
+
+        const result = await api(
+            '/api/work-orders/' + encodeURIComponent(workOrderId) + '/services'
+        );
+
+        const services = result.services || [];
+
+        if (services.length === 0) {
+            list.innerHTML = '<p>لا توجد خدمات مضافة لهذا الأمر.</p>';
+        } else {
+
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>الكود</th>
+                            <th>الخدمة</th>
+                            <th>الكمية</th>
+                            <th>سعر الوحدة</th>
+                            <th>الخصم</th>
+                            <th>الإجمالي</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            services.forEach(service => {
+
+                html += `
+                    <tr>
+                        <td>${escapeHtml(service.service_code)}</td>
+                        <td>${escapeHtml(service.service_name)}</td>
+                        <td>${service.quantity ?? 0}</td>
+                        <td>${service.unit_price ?? 0}</td>
+                        <td>${service.discount ?? 0}</td>
+                        <td>${service.line_total ?? 0}</td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                    </tbody>
+                </table>
+            `;
+
+            list.innerHTML = html;
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        list.innerHTML =
+            '<p>❌ تعذر تحميل الخدمات: ' +
+            escapeHtml(error.message) +
+            '</p>';
+    }
+}
+
+
+async function loadAvailableServices() {
+
+    const select = document.getElementById('service_id');
+
+    try {
+
+        const result = await api('/api/services');
+
+        const services = result.services || [];
+
+        if (services.length === 0) {
+            select.innerHTML =
+                '<option value="">لا توجد خدمات متاحة</option>';
+            return;
+        }
+
+        select.innerHTML =
+            '<option value="">اختر الخدمة</option>';
+
+        services.forEach(service => {
+
+            const option = document.createElement('option');
+
+            option.value = service.service_id;
+            option.textContent =
+                service.service_code + ' - ' +
+                service.service_name +
+                ' (' + (service.standard_price ?? 0) + ')';
+
+            option.dataset.price = service.standard_price ?? 0;
+
+            select.appendChild(option);
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        select.innerHTML =
+            '<option value="">تعذر تحميل الخدمات</option>';
+    }
+}
+
+
+document.getElementById('service_id').addEventListener('change', function () {
+
+    const option = this.options[this.selectedIndex];
+
+    if (option && option.dataset.price !== undefined) {
+        document.getElementById('service_unit_price').value =
+            option.dataset.price;
+    }
+});
+
+
+async function addService() {
+
+    const message = document.getElementById('servicesMessage');
+
+    const serviceId =
+        Number(document.getElementById('service_id').value);
+
+    const quantity =
+        Number(document.getElementById('service_quantity').value || 1);
+
+    const unitPrice =
+        Number(document.getElementById('service_unit_price').value || 0);
+
+    const discount =
+        Number(document.getElementById('service_discount').value || 0);
+
+    const notes =
+        document.getElementById('service_notes').value.trim();
+
+    if (!serviceId) {
+        message.innerHTML = '⚠️ اختر الخدمة أولاً.';
+        return;
+    }
+
+    if (quantity <= 0) {
+        message.innerHTML = '⚠️ الكمية يجب أن تكون أكبر من صفر.';
+        return;
+    }
+
+    if (unitPrice < 0 || discount < 0) {
+        message.innerHTML = '⚠️ السعر والخصم لا يمكن أن يكونا سالبين.';
+        return;
+    }
+
+    try {
+
+        const result = await api(
+            '/api/work-orders/' +
+            encodeURIComponent(workOrderId) +
+            '/services',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    service_id: serviceId,
+                    quantity: quantity,
+                    unit_price: unitPrice,
+                    discount: discount,
+                    notes: notes
+                })
+            }
+        );
+
+        message.innerHTML =
+            '✅ تم إضافة الخدمة بنجاح.';
+
+        document.getElementById('service_quantity').value = 1;
+        document.getElementById('service_discount').value = 0;
+        document.getElementById('service_notes').value = '';
+
+        await loadServices();
+
+    } catch (error) {
+
+        console.error(error);
+
+        message.innerHTML =
+            '❌ ' + escapeHtml(error.message);
+    }
+}
+
+
+loadServices();
+loadAvailableServices();
+
+loadDetails();
+
+
+async function loadVehicleInspection() {
+    const history = document.getElementById('inspectionHistory');
+    if (!history) return;
+
+    try {
+        const result = await api(
+            '/api/work-orders/' + encodeURIComponent(workOrderId) + '/inspection'
+        );
+
+        const inspections = result.inspections || [];
+
+        if (!inspections.length) {
+            history.innerHTML = '<div style="padding:10px;background:#f7f7f7;border-radius:8px;">لا يوجد فحص مسجل حتى الآن.</div>';
+            return;
+        }
+
+        const latest = inspections[0];
+
+        const fields = [
+            ['نوع الفحص', latest.inspection_type],
+            ['النتيجة', latest.result],
+            ['قراءة العداد', latest.odometer_reading],
+            ['الهيكل الخارجي', latest.exterior_condition],
+            ['الداخلية', latest.interior_condition],
+            ['المقاعد', latest.seats_condition],
+            ['الطبلون', latest.dashboard_condition],
+            ['الأبواب', latest.doors_condition],
+            ['السقف', latest.roof_condition],
+            ['الأرضية', latest.floor_condition],
+            ['الكهرباء', latest.electrical_condition],
+            ['الأضرار الموجودة مسبقًا', latest.existing_damage],
+            ['الأشياء المفقودة', latest.missing_items],
+            ['متطلبات العميل', latest.customer_requirements],
+            ['ملاحظات الفاحص', latest.inspector_notes],
+            ['ملاحظات عامة', latest.notes]
+        ];
+
+        history.innerHTML =
+            '<h3>📋 آخر فحص مسجل</h3>' +
+            '<div class="grid">' +
+            fields.map(function(item) {
+                return '<div class="item">' +
+                    '<div class="label">' + escapeHtml(item[0]) + '</div>' +
+                    '<div class="value">' + escapeHtml(item[1] ?? '-') + '</div>' +
+                    '</div>';
+            }).join('') +
+            '</div>' +
+            '<div style="margin-top:10px;color:#666;">' +
+            '📅 تاريخ الفحص: ' +
+            escapeHtml(latest.inspected_at ? new Date(latest.inspected_at).toLocaleString('ar-YE') : '-') +
+            '</div>';
+
+    } catch (error) {
+        console.error('Load vehicle inspection error:', error);
+        history.innerHTML = '<div style="color:#b00020;">تعذر تحميل سجل الفحص.</div>';
+    }
+}
+
+
+async function loadInspectionPhotos() {
+    const list = document.getElementById('inspectionPhotosList');
+    if (!list) return;
+
+    try {
+        const result = await api(
+            '/api/work-orders/' + encodeURIComponent(workOrderId) + '/inspection/photos'
+        );
+
+        const photos = result.photos || [];
+
+        if (!photos.length) {
+            list.innerHTML =
+                '<div style="padding:10px;background:#f7f7f7;border-radius:8px;">لا توجد صور فحص مسجلة حتى الآن.</div>';
+            return;
+        }
+
+        list.innerHTML =
+            '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;">' +
+            photos.map(function(photo) {
+                return '<div style="border:1px solid #ddd;border-radius:10px;overflow:hidden;background:#fff;">' +
+                    '<img src="' + escapeHtml(photo.file_url) + '" ' +
+                    'style="width:100%;height:180px;object-fit:cover;display:block;" ' +
+                    'alt="صورة فحص">' +
+                    '<div style="padding:10px;">' +
+                    '<div style="font-weight:700;">' +
+                    escapeHtml(photo.photo_type || 'صورة') +
+                    '</div>' +
+                    '<div style="margin-top:5px;color:#666;">' +
+                    escapeHtml(photo.caption || '') +
+                    '</div>' +
+                    '</div></div>';
+            }).join('') +
+            '</div>';
+
+    } catch (error) {
+        console.error('Load inspection photos error:', error);
+        list.innerHTML =
+            '<div style="color:#b00020;">تعذر تحميل صور الفحص.</div>';
+    }
+}
+
+async function uploadInspectionPhoto() {
+    const fileInput = document.getElementById('inspection_photo_file');
+    const typeInput = document.getElementById('inspection_photo_type');
+    const captionInput = document.getElementById('inspection_photo_caption');
+    const message = document.getElementById('photoMessage');
+
+    if (!fileInput || !fileInput.files || !fileInput.files[0]) {
+        alert('يرجى اختيار صورة أولًا.');
+        return;
+    }
+
+    const file = fileInput.files[0];
+
+    if (!file.type.startsWith('image/')) {
+        alert('الملف المختار ليس صورة.');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('photo', file);
+    formData.append('photo_type', typeInput ? typeInput.value : 'OTHER');
+    formData.append('caption', captionInput ? captionInput.value.trim() : '');
+
+    try {
+        if (message) message.textContent = 'جاري رفع الصورة...';
+
+        const token = localStorage.getItem('token');
+
+        const response = await fetch(
+            '/api/work-orders/' + encodeURIComponent(workOrderId) + '/inspection/photos',
+            {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                },
+                body: formData
+            }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            throw new Error(result.message || 'فشل رفع الصورة');
+        }
+
+        if (message) message.textContent = '✅ تم رفع الصورة بنجاح.';
+
+        fileInput.value = '';
+        if (captionInput) captionInput.value = '';
+
+        await loadInspectionPhotos();
+
+    } catch (error) {
+        console.error('Upload inspection photo error:', error);
+        if (message) message.textContent = '❌ ' + escapeHtml(error.message);
+    }
+}
+
+async function saveVehicleInspection() {
+    const message = document.getElementById('inspectionMessage');
+
+    const body = {
+        vehicle_id: window.currentOrder ? window.currentOrder.vehicle_id : null,
+        inspection_type: document.getElementById('inspection_type')?.value,
+        result: document.getElementById('inspection_result')?.value,
+        mileage: document.getElementById('inspection_mileage')?.value || null,
+        odometer_reading: document.getElementById('odometer_reading')?.value || null,
+        exterior_condition: document.getElementById('exterior_condition')?.value.trim() || null,
+        interior_condition: document.getElementById('interior_condition')?.value.trim() || null,
+        seats_condition: document.getElementById('seats_condition')?.value.trim() || null,
+        seats_notes: document.getElementById('seats_notes')?.value.trim() || null,
+        dashboard_condition: document.getElementById('dashboard_condition')?.value.trim() || null,
+        doors_condition: document.getElementById('doors_condition')?.value.trim() || null,
+        roof_condition: document.getElementById('roof_condition')?.value.trim() || null,
+        floor_condition: document.getElementById('floor_condition')?.value.trim() || null,
+        electrical_condition: document.getElementById('electrical_condition')?.value.trim() || null,
+        existing_damage: document.getElementById('existing_damage')?.value.trim() || null,
+        missing_items: document.getElementById('missing_items')?.value.trim() || null,
+        customer_requirements: document.getElementById('customer_requirements')?.value.trim() || null,
+        inspector_notes: document.getElementById('inspector_notes')?.value.trim() || null,
+        notes: document.getElementById('inspection_notes')?.value.trim() || null
+    };
+
+    if (!body.vehicle_id) {
+        alert('تعذر تحديد السيارة المرتبطة بأمر العمل.');
+        return;
+    }
+
+    try {
+        if (message) message.textContent = 'جاري حفظ الفحص...';
+
+        const result = await api(
+            '/api/work-orders/' + encodeURIComponent(workOrderId) + '/inspection',
+            {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(body)
+            }
+        );
+
+        if (message) message.textContent = '✅ تم حفظ فحص واستلام السيارة بنجاح.';
+
+        await loadVehicleInspection();
+
+    } catch (error) {
+        console.error('Save vehicle inspection error:', error);
+        if (message) message.textContent = '❌ ' + escapeHtml(error.message);
+    }
+}
+</script>
+
+
+
+
+<style id="muluk-layout-v2">
+/* ===== ملوك التنجيد | نظام البلكات ===== */
+#content {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    align-items: start;
+}
+
+#content > .workflow-card,
+#content > .message {
+    grid-column: 1 / -1;
+}
+
+#content > .card {
+    width: 100% !important;
+    margin: 0 !important;
+    position: relative;
+    overflow: hidden;
+    border-radius: 22px !important;
+    box-shadow: 0 8px 25px rgba(0,0,0,.07) !important;
+}
+
+#content > .card[data-wide="true"] {
+    grid-column: 1 / -1;
+}
+
+/* شريط علوي للبلكات */
+#content > .muluk-block::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 5px;
+    background: #1d2738;
+}
+
+#content > .customer-block::before { background: #1976d2; }
+#content > .vehicle-block::before { background: #7b4bb7; }
+#content > .money-block::before { background: #218838; }
+#content > .inspection-block::before { background: #00a6b7; }
+#content > .photo-block::before { background: #d89b24; }
+#content > .approval-block::before { background: #c49a3a; }
+#content > .services-block::before { background: #e67e22; }
+#content > .materials-block::before { background: #596579; }
+#content > .quality-block::before { background: #2e8b57; }
+#content > .delivery-block::before { background: #008c95; }
+#content > .warranty-block::before { background: #6846a5; }
+#content > .notes-block::before { background: #667085; }
+
+/* تمييز البلكات */
+.muluk-block h2 {
+    font-weight: 850 !important;
+}
+
+/* الهاتف */
+@media (max-width: 700px) {
+    #content {
+        grid-template-columns: 1fr !important;
+        gap: 14px !important;
+    }
+
+    #content > .workflow-card,
+    #content > .message,
+    #content > .card[data-wide="true"] {
+        grid-column: 1 / -1 !important;
+    }
+
+    #content > .card {
+        border-radius: 18px !important;
+    }
+}
+</style>
+
+
+
+
+<section id="receipts-section" style="margin:24px 0;">
+    <div style="background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:22px;box-shadow:0 4px 16px rgba(0,0,0,.05);">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px;">
+            <div>
+                <h2 style="margin:0 0 6px;font-size:22px;">💰 الحسابات والدفعات</h2>
+                <div style="color:#6b7280;font-size:14px;">إدارة المبالغ المستلمة المرتبطة بأمر التشغيل</div>
+            </div>
+            <button type="button" onclick="openReceiptForm()"
+                style="border:0;background:#111827;color:#fff;padding:11px 18px;border-radius:10px;cursor:pointer;font-weight:700;">
+                ＋ تسجيل دفعة
+            </button>
+        </div>
+
+        <div id="receiptSummary"
+             style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:18px;">
+            <div style="background:#f8fafc;border-radius:12px;padding:15px;">
+                <div style="color:#6b7280;font-size:13px;">إجمالي أمر التشغيل</div>
+                <strong id="receiptTotal" style="font-size:20px;">—</strong>
+            </div>
+            <div style="background:#f8fafc;border-radius:12px;padding:15px;">
+                <div style="color:#6b7280;font-size:13px;">إجمالي المدفوع</div>
+                <strong id="receiptPaid" style="font-size:20px;">—</strong>
+            </div>
+            <div style="background:#f8fafc;border-radius:12px;padding:15px;">
+                <div style="color:#6b7280;font-size:13px;">المتبقي</div>
+                <strong id="receiptBalance" style="font-size:20px;">—</strong>
+            </div>
+        </div>
+
+        <div id="receiptForm" style="display:none;background:#f8fafc;border-radius:12px;padding:18px;margin-bottom:18px;">
+            <h3 style="margin:0 0 14px;">تسجيل دفعة جديدة</h3>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;">
+                <label>
+                    <span>المبلغ</span>
+                    <input id="receiptAmount" type="number" min="1" step="0.01"
+                        placeholder="مثال: 10000"
+                        style="width:100%;box-sizing:border-box;padding:11px;margin-top:6px;border:1px solid #d1d5db;border-radius:9px;">
+                </label>
+
+                <label>
+                    <span>طريقة الدفع</span>
+                    <select id="receiptPaymentMethod"
+                        style="width:100%;box-sizing:border-box;padding:11px;margin-top:6px;border:1px solid #d1d5db;border-radius:9px;">
+                        <option value="CASH">نقدي</option>
+                        <option value="BANK_TRANSFER">تحويل بنكي</option>
+                        <option value="E_WALLET">محفظة إلكترونية</option>
+                        <option value="OTHER">أخرى</option>
+                    </select>
+                </label>
+            </div>
+
+            <label style="display:block;margin-top:12px;">
+                <span>ملاحظات</span>
+                <textarea id="receiptNotes" rows="2"
+                    style="width:100%;box-sizing:border-box;padding:11px;margin-top:6px;border:1px solid #d1d5db;border-radius:9px;"
+                    placeholder="ملاحظات السند"></textarea>
+            </label>
+
+            <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
+                <button type="button" onclick="createReceipt()"
+                    style="border:0;background:#16a34a;color:#fff;padding:11px 20px;border-radius:9px;cursor:pointer;font-weight:700;">
+                    💾 حفظ الدفعة وإصدار السند
+                </button>
+                <button type="button" onclick="closeReceiptForm()"
+                    style="border:0;background:#e5e7eb;color:#111827;padding:11px 20px;border-radius:9px;cursor:pointer;">
+                    إلغاء
+                </button>
+            </div>
+        </div>
+
+        <div id="receiptsList">
+            <div style="text-align:center;color:#6b7280;padding:20px;">جاري تحميل السندات...</div>
+        </div>
+    </div>
+</section>
+
+<script id="muluk-receipts-ui">
+(function () {
+    function getToken() {
+        return localStorage.getItem('token') || localStorage.getItem('accessToken') || '';
+    }
+
+    function getWorkOrderId() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('id') || params.get('work_order_id');
+    }
+
+    function money(value) {
+        return Number(value || 0).toLocaleString('ar-YE') + ' ريال';
+    }
+
+    window.openReceiptForm = function () {
+        document.getElementById('receiptForm').style.display = 'block';
+        document.getElementById('receiptAmount').focus();
+    };
+
+    window.closeReceiptForm = function () {
+        document.getElementById('receiptForm').style.display = 'none';
+    };
+
+    window.loadReceipts = async function () {
+        const workOrderId = getWorkOrderId();
+
+        if (!workOrderId) {
+            document.getElementById('receiptsList').innerHTML =
+                '<div style="color:#b91c1c;padding:15px;">لم يتم العثور على رقم أمر التشغيل.</div>';
+            return;
+        }
+
+        const currentOrder = window.currentWorkOrder;
+        if (currentOrder) {
+            document.getElementById('receiptTotal').textContent = money(currentOrder.total_amount);
+            document.getElementById('receiptPaid').textContent = money(currentOrder.deposit_amount);
+            document.getElementById('receiptBalance').textContent = money(currentOrder.balance_amount);
+        }
+
+        try {
+            const response = await fetch('/api/receipts/work-order/' + encodeURIComponent(workOrderId), {
+                headers: {
+                    Authorization: 'Bearer ' + getToken()
+                }
+            });
+
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(data.message || 'فشل تحميل السندات');
+            }
+
+            const receipts = data.receipts || [];
+
+            if (!receipts.length) {
+                document.getElementById('receiptsList').innerHTML =
+                    '<div style="text-align:center;color:#6b7280;padding:20px;">لا توجد سندات قبض حتى الآن.</div>';
+                return;
+            }
+
+            let paid = 0;
+
+            document.getElementById('receiptsList').innerHTML = receipts.map(function (r) {
+                paid += Number(r.amount || 0);
+
+                const date = r.received_at
+                    ? new Date(r.received_at).toLocaleString('ar-YE')
+                    : '—';
+
+                const method = {
+                    CASH: 'نقدي',
+                    BANK_TRANSFER: 'تحويل بنكي',
+                    E_WALLET: 'محفظة إلكترونية',
+                    OTHER: 'أخرى'
+                }[r.payment_method] || r.payment_method;
+
+                return `
+                    <div style="border:1px solid #e5e7eb;border-radius:12px;padding:15px;margin-top:10px;background:#fff;">
+                        <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;">
+                            <strong>🧾 ${r.receipt_no}</strong>
+                            <div style="display:flex;align-items:center;gap:10px;">
+                                <strong>${money(r.amount)}</strong>
+                                <button type="button"
+                                    onclick="printReceipt(${r.receipt_id})"
+                                    style="border:0;background:#111827;color:#fff;padding:8px 12px;border-radius:8px;cursor:pointer;">
+                                    🖨️ طباعة
+                                </button>
+                                
+                                <button type="button"
+                                    onclick="sendReceiptWhatsApp(${r.receipt_id})"
+                                    style="border:0;background:#16a34a;color:#fff;padding:8px 12px;border-radius:8px;cursor:pointer;">
+                                    🟢 واتساب
+                                </button>
+                            </div>
+                        </div>
+                        <div style="color:#6b7280;font-size:13px;margin-top:7px;">
+                            ${method} · ${date}
+                        </div>
+                        ${r.notes ? `<div style="margin-top:7px;">${r.notes}</div>` : ''}
+                    </div>
+                `;
+            }).join('');
+
+            const total = Number(window.currentWorkOrder?.total_amount || 0);
+            document.getElementById('receiptTotal').textContent = money(total);
+            document.getElementById('receiptPaid').textContent = money(paid);
+            document.getElementById('receiptBalance').textContent = money(Math.max(total - paid, 0));
+
+        } catch (error) {
+            console.error('Receipts load error:', error);
+            document.getElementById('receiptsList').innerHTML =
+                '<div style="color:#b91c1c;padding:15px;">تعذر تحميل سندات القبض.</div>';
+        }
+    };
+
+
+    
+
+    window.printReceipt = async function (receiptId) {
+        try {
+            const token = getToken();
+
+            if (!token) {
+                alert('انتهت جلسة الدخول، يرجى تسجيل الدخول مرة أخرى');
+                return;
+            }
+
+            const response = await fetch('/api/receipts/' + encodeURIComponent(receiptId), {
+                headers: {
+                    Authorization: 'Bearer ' + token
+                }
+            });
+
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(data.message || 'فشل جلب بيانات السند');
+            }
+
+            const r = data.receipt || {};
+
+            const formatNumber = value =>
+                Number(value || 0).toLocaleString('en-US');
+
+            const formatDate = value => {
+                if (!value) return '—';
+                const d = new Date(value);
+                if (isNaN(d.getTime())) return '—';
+
+                const day = String(d.getDate()).padStart(2, '0');
+                const month = String(d.getMonth() + 1).padStart(2, '0');
+                const year = d.getFullYear();
+
+                return `${day}/${month}/${year}`;
+            };
+
+            const amountNumber = Number(r.amount || 0);
+            const totalNumber = Number(r.total_amount || 0);
+            const paidNumber = Number(r.deposit_amount || 0);
+            const balanceNumber = Number(r.balance_amount || 0);
+
+            const amount = formatNumber(amountNumber);
+            const total = formatNumber(totalNumber);
+            const paid = formatNumber(paidNumber);
+            const balance = formatNumber(balanceNumber);
+
+            function amountInArabicWords(number) {
+                number = Math.floor(Number(number || 0));
+
+                if (number === 0) return 'صفر ريال فقط';
+
+                const ones = [
+                    '', 'واحد', 'اثنان', 'ثلاثة', 'أربعة',
+                    'خمسة', 'ستة', 'سبعة', 'ثمانية', 'تسعة',
+                    'عشرة', 'أحد عشر', 'اثنا عشر', 'ثلاثة عشر',
+                    'أربعة عشر', 'خمسة عشر', 'ستة عشر',
+                    'سبعة عشر', 'ثمانية عشر', 'تسعة عشر'
+                ];
+
+                const tens = [
+                    '', '', 'عشرون', 'ثلاثون', 'أربعون',
+                    'خمسون', 'ستون', 'سبعون', 'ثمانون', 'تسعون'
+                ];
+
+                function under100(n) {
+                    if (n < 20) return ones[n];
+
+                    const t = Math.floor(n / 10);
+                    const o = n % 10;
+
+                    if (!o) return tens[t];
+
+                    return ones[o] + ' و' + tens[t];
+                }
+
+                function under1000(n) {
+                    if (n < 100) return under100(n);
+
+                    const h = Math.floor(n / 100);
+                    const rest = n % 100;
+
+                    const hundreds = [
+                        '', 'مائة', 'مائتان', 'ثلاثمائة',
+                        'أربعمائة', 'خمسمائة', 'ستمائة',
+                        'سبعمائة', 'ثمانمائة', 'تسعمائة'
+                    ];
+
+                    if (!rest) return hundreds[h];
+
+                    return hundreds[h] + ' و' + under100(rest);
+                }
+
+                if (number < 1000) {
+                    return under1000(number) + ' ريال فقط';
+                }
+
+                if (number < 1000000) {
+                    const thousands = Math.floor(number / 1000);
+                    const rest = number % 1000;
+
+                    let text;
+
+                    if (thousands === 1) {
+                        text = 'ألف';
+                    } else if (thousands === 2) {
+                        text = 'ألفان';
+                    } else if (thousands < 11) {
+                        text = under1000(thousands) + ' آلاف';
+                    } else {
+                        text = under1000(thousands) + ' ألف';
+                    }
+
+                    if (rest) {
+                        text += ' و' + under1000(rest);
+                    }
+
+                    return text + ' ريال فقط';
+                }
+
+                return formatNumber(number) + ' ريال فقط';
+            }
+
+            const amountWords = amountInArabicWords(amountNumber);
+
+            const methodMap = {
+                CASH: 'نقدي',
+                BANK_TRANSFER: 'تحويل بنكي',
+                E_WALLET: 'محفظة إلكترونية',
+                OTHER: 'أخرى'
+            };
+
+            const method = methodMap[r.payment_method] ||
+                r.payment_method ||
+                'نقدي';
+
+            const customerName = r.customer_name || '—';
+            const workOrderNo = r.work_order_no || '—';
+            const receiptNo = r.receipt_no || '—';
+            const receivedDate = formatDate(r.received_at);
+            const notes = r.notes || '';
+            const receivedBy = r.received_by_username || '—';
+
+            const printWindow = window.open(
+                '',
+                '_blank',
+                'width=1536,height=1024'
+            );
+
+            if (!printWindow) {
+                alert('يرجى السماح بفتح النوافذ المنبثقة للطباعة');
+                return;
+            }
+
+            const methodMark = method === 'تحويل بنكي'
+                ? 'bank'
+                : method === 'محفظة إلكترونية'
+                    ? 'wallet'
+                    : 'cash';
+
+            printWindow.document.write(`
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>سند قبض ${receiptNo}</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+html,
+body{
+    margin:0;
+    padding:0;
+    background:#e5e7eb;
+    font-family:Arial,Tahoma,sans-serif;
+}
+
+.receipt-page{
+    width:1536px;
+    height:1024px;
+    position:relative;
+    margin:20px auto;
+    overflow:hidden;
+    background:#fff;
+}
+
+.field{
+    position:absolute;
+    color:#111;
+    font-weight:700;
+    z-index:2;
+    text-align:center;
+    white-space:nowrap;
+}
+
+/* رقم السند */
+.receipt-no{
+    left:55px;
+    top:325px;
+    width:330px;
+    font-size:16px;
+}
+
+/* التاريخ */
+.receipt-date{
+    left:1160px;
+    top:325px;
+    width:300px;
+    font-size:16px;
+}
+
+/* اسم العميل */
+.customer-name{
+    left:1010px;
+    top:325px;
+    width:150px;
+    font-size:16px;
+}
+
+/* اسم العميل داخل استلمنا من */
+.from-name{
+    left:120px;
+    top:423px;
+    width:680px;
+    font-size:16px;
+}
+
+/* المبلغ كتابة */
+.amount-words{
+    left:120px;
+    top:477px;
+    width:680px;
+    font-size:15px;
+}
+
+/* وذلك مقابل */
+.purpose{
+    left:120px;
+    top:531px;
+    width:680px;
+    font-size:15px;
+}
+
+/* المبلغ الرقمي */
+.amount-number{
+    left:1120px;
+    top:575px;
+    width:300px;
+    font-size:24px;
+}
+
+/* أمر التشغيل */
+.work-order{
+    left:720px;
+    top:632px;
+    width:330px;
+    font-size:15px;
+}
+
+/* تاريخ الاستحقاق */
+.due-date{
+    left:70px;
+    top:655px;
+    width:300px;
+    font-size:15px;
+}
+
+/* الملاحظات */
+.notes{
+    left:120px;
+    top:710px;
+    width:760px;
+    font-size:14px;
+    white-space:normal;
+    line-height:1.5;
+}
+
+/* المستلم */
+.receiver{
+    position:absolute;
+    right:300px;
+    bottom:115px;
+    width:300px;
+    text-align:center;
+    font-size:15px;
+    font-weight:700;
+}
+
+/* أمين الصندوق */
+.cashier{
+    position:absolute;
+    left:70px;
+    bottom:115px;
+    width:300px;
+    text-align:center;
+    font-size:15px;
+    font-weight:700;
+}
+
+/* علامة طريقة الدفع */
+.payment-mark{
+    position:absolute;
+    font-size:24px;
+    font-weight:900;
+    color:#111;
+    line-height:1;
+}
+
+.payment-cash{
+    left:1180px;
+    top:485px;
+}
+
+.payment-bank{
+    left:1180px;
+    top:525px;
+}
+
+.payment-wallet{
+    left:1260px;
+    top:525px;
+}
+
+.print-controls{
+    position:fixed;
+    top:15px;
+    left:15px;
+    z-index:9999;
+}
+
+.print-controls button{
+    border:0;
+    padding:12px 22px;
+    border-radius:10px;
+    background:#111827;
+    color:white;
+    font-weight:700;
+    font-size:15px;
+}
+
+@media(max-width:800px){
+    body{
+        overflow:auto;
+    }
+
+    .receipt-page{
+        margin:0;
+        transform-origin:top left;
+        transform:scale(calc(100vw / 1536));
+        margin-bottom:calc(-1024px + (100vw * 0.6666667));
+    }
+
+    .print-controls{
+        display:none;
+    }
+}
+
+@media print{
+    html,
+    body{
+        width:100%;
+        height:auto;
+        margin:0;
+        padding:0;
+        background:#fff;
+    }
+
+    .receipt-page{
+        width:100%;
+        height:auto;
+        aspect-ratio:3 / 2;
+        margin:0;
+        transform:none !important;
+        page-break-after:avoid;
+        break-after:avoid;
+        overflow:hidden;
+    }
+
+    .template-image{
+        width:100%;
+        height:100%;
+        object-fit:fill;
+    }
+
+    .print-controls{
+        display:none;
+    }
+
+    @page{
+        size: landscape;
+        margin:0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="print-controls">
+    <button onclick="window.print()">🖨️ طباعة السند</button>
+</div>
+
+<div class="receipt-page">
+
+    <img class="template-image" src="/Mloktangeed.png" alt="سند قبض">
+
+    <div class="field receipt-no">
+        ${receiptNo}
+    </div>
+
+    <div class="field receipt-date">
+        ${receivedDate}
+    </div>
+
+    <div class="field from-name">
+        ${customerName}
+    </div>
+
+    <div class="field amount-words">
+        ${amountWords}
+    </div>
+
+    <div class="field purpose">
+        دفعة من قيمة أمر التشغيل
+    </div>
+
+    <div class="field amount-number">
+        ${amount}
+    </div>
+
+    <div class="field work-order">
+        ${workOrderNo}
+    </div>
+
+    <div class="field due-date">
+        ${receivedDate}
+    </div>
+
+    <div class="field notes">
+        ${notes || '—'}
+    </div>
+
+    <div class="receiver">
+        ${customerName}
+    </div>
+
+    <div class="cashier">
+        ${receivedBy}
+    </div>
+
+    ${methodMark === 'cash'
+        ? '<div class="payment-mark payment-cash">●</div>'
+        : ''}
+
+    ${methodMark === 'bank'
+        ? '<div class="payment-mark payment-bank">●</div>'
+        : ''}
+
+    ${methodMark === 'wallet'
+        ? '<div class="payment-mark payment-wallet">●</div>'
+        : ''}
+
+</div>
+
+</body>
+</html>
+            `);
+
+            printWindow.document.close();
+            printWindow.focus();
+
+            setTimeout(() => {
+                printWindow.print();
+            }, 500);
+
+        } catch (error) {
+            console.error('Print receipt error:', error);
+            alert(error.message || 'تعذر تجهيز سند القبض للطباعة');
+        }
+    };
+
+    window.sendReceiptWhatsApp = async function (receiptId) {
+        try {
+            const token = getToken();
+
+            if (!token) {
+                alert('انتهت جلسة الدخول، يرجى تسجيل الدخول مرة أخرى');
+                return;
+            }
+
+            const response = await fetch('/api/receipts/' + encodeURIComponent(receiptId), {
+                headers: {
+                    Authorization: 'Bearer ' + token
+                }
+            });
+
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(data.message || 'فشل جلب بيانات السند');
+            }
+
+            const r = data.receipt;
+
+            if (!r.customer_phone) {
+                alert('لا يوجد رقم هاتف مسجل للعميل');
+                return;
+            }
+
+            let phone = String(r.customer_phone).replace(/[^\d+]/g, '');
+
+            if (phone.startsWith('+967')) {
+                phone = phone.substring(1);
+            } else if (phone.startsWith('00967')) {
+                phone = phone.substring(2);
+            } else if (phone.startsWith('967')) {
+                // الرقم بالفعل بالصيغة الدولية
+            } else if (phone.startsWith('0')) {
+                phone = '967' + phone.substring(1);
+            } else {
+                phone = '967' + phone;
+            }
+
+            const amount = Number(r.amount || 0).toLocaleString('ar-YE');
+            const total = Number(r.total_amount || 0).toLocaleString('ar-YE');
+            const balance = Number(r.balance_amount || 0).toLocaleString('ar-YE');
+
+            const message =
+`السلام عليكم ورحمة الله وبركاته
+
+الأستاذ/ ${r.customer_name || ''}
+
+تم استلام دفعة مالية مرتبطة بأمر التشغيل الخاص بسيارتكم لدى ملوك التنجيد لخدمات التنجيد.
+
+🧾 رقم سند القبض: ${r.receipt_no}
+🔧 رقم أمر التشغيل: ${r.work_order_no}
+🚗 السيارة: ${r.make || ''} ${r.model || ''} ${r.model_year || ''}
+💰 المبلغ المقبوض: ${amount} ريال
+💵 إجمالي أمر التشغيل: ${total} ريال
+📌 المتبقي: ${balance} ريال
+
+نشكر لكم ثقتكم بملوك التنجيد.
+نتمنى لكم تجربة مميزة معنا.
+
+ملوك التنجيد لخدمات التنجيد`;
+
+            const whatsappUrl =
+                'https://wa.me/' + phone + '?text=' + encodeURIComponent(message);
+
+            window.open(whatsappUrl, '_blank');
+
+        } catch (error) {
+            console.error('WhatsApp receipt error:', error);
+            alert(error.message || 'تعذر تجهيز رسالة واتساب');
+        }
+    };
+
+    window.createReceipt = async function () {
+        const workOrderId = getWorkOrderId();
+        const amount = Number(document.getElementById('receiptAmount').value);
+        const paymentMethod = document.getElementById('receiptPaymentMethod').value;
+        const notes = document.getElementById('receiptNotes').value.trim();
+
+        if (!workOrderId) {
+            alert('رقم أمر التشغيل غير موجود');
+            return;
+        }
+
+        if (!Number.isFinite(amount) || amount <= 0) {
+            alert('أدخل مبلغًا صحيحًا');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/receipts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer ' + getToken()
+                },
+                body: JSON.stringify({
+                    work_order_id: Number(workOrderId),
+                    amount,
+                    payment_method: paymentMethod,
+                    notes: notes || null
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(data.message || 'فشل إنشاء سند القبض');
+            }
+
+            alert('تم إنشاء سند القبض: ' + data.receipt.receipt_no);
+
+            document.getElementById('receiptAmount').value = '';
+            document.getElementById('receiptNotes').value = '';
+            closeReceiptForm();
+
+            if (window.currentWorkOrder) {
+                window.currentWorkOrder.deposit_amount = data.work_order.deposit_amount;
+                window.currentWorkOrder.balance_amount = data.work_order.balance_amount;
+            }
+
+            await loadReceipts();
+
+        } catch (error) {
+            console.error('Create receipt error:', error);
+            alert(error.message || 'تعذر إنشاء سند القبض');
+        }
+    };
+
+    window.addEventListener('load', function () {
+        setTimeout(loadReceipts, 500);
+    });
+})();
+</script>
+
+</body>
+</html>

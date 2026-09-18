@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أمر تشغيل جديد | ملوك التنجيد</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+    margin:0;
+    font-family:Arial,Tahoma,sans-serif;
+    background:#f5f6f8;
+    color:#1d2738;
+}
+.header{
+    background:#182235;
+    color:#fff;
+    padding:22px 16px;
+}
+.header-inner{
+    max-width:900px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+}
+.title{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+.logo{
+    width:48px;
+    height:48px;
+    border-radius:15px;
+    background:#c49a3a;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:25px;
+}
+h1{margin:0;font-size:22px}
+.header p{margin:5px 0 0;color:#d8dce4;font-size:13px}
+.back{
+    color:#fff;
+    text-decoration:none;
+    border:1px solid rgba(255,255,255,.25);
+    padding:10px 14px;
+    border-radius:12px;
+}
+.container{
+    max-width:900px;
+    margin:20px auto;
+    padding:0 14px;
+}
+.card{
+    background:#fff;
+    border-radius:20px;
+    padding:20px;
+    margin-bottom:16px;
+    box-shadow:0 7px 25px rgba(0,0,0,.07);
+}
+.card h2{
+    margin:0 0 18px;
+    font-size:18px;
+}
+.grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:14px;
+}
+.field{display:flex;flex-direction:column;gap:7px}
+.field.full{grid-column:1/-1}
+label{font-size:13px;font-weight:800;color:#4b5565}
+input,select,textarea{
+    width:100%;
+    border:1px solid #dfe3e9;
+    border-radius:12px;
+    padding:12px;
+    font:inherit;
+    background:#fff;
+}
+textarea{min-height:100px;resize:vertical}
+.actions{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+button{
+    border:0;
+    border-radius:13px;
+    padding:13px 20px;
+    font:inherit;
+    font-weight:800;
+    cursor:pointer;
+}
+.primary{
+    background:#182235;
+    color:#fff;
+}
+.secondary{
+    background:#eef0f3;
+    color:#253044;
+}
+.summary{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+}
+.summary-box{
+    background:#f7f8fa;
+    border-radius:14px;
+    padding:14px;
+}
+.summary-label{font-size:12px;color:#777}
+.summary-value{font-size:18px;font-weight:800;margin-top:5px}
+#formMessage{
+    margin-top:14px;
+    font-weight:700;
+}
+@media(max-width:650px){
+    .header-inner{align-items:flex-start}
+    .back{font-size:12px}
+    .grid{grid-template-columns:1fr}
+    .field.full{grid-column:auto}
+    .summary{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+    <div class="header-inner">
+        <div class="title">
+            <div class="logo">👑</div>
+            <div>
+                <h1>أمر تشغيل جديد</h1>
+                <p>إنشاء أمر تشغيل للسيارة</p>
+            </div>
+        </div>
+        <a class="back" href="/work-orders.html">← أوامر التشغيل</a>
+    </div>
+</header>
+
+<main class="container">
+
+    <div class="card">
+        <h2>👤 العميل والسيارة</h2>
+
+        <div class="grid">
+
+            <div class="field">
+                <label>العميل</label>
+                <select id="customer_id" onchange="loadVehicles()">
+                    <option value="">جاري التحميل...</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>السيارة</label>
+                <select id="vehicle_id">
+                    <option value="">اختر العميل أولاً</option>
+                </select>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>🧰 تفاصيل التشغيل</h2>
+
+        <div class="grid">
+
+            <div class="field">
+                <label>الخدمة المطلوبة</label>
+                <input id="service_name" placeholder="مثال: تنجيد داخلي كامل">
+            </div>
+
+            <div class="field">
+                <label>الموظف المسؤول</label>
+                <select id="assigned_to">
+                    <option value="">-- بدون تعيين --</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>الأولوية</label>
+                <select id="priority">
+                    <option value="LOW">منخفضة</option>
+                    <option value="NORMAL" selected>عادية</option>
+                    <option value="HIGH">عالية</option>
+                    <option value="URGENT">عاجلة</option>
+                </select>
+            </div>
+
+            <div class="field full">
+                <label>طلب العميل / وصف العمل</label>
+                <textarea id="customer_notes" placeholder="اكتب المطلوب من العميل باختصار"></textarea>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>💰 الحساب</h2>
+
+        <div class="grid">
+
+            <div class="field">
+                <label>المبلغ قبل الخصم</label>
+                <input id="subtotal" type="number" min="0" value="0" oninput="calculateTotal()">
+            </div>
+
+            <div class="field">
+                <label>الخصم</label>
+                <input id="discount_amount" type="number" min="0" value="0" oninput="calculateTotal()">
+            </div>
+
+            <div class="field">
+                <label>الضريبة</label>
+                <input id="tax_amount" type="number" min="0" value="0" oninput="calculateTotal()">
+            </div>
+
+            <div class="field">
+                <label>الدفعة المقدمة</label>
+                <input id="deposit_amount" type="number" min="0" value="0" oninput="calculateTotal()">
+            </div>
+
+        </div>
+
+        <div class="summary" style="margin-top:15px">
+            <div class="summary-box">
+                <div class="summary-label">الإجمالي</div>
+                <div class="summary-value" id="total_display">0 ريال</div>
+            </div>
+            <div class="summary-box">
+                <div class="summary-label">المدفوع</div>
+                <div class="summary-value" id="deposit_display">0 ريال</div>
+            </div>
+            <div class="summary-box">
+                <div class="summary-label">المتبقي</div>
+                <div class="summary-value" id="remaining_display">0 ريال</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="actions">
+            <button class="primary" onclick="createWorkOrder()">💾 إنشاء أمر التشغيل</button>
+            <button class="secondary" onclick="window.location.href='/work-orders.html'">إلغاء</button>
+        </div>
+
+        <div id="formMessage"></div>
+    </div>
+
+</main>
+
+<script>
+
+async function loadCustomers() {
+    const token = localStorage.getItem('token');
+    const select = document.getElementById('customer_id');
+
+    try {
+        const res = await fetch('/api/customers', {
+            headers:{'Authorization':'Bearer '+token}
+        });
+
+        if (!res.ok) {
+            select.innerHTML='<option value="">تعذر تحميل العملاء</option>';
+            return;
+        }
+
+        const data=await res.json();
+        const rows=data.customers||[];
+
+        select.innerHTML=
+            '<option value="">اختر العميل</option>'+
+            rows.map(c =>
+                '<option value="'+c.customer_id+'">'+
+                (c.full_name||c.customer_name||'')+
+                '</option>'
+            ).join('');
+
+    } catch(error) {
+        select.innerHTML='<option value="">تعذر تحميل العملاء</option>';
+    }
+}
+
+async function loadVehicles() {
+    const customerId=document.getElementById('customer_id').value;
+    const select=document.getElementById('vehicle_id');
+
+    if(!customerId){
+        select.innerHTML='<option value="">اختر العميل أولاً</option>';
+        return;
+    }
+
+    const token=localStorage.getItem('token');
+
+    try {
+        const res=await fetch('/api/vehicles',{
+            headers:{'Authorization':'Bearer '+token}
+        });
+
+        if(!res.ok){
+            select.innerHTML='<option value="">تعذر تحميل السيارات</option>';
+            return;
+        }
+
+        const data=await res.json();
+
+        const rows=(data.vehicles||[]).filter(
+            v=>Number(v.customer_id)===Number(customerId)
+        );
+
+        select.innerHTML=
+            '<option value="">اختر السيارة</option>'+
+            rows.map(v =>
+                '<option value="'+v.vehicle_id+'">'+
+                (v.plate_no||'')+' - '+
+                (v.make||'')+' '+(v.model||'')+
+                '</option>'
+            ).join('');
+
+        if(rows.length===0){
+            select.innerHTML=
+                '<option value="">لا توجد سيارة مسجلة لهذا العميل</option>';
+        }
+
+    } catch(error) {
+        select.innerHTML='<option value="">تعذر تحميل السيارات</option>';
+    }
+}
+
+async function loadEmployees() {
+    const token=localStorage.getItem('token');
+    const select=document.getElementById('assigned_to');
+
+    try {
+        const res=await fetch('/api/employees',{
+            headers:{'Authorization':'Bearer '+token}
+        });
+
+        if(!res.ok){
+            select.innerHTML='<option value="">تعذر تحميل الموظفين</option>';
+            return;
+        }
+
+        const data=await res.json();
+        const rows=data.employees||[];
+
+        select.innerHTML=
+            '<option value="">-- بدون تعيين --</option>'+
+            rows
+            .filter(e=>e.is_active!==false)
+            .map(e =>
+                '<option value="'+e.employee_id+'">'+
+                (e.full_name||e.name||'')+
+                '</option>'
+            ).join('');
+
+    } catch(error) {
+        select.innerHTML='<option value="">تعذر تحميل الموظفين</option>';
+    }
+}
+
+function calculateTotal() {
+    const subtotal=Number(document.getElementById('subtotal').value||0);
+    const discount=Number(document.getElementById('discount_amount').value||0);
+    const tax=Number(document.getElementById('tax_amount').value||0);
+    const deposit=Number(document.getElementById('deposit_amount').value||0);
+
+    const total=Math.max(0,subtotal-discount+tax);
+    const remaining=Math.max(0,total-deposit);
+
+    document.getElementById('total_display').textContent=total.toLocaleString()+' ريال';
+    document.getElementById('deposit_display').textContent=deposit.toLocaleString()+' ريال';
+    document.getElementById('remaining_display').textContent=remaining.toLocaleString()+' ريال';
+}
+
+async function createWorkOrder() {
+    const token=localStorage.getItem('token');
+    const message=document.getElementById('formMessage');
+
+    const customerId=Number(document.getElementById('customer_id').value);
+    const vehicleId=Number(document.getElementById('vehicle_id').value);
+
+    const body={
+        branch_id:1,
+        customer_id:customerId,
+        vehicle_id:vehicleId,
+        assigned_to:document.getElementById('assigned_to').value
+            ? Number(document.getElementById('assigned_to').value)
+            : null,
+        priority:document.getElementById('priority').value,
+        subtotal:Number(document.getElementById('subtotal').value||0),
+        discount_amount:Number(document.getElementById('discount_amount').value||0),
+        tax_amount:Number(document.getElementById('tax_amount').value||0),
+        deposit_amount:Number(document.getElementById('deposit_amount').value||0),
+        customer_notes:
+            (document.getElementById('service_name').value||'')+
+            (
+                document.getElementById('customer_notes').value
+                ? ' | '+document.getElementById('customer_notes').value
+                : ''
+            )
+    };
+
+    if(!body.customer_id || !body.vehicle_id){
+        message.textContent='⚠️ اختر العميل والسيارة أولاً.';
+        return;
+    }
+
+    try {
+        message.textContent='جاري إنشاء أمر التشغيل...';
+
+        const res=await fetch('/api/work-orders',{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json',
+                'Authorization':'Bearer '+token
+            },
+            body:JSON.stringify(body)
+        });
+
+        const data=await res.json();
+
+        if(!res.ok){
+            message.textContent='❌ '+(data.message||'فشل إنشاء أمر التشغيل');
+            return;
+        }
+
+        const orderNo=data.work_order_no||data.data?.work_order_no||'';
+
+        message.innerHTML=
+            '✅ تم إنشاء أمر التشغيل بنجاح: <strong>'+
+            orderNo+
+            '</strong>';
+
+        setTimeout(function(){
+            if(data.work_order_id||data.data?.work_order_id){
+                const id=data.work_order_id||data.data.work_order_id;
+                window.location.href=
+                    '/work-order-details.html?id='+
+                    encodeURIComponent(id);
+            } else {
+                window.location.href='/work-orders.html';
+            }
+        },800);
+
+    } catch(error) {
+        message.textContent='❌ '+error.message;
+    }
+}
+
+loadCustomers();
+loadEmployees();
+calculateTotal();
+
+</script>
+
+</body>
+</html>

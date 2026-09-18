@@ -1,0 +1,63 @@
+.env
+.env.*
+!.env.example
+
+node_modules/
+npm-debug.log*
+*.log
+
+backups/
+*.dump
+*.sql
+
+uploads/*
+!uploads/.gitkeep
+
+android-app.backup*/
+*.backup
+*.bak
+
+*.pdf
+
+.DS_Store
+
+# Project backups
+*.backup*
+*.bak*
+server.log
+
+# Test/check scripts
+*-check.js
+work_order_details_1.js
+new-work-order-check.js
+new-work-order-v2-check.js
+muluk-receipts-ui-check.js
+quality-check.js
+
+# Android build/backups
+android-app.backup*/
+
+# Extra test scripts
+work-orders-check-*.js
+
+# Local miscellaneous files
+tall aapt2 d8 apksigner
+
+# Uploaded runtime files
+uploads/*
+!uploads/.gitkeep
+
+# Android application - not needed for web server deployment
+android-app/
+
+# All backup / old versions anywhere in project
+**/*backup*
+**/*backup-*
+**/*.bak
+**/*.bak*
+**/*.backup
+**/*.backup*
+**/*.before-*
+
+# Old route versions
+src/routes/*.before-*

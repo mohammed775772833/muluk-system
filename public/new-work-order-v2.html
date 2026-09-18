@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أمر تشغيل جديد | ملوك التنجيد</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Tahoma,Arial,sans-serif;background:#f4f4f2;color:#171717}
+.container{max-width:900px;margin:auto;padding:16px}
+.header{background:#111;color:#fff;padding:22px;border-radius:0 0 24px 24px}
+.header h1{margin:0;font-size:24px}
+.header p{margin:7px 0 0;color:#bbb}
+.card{background:#fff;border:1px solid #e6e6e6;border-radius:20px;padding:20px;margin-top:16px;box-shadow:0 8px 25px rgba(0,0,0,.06)}
+h2{margin:0 0 18px;font-size:19px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field{display:flex;flex-direction:column;gap:7px}
+.full{grid-column:1/-1}
+label{font-size:13px;font-weight:bold;color:#555}
+input,select,textarea{width:100%;padding:13px;border:1px solid #ddd;border-radius:12px;font:inherit;background:#fff}
+button{border:0;border-radius:12px;padding:13px 18px;font:inherit;font-weight:bold;cursor:pointer}
+.primary{background:#111;color:#fff}
+.gold{background:#b88a20;color:#fff}
+.secondary{background:#eee;color:#222}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.customer-result{padding:13px;border:1px solid #ddd;border-radius:12px;margin-top:10px;cursor:pointer;background:#fafafa}
+.customer-result:hover{background:#f5f0e5}
+.selected{background:#f7f0df;border-color:#b88a20}
+.info{background:#f7f7f7;border-radius:14px;padding:14px;margin-top:14px}
+.hidden{display:none!important}
+.message{margin-top:12px;font-weight:bold}
+@media(max-width:650px){.grid{grid-template-columns:1fr}.full{grid-column:auto}}
+
+/* ===== الهوية الموحدة - إنشاء أمر العمل ===== */
+
+.unified-header {
+    background: linear-gradient(135deg, #17365f, #285c9f);
+    color: white;
+    padding: 14px 18px;
+    border-radius: 0 0 24px 24px;
+    box-shadow: 0 5px 20px rgba(0,0,0,.12);
+}
+
+.unified-header-inner {
+    max-width: 1250px;
+    min-height: 72px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 20px;
+}
+
+.unified-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.unified-logo {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    background: white;
+    padding: 3px;
+    border-radius: 13px;
+}
+
+.unified-brand h1 {
+    margin: 0 0 4px;
+    font-size: 22px;
+    color: white;
+}
+
+.unified-brand p {
+    margin: 0;
+    color: rgba(255,255,255,.82);
+    font-size: 13px;
+}
+
+.unified-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-self: start;
+}
+
+.unified-user small {
+    display: block;
+    opacity: .75;
+    margin-bottom: 3px;
+}
+
+.unified-user strong {
+    font-size: 14px;
+}
+
+.unified-user-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+    background: rgba(255,255,255,.14);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.unified-back {
+    justify-self: end;
+    border: 1px solid rgba(255,255,255,.25);
+    background: rgba(255,255,255,.12);
+    color: white;
+    border-radius: 12px;
+    padding: 11px 16px;
+    cursor: pointer;
+    font: inherit;
+    font-weight: bold;
+}
+
+@media (max-width:650px) {
+    .unified-header {
+        padding: 10px 12px;
+    }
+
+    .unified-header-inner {
+        min-height: 62px;
+        grid-template-columns: auto 1fr auto;
+        gap: 8px;
+    }
+
+    .unified-user {
+        display: none;
+    }
+
+    .unified-logo {
+        width: 50px;
+        height: 50px;
+    }
+
+    .unified-brand {
+        justify-content: flex-start;
+        gap: 7px;
+    }
+
+    .unified-brand h1 {
+        font-size: 18px;
+    }
+
+    .unified-brand p {
+        font-size: 11px;
+    }
+
+    .unified-back {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+<header class="header unified-header">
+    <div class="container unified-header-inner">
+
+        <div class="unified-user">
+            <div class="unified-user-avatar">👤</div>
+            <div>
+                <small>مرحبًا</small>
+                <strong>إنشاء أمر عمل</strong>
+            </div>
+        </div>
+
+        <div class="unified-brand">
+            <img src="/muluk-logo.jpg"
+                 alt="ملوك التنجيد"
+                 class="unified-logo">
+            <div>
+                <h1>ملوك التنجيد</h1>
+                <p>إنشاء أمر تشغيل جديد</p>
+            </div>
+        </div>
+
+        <button type="button"
+                class="unified-back"
+                onclick="window.location.href='/work-orders.html'">
+            ← أوامر العمل
+        </button>
+
+    </div>
+</header>
+
+<main class="container">
+
+<section class="card">
+<h2>👤 بيانات العميل</h2>
+
+<div class="grid">
+<div class="field full">
+<label>البحث عن العميل</label>
+<input id="customerSearch" placeholder="اكتب اسم العميل أو رقم العميل أو الهاتف" oninput="searchCustomers()">
+</div>
+</div>
+
+<div id="customerResults"></div>
+
+<div class="row" style="margin-top:14px">
+<button class="gold" type="button" onclick="showCustomerForm()">＋ إضافة عميل جديد</button>
+</div>
+
+<div id="customerForm" class="info hidden">
+<h3 style="margin-top:0">إضافة عميل جديد</h3>
+
+<div class="grid">
+<div class="field">
+<label>اسم العميل *</label>
+<input id="newCustomerName">
+</div>
+
+<div class="field">
+<label>رقم الهاتف *</label>
+<input id="newCustomerPhone" type="tel">
+</div>
+
+<div class="field full">
+<label>العنوان</label>
+<input id="newCustomerAddress">
+</div>
+</div>
+
+<div class="row" style="margin-top:14px">
+<button class="primary" type="button" onclick="createCustomer()">حفظ العميل</button>
+<button class="secondary" type="button" onclick="hideCustomerForm()">إلغاء</button>
+</div>
+
+<div id="customerMessage" class="message"></div>
+</div>
+
+<div id="selectedCustomer" class="info hidden"></div>
+</section>
+
+<section id="vehicleSection" class="card hidden">
+<h2>🚗 بيانات السيارة</h2>
+
+<div id="existingVehiclesBox" class="info hidden">
+    <strong>🚘 سيارات العميل المسجلة</strong>
+    <div id="existingVehiclesList" style="margin-top:12px"></div>
+</div>
+
+<div id="newVehicleToggle" class="row" style="margin:14px 0">
+    <button type="button" onclick="showNewVehicleForm()">＋ إضافة سيارة جديدة</button>
+</div>
+
+<div id="newVehicleForm" class="hidden">
+<h3>➕ بيانات السيارة الجديدة</h3>
+
+<div class="grid">
+<div class="field">
+<label>نوع / ماركة السيارة *</label>
+<input id="vehicleMake" placeholder="مثال: Toyota">
+</div>
+
+<div class="field">
+<label>الموديل *</label>
+<input id="vehicleModel" placeholder="مثال: Camry">
+</div>
+
+<div class="field">
+<label>سنة الموديل</label>
+<input id="vehicleYear" type="number" placeholder="مثال: 2020">
+</div>
+
+<div class="field">
+<label>رقم اللوحة</label>
+<input id="vehiclePlate">
+</div>
+
+<div class="field">
+<label>لون السيارة</label>
+<input id="vehicleColor">
+</div>
+</div>
+
+<div class="row" style="margin-top:16px">
+<button class="primary" type="button" onclick="createVehicle()">حفظ السيارة والانتقال</button>
+</div>
+</div>
+
+<div id="vehicleMessage" class="message"></div>
+</section>
+
+<section id="nextStep" class="card hidden">
+<h2>✅ تم حفظ بيانات العميل والسيارة</h2>
+<div id="vehicleSummary" class="info"></div>
+<button class="gold" type="button" onclick="showServices()">
+الانتقال إلى الخدمات
+</button>
+</section>
+
+
+<section id="servicesSection" class="card hidden">
+<h2>🛠️ الخدمات والتفاصيل والأسعار</h2>
+
+<div class="info">
+    <strong>العميل:</strong> <span id="serviceCustomer"></span><br>
+    <strong>السيارة:</strong> <span id="serviceVehicle"></span>
+</div>
+
+<div id="servicesList">
+
+<!-- الكراسي -->
+<div class="info service-box">
+<label style="font-size:16px">
+<input type="checkbox" id="serviceChairs" onchange="toggleService('chairs')">
+ تنجيد الكراسي
+</label>
+
+<div id="chairsOptions" class="hidden" style="margin-top:14px">
+<div class="grid">
+<div class="field">
+<label>المواصفات</label>
+<select id="chairsSpec" onchange="calculateTotal()">
+<option value="">اختر المواصفات</option>
+<option>مواصفات ألمانية</option>
+<option>مواصفات أمريكية</option>
+<option>مواصفات أوروبية</option>
+</select>
+</div>
+
+<div class="field">
+<label>اللون</label>
+<input id="chairsColor" placeholder="مثال: أسود / بيج / جملي">
+</div>
+
+<div class="field">
+<label>السعر</label>
+<input id="chairsPrice" type="number" min="0" step="1" value="0" oninput="calculateTotal()">
+</div>
+</div>
+</div>
+</div>
+
+<!-- الأرضية -->
+<div class="info service-box">
+<label style="font-size:16px">
+<input type="checkbox" id="serviceFloor" onchange="toggleService('floor')">
+ تنجيد فرشة الأرضية
+</label>
+
+<div id="floorOptions" class="hidden" style="margin-top:14px">
+<div class="grid">
+<div class="field full">
+<label>النوع</label>
+<select id="floorSpec">
+<option value="">اختر النوع</option>
+<option>الممتاز رقم واحد MTC</option>
+<option>درجة أولى أمريكي</option>
+<option>ممتاز بطانة أبو شعرة</option>
+<option>أخرى</option>
+</select>
+</div>
+
+<div class="field">
+<label>السعر</label>
+<input id="floorPrice" type="number" min="0" step="1" value="0" oninput="calculateTotal()">
+</div>
+</div>
+</div>
+</div>
+
+<!-- السقف -->
+<div class="info service-box">
+<label style="font-size:16px">
+<input type="checkbox" id="serviceRoof" onchange="toggleService('roof')">
+ تنجيد السقف
+</label>
+
+<div id="roofOptions" class="hidden" style="margin-top:14px">
+<div class="grid">
+<div class="field">
+<label>اللون / الملاحظات</label>
+<input id="roofDetails">
+</div>
+
+<div class="field">
+<label>السعر</label>
+<input id="roofPrice" type="number" min="0" step="1" value="0" oninput="calculateTotal()">
+</div>
+</div>
+</div>
+</div>
+
+<!-- الطبلون -->
+<div class="info service-box">
+<label style="font-size:16px">
+<input type="checkbox" id="serviceDashboard" onchange="toggleService('dashboard')">
+ فرشة للطبلون
+</label>
+
+<div id="dashboardOptions" class="hidden" style="margin-top:14px">
+<div class="grid">
+<div class="field">
+<label>النوع</label>
+<select id="dashboardSpec">
+<option value="">اختر النوع</option>
+<option>ملكي ممتاز</option>
+<option>العادي</option>
+</select>
+</div>
+
+<div class="field">
+<label>السعر</label>
+<input id="dashboardPrice" type="number" min="0" step="1" value="0" oninput="calculateTotal()">
+</div>
+</div>
+</div>
+</div>
+
+<!-- الأبواب -->
+<div class="info service-box">
+<label style="font-size:16px">
+<input type="checkbox" id="serviceDoors" onchange="toggleService('doors')">
+ تنجيد الأبواب
+</label>
+
+<div id="doorsOptions" class="hidden" style="margin-top:14px">
+<div class="grid">
+<div class="field">
+<label>اللون / الملاحظات</label>
+<input id="doorsDetails">
+</div>
+
+<div class="field">
+<label>السعر</label>
+<input id="doorsPrice" type="number" min="0" step="1" value="0" oninput="calculateTotal()">
+</div>
+</div>
+</div>
+</div>
+
+<!-- أخرى -->
+<div class="info service-box">
+<label style="font-size:16px">
+<input type="checkbox" id="serviceOther" onchange="toggleService('other')">
+ أخرى
+</label>
+
+<div id="otherOptions" class="hidden" style="margin-top:14px">
+<div class="grid">
+<div class="field full">
+<label>وصف الخدمة</label>
+<input id="otherDetails" placeholder="اكتب تفاصيل الخدمة">
+</div>
+
+<div class="field">
+<label>السعر</label>
+<input id="otherPrice" type="number" min="0" step="1" value="0" oninput="calculateTotal()">
+</div>
+</div>
+</div>
+</div>
+
+</div>
+
+<div class="info" style="margin-top:18px">
+<h3 style="margin:0 0 10px">💰 ملخص الأسعار</h3>
+<div style="font-size:22px;font-weight:bold">
+الإجمالي: <span id="servicesTotal">0</span> ريال
+</div>
+</div>
+
+<div id="servicesMessage" class="message"></div>
+
+<div class="row" style="margin-top:16px">
+<button class="primary" type="button" onclick="continueToPayment()">
+الانتقال إلى الدفع وموعد التسليم
+</button>
+</div>
+</section>
+
+<section id="paymentSection" class="card hidden">
+<h2>💰 الدفع وموعد التسليم</h2>
+
+<div class="info">
+    <div style="font-size:18px">
+        إجمالي الخدمات:
+        <strong><span id="paymentServicesTotal">0</span> ريال</strong>
+    </div>
+</div>
+
+<div class="grid" style="margin-top:16px">
+
+<div class="field">
+<label>الخصم من الإجمالي</label>
+<input id="discountAmount" type="number" min="0" step="1" value="0"
+       oninput="calculatePayment()">
+</div>
+
+<div class="field">
+<label>المدفوع مقدمًا</label>
+<input id="depositAmount" type="number" min="0" step="1" value="0"
+       oninput="calculatePayment()">
+</div>
+
+<div class="field">
+<label>موعد التسليم *</label>
+<input id="deliveryDate" type="date">
+</div>
+
+<div class="field">
+<label>وقت التسليم</label>
+<input id="deliveryTime" type="time">
+</div>
+
+<div class="field full">
+<label>ملاحظات أمر التشغيل</label>
+<textarea id="orderNotes" rows="3"
+placeholder="أي ملاحظات أو تفاصيل إضافية"></textarea>
+</div>
+
+</div>
+
+<div class="info" style="margin-top:18px">
+<div style="font-size:19px;margin-bottom:10px">
+الخصم:
+<strong><span id="paymentDiscount">0</span> ريال</strong>
+</div>
+
+<div style="font-size:22px;margin-bottom:10px">
+الإجمالي بعد الخصم:
+<strong><span id="finalTotal">0</span> ريال</strong>
+</div>
+
+<div style="font-size:22px">
+الباقي:
+<strong><span id="remainingAmount">0</span> ريال</strong>
+</div>
+</div>
+
+<div id="paymentMessage" class="message"></div>
+
+<h3 style="margin-top:24px">✍️ توقيع العميل</h3>
+
+<div style="border:2px dashed #ccc;border-radius:14px;background:#fff;
+padding:8px;touch-action:none">
+<canvas id="signatureCanvas"
+        style="width:100%;height:220px;display:block;touch-action:none">
+</canvas>
+</div>
+
+<div class="row" style="margin-top:10px">
+<button class="secondary" type="button" onclick="clearSignature()">
+مسح التوقيع
+</button>
+</div>
+
+<div class="info" style="margin-top:18px">
+<h3 style="margin:0 0 12px">📋 مراجعة أمر التشغيل</h3>
+<div id="finalReview"></div>
+</div>
+
+<div class="row" style="margin-top:18px">
+<button class="gold" type="button" onclick="saveWorkOrderV2()">
+مراجعة وحفظ أمر التشغيل
+</button>
+</div>
+</section>
+
+</main>
+
+<script>
+let customers=[];
+let selectedCustomer=null;
+let selectedVehicle=null;
+
+function token(){
+    return localStorage.getItem('token');
+}
+
+function currentUser(){
+    try{
+        const t = token();
+        if(!t) return null;
+        const part = t.split('.')[1];
+        return JSON.parse(atob(part.replace(/-/g,'+').replace(/_/g,'/')));
+    }catch(e){
+        console.error('JWT decode error:',e);
+        return null;
+    }
+}
+
+async function checkSession(){
+    const t = token();
+
+    if(!t){
+        window.location.href = '/';
+        return false;
+    }
+
+    try{
+        const res = await fetch('/api/auth/me',{
+            method:'GET',
+            headers:{
+                'Authorization':'Bearer '+t,
+                'Cache-Control':'no-cache'
+            },
+            cache:'no-store'
+        });
+
+        if(!res.ok){
+            localStorage.removeItem('token');
+            window.location.href = '/';
+            return false;
+        }
+
+        return true;
+    }catch(e){
+        console.error('Session check error:',e);
+        return false;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', async ()=>{
+    await checkSession();
+});
+
+async function searchCustomers(){
+    const q=document.getElementById('customerSearch').value.trim();
+    const box=document.getElementById('customerResults');
+
+    if(!q){
+        box.innerHTML='';
+        return;
+    }
+
+    try{
+        const res=await fetch('/api/customers',{
+            headers:{Authorization:'Bearer '+token()}
+        });
+
+        const data=await res.json();
+
+        if(!res.ok){
+            box.innerHTML='<div class="message">تعذر تحميل العملاء</div>';
+            return;
+        }
+
+        customers=data.customers||[];
+
+        const query=q.toLowerCase();
+
+        const results=customers.filter(c=>
+            String(c.full_name||'').toLowerCase().includes(query) ||
+            String(c.customer_no||'').toLowerCase().includes(query) ||
+            String(c.phone||'').toLowerCase().includes(query)
+        ).slice(0,10);
+
+        if(!results.length){
+            box.innerHTML='<div class="info">لم يتم العثور على العميل.</div>';
+            return;
+        }
+
+        box.innerHTML=results.map(c=>`
+            <div class="customer-result" onclick="selectCustomer(${Number(c.customer_id)})">
+                <strong>${escapeHtml(c.full_name)}</strong><br>
+                <small>رقم العميل: ${escapeHtml(c.customer_no||'')} — الهاتف: ${escapeHtml(c.phone||'')}</small>
+            </div>
+        `).join('');
+
+    }catch(e){
+        console.error(e);
+        box.innerHTML='<div class="message">حدث خطأ أثناء البحث</div>';
+    }
+}
+
+function selectCustomer(id){
+    selectedCustomer=customers.find(c=>Number(c.customer_id)===Number(id));
+
+    if(!selectedCustomer)return;
+
+    document.getElementById('selectedCustomer').classList.remove('hidden');
+    document.getElementById('selectedCustomer').innerHTML=`
+        <strong>العميل المختار</strong><br><br>
+        👤 ${escapeHtml(selectedCustomer.full_name)}<br>
+        🆔 رقم العميل: <strong>${escapeHtml(selectedCustomer.customer_no||'')}</strong><br>
+        📞 ${escapeHtml(selectedCustomer.phone||'')}
+    `;
+
+    document.getElementById('vehicleSection').classList.remove('hidden');
+    loadCustomerVehicles();
+    document.getElementById('customerResults').innerHTML='';
+    document.getElementById('customerSearch').value=selectedCustomer.full_name;
+
+    window.scrollTo({
+        top:document.getElementById('vehicleSection').offsetTop-20,
+        behavior:'smooth'
+    });
+}
+
+function showCustomerForm(){
+    document.getElementById('customerForm').classList.remove('hidden');
+}
+
+function hideCustomerForm(){
+    document.getElementById('customerForm').classList.add('hidden');
+}
+
+async function createCustomer(){
+    const message=document.getElementById('customerMessage');
+
+    const full_name=document.getElementById('newCustomerName').value.trim();
+    const phone=document.getElementById('newCustomerPhone').value.trim();
+    const address=document.getElementById('newCustomerAddress').value.trim();
+
+    if(!full_name||!phone){
+        message.textContent='⚠️ اسم العميل ورقم الهاتف مطلوبان';
+        return;
+    }
+
+    try{
+        const res=await fetch('/api/customers',{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json',
+                'Authorization':'Bearer '+token()
+            },
+            body:JSON.stringify({
+                full_name,
+                phone,
+                address
+            })
+        });
+
+        const data=await res.json();
+
+        if(!res.ok){
+            message.textContent='❌ '+(data.message||'فشل حفظ العميل');
+            return;
+        }
+
+        selectedCustomer=data.customer;
+
+        message.textContent='✅ تم حفظ العميل بنجاح';
+
+        document.getElementById('selectedCustomer').classList.remove('hidden');
+        document.getElementById('selectedCustomer').innerHTML=`
+            <strong>تمت إضافة العميل</strong><br><br>
+            👤 ${escapeHtml(selectedCustomer.full_name)}<br>
+            🆔 رقم العميل: <strong>${escapeHtml(selectedCustomer.customer_no||'')}</strong><br>
+            📞 ${escapeHtml(selectedCustomer.phone||'')}
+        `;
+
+        document.getElementById('customerSearch').value=selectedCustomer.full_name;
+        document.getElementById('customerForm').classList.add('hidden');
+        document.getElementById('vehicleSection').classList.remove('hidden');
+
+        document.getElementById('newCustomerName').value='';
+        document.getElementById('newCustomerPhone').value='';
+        document.getElementById('newCustomerAddress').value='';
+
+        window.scrollTo({
+            top:document.getElementById('vehicleSection').offsetTop-20,
+            behavior:'smooth'
+        });
+
+    }catch(e){
+        console.error(e);
+        message.textContent='❌ حدث خطأ أثناء حفظ العميل';
+    }
+}
+
+
+async function loadCustomerVehicles(){
+    const box = document.getElementById('existingVehiclesBox');
+    const list = document.getElementById('existingVehiclesList');
+
+    if(!selectedCustomer){
+        box.classList.add('hidden');
+        return;
+    }
+
+    try{
+        const res = await fetch('/api/vehicles',{
+            headers:{
+                'Authorization':'Bearer '+token()
+            },
+            cache:'no-store'
+        });
+
+        const data = await res.json();
+
+        if(!res.ok){
+            box.classList.add('hidden');
+            showNewVehicleForm();
+            return;
+        }
+
+        const vehicles = (data.vehicles || []).filter(v =>
+            Number(v.customer_id) === Number(selectedCustomer.customer_id)
+        );
+
+        if(!vehicles.length){
+            box.classList.add('hidden');
+            showNewVehicleForm();
+            return;
+        }
+
+        box.classList.remove('hidden');
+
+        list.innerHTML = vehicles.map(v => `
+            <div class="customer-result"
+                 style="cursor:pointer;margin-bottom:8px"
+                 onclick="selectExistingVehicle(${Number(v.vehicle_id)})">
+                <strong>🚗 ${escapeHtml((v.make||'')+' '+(v.model||''))}</strong><br>
+                <small>
+                    اللوحة: ${escapeHtml(v.plate_no||'غير محدد')}
+                    — اللون: ${escapeHtml(v.color||'غير محدد')}
+                    — الموديل: ${escapeHtml(v.model_year||'غير محدد')}
+                </small>
+            </div>
+        `).join('');
+
+        document.getElementById('newVehicleForm').classList.add('hidden');
+
+    }catch(e){
+        console.error('Load customer vehicles error:',e);
+        box.classList.add('hidden');
+        showNewVehicleForm();
+    }
+}
+
+async function selectExistingVehicle(id){
+    const message = document.getElementById('vehicleMessage');
+
+    try{
+        const res = await fetch('/api/vehicles/'+Number(id),{
+            headers:{
+                'Authorization':'Bearer '+token()
+            },
+            cache:'no-store'
+        });
+
+        const data = await res.json();
+
+        if(!res.ok){
+            message.textContent='❌ '+(data.message||'تعذر تحميل السيارة');
+            return;
+        }
+
+        selectedVehicle = data.vehicle;
+
+        document.getElementById('vehicleMake').value = selectedVehicle.make || '';
+        document.getElementById('vehicleModel').value = selectedVehicle.model || '';
+        document.getElementById('vehicleYear').value = selectedVehicle.model_year || '';
+        document.getElementById('vehiclePlate').value = selectedVehicle.plate_no || '';
+        document.getElementById('vehicleColor').value = selectedVehicle.color || '';
+
+        document.getElementById('newVehicleForm').classList.add('hidden');
+
+        message.textContent='✅ تم اختيار السيارة المسجلة';
+
+        document.getElementById('nextStep').classList.remove('hidden');
+
+        document.getElementById('vehicleSummary').innerHTML=`
+            👤 العميل: <strong>${escapeHtml(selectedCustomer.full_name)}</strong><br>
+            🆔 رقم العميل: <strong style="white-space:nowrap">${escapeHtml(selectedCustomer.customer_no||'')}</strong><br><br>
+            🚗 السيارة: <strong>${escapeHtml(selectedVehicle.make||'')} ${escapeHtml(selectedVehicle.model||'')}</strong><br>
+            🔢 اللوحة: ${escapeHtml(selectedVehicle.plate_no||'غير محدد')}<br>
+            🎨 اللون: ${escapeHtml(selectedVehicle.color||'غير محدد')}<br>
+            📅 الموديل: ${escapeHtml(selectedVehicle.model_year||'غير محدد')}
+        `;
+
+        window.scrollTo({
+            top:document.getElementById('nextStep').offsetTop-20,
+            behavior:'smooth'
+        });
+
+    }catch(e){
+        console.error(e);
+        message.textContent='❌ حدث خطأ أثناء تحميل السيارة';
+    }
+}
+
+function showNewVehicleForm(){
+    document.getElementById('newVehicleForm').classList.remove('hidden');
+
+    window.scrollTo({
+        top:document.getElementById('newVehicleForm').offsetTop-20,
+        behavior:'smooth'
+    });
+}
+
+async function createVehicle(){
+    const message=document.getElementById('vehicleMessage');
+
+    if(!selectedCustomer){
+        message.textContent='⚠️ اختر العميل أولاً';
+        return;
+    }
+
+    const make=document.getElementById('vehicleMake').value.trim();
+    const model=document.getElementById('vehicleModel').value.trim();
+    const model_year=document.getElementById('vehicleYear').value;
+    const plate_no=document.getElementById('vehiclePlate').value.trim();
+    const color=document.getElementById('vehicleColor').value.trim();
+
+    if(!make||!model){
+        message.textContent='⚠️ نوع السيارة والموديل مطلوبان';
+        return;
+    }
+
+    try{
+        const res=await fetch('/api/vehicles',{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json',
+                'Authorization':'Bearer '+token()
+            },
+            body:JSON.stringify({
+                customer_id:Number(selectedCustomer.customer_id),
+                make,
+                model,
+                model_year:model_year?Number(model_year):null,
+                plate_no,
+                color
+            })
+        });
+
+        const data=await res.json();
+
+        if(!res.ok){
+            message.textContent='❌ '+(data.message||'فشل حفظ السيارة');
+            return;
+        }
+
+        selectedVehicle=data.vehicle;
+
+        message.textContent='✅ تم حفظ السيارة بنجاح';
+
+        document.getElementById('nextStep').classList.remove('hidden');
+        document.getElementById('vehicleSummary').innerHTML=`
+            👤 العميل: <strong>${escapeHtml(selectedCustomer.full_name)}</strong><br>
+            🆔 رقم العميل: <strong>${escapeHtml(selectedCustomer.customer_no||'')}</strong><br><br>
+            🚗 السيارة: <strong>${escapeHtml(selectedVehicle.make||'')} ${escapeHtml(selectedVehicle.model||'')}</strong><br>
+            🔢 اللوحة: ${escapeHtml(selectedVehicle.plate_no||'غير محدد')}<br>
+            🎨 اللون: ${escapeHtml(selectedVehicle.color||'غير محدد')}<br>
+            📅 الموديل: ${escapeHtml(selectedVehicle.model_year||'غير محدد')}
+        `;
+
+        window.scrollTo({
+            top:document.getElementById('nextStep').offsetTop-20,
+            behavior:'smooth'
+        });
+
+    }catch(e){
+        console.error(e);
+        message.textContent='❌ حدث خطأ أثناء حفظ السيارة';
+    }
+}
+
+
+function showServices(){
+    if(!selectedCustomer || !selectedVehicle){
+        alert('يجب حفظ العميل والسيارة أولاً');
+        return;
+    }
+
+    document.getElementById('servicesSection').classList.remove('hidden');
+
+    document.getElementById('serviceCustomer').textContent =
+        selectedCustomer.full_name + ' — ' + (selectedCustomer.customer_no || '');
+
+    document.getElementById('serviceVehicle').textContent =
+        (selectedVehicle.make || '') + ' ' +
+        (selectedVehicle.model || '') + ' — لوحة ' +
+        (selectedVehicle.plate_no || 'غير محدد');
+
+    window.scrollTo({
+        top:document.getElementById('servicesSection').offsetTop-20,
+        behavior:'smooth'
+    });
+}
+
+function toggleService(type){
+    const box=document.getElementById(type==='chairs'?'chairsOptions':
+        type==='floor'?'floorOptions':
+        type==='roof'?'roofOptions':
+        type==='dashboard'?'dashboardOptions':
+        type==='doors'?'doorsOptions':
+        'otherOptions');
+
+    const checked=document.getElementById(
+        type==='chairs'?'serviceChairs':
+        type==='floor'?'serviceFloor':
+        type==='roof'?'serviceRoof':
+        type==='dashboard'?'serviceDashboard':
+        type==='doors'?'serviceDoors':
+        'serviceOther'
+    ).checked;
+
+    box.classList.toggle('hidden', !checked);
+
+    if(!checked){
+        const price=document.getElementById(type+'Price');
+        if(price) price.value=0;
+    }
+
+    calculateTotal();
+}
+
+function calculateTotal(){
+    const ids=[
+        'chairsPrice',
+        'floorPrice',
+        'roofPrice',
+        'dashboardPrice',
+        'doorsPrice',
+        'otherPrice'
+    ];
+
+    let total=0;
+
+    ids.forEach(id=>{
+        const el=document.getElementById(id);
+        if(el) total += Number(el.value)||0;
+    });
+
+    document.getElementById('servicesTotal').textContent =
+        total.toLocaleString('ar-YE');
+
+    return total;
+}
+
+function continueToPayment(){
+    const selected=[
+        document.getElementById('serviceChairs').checked,
+        document.getElementById('serviceFloor').checked,
+        document.getElementById('serviceRoof').checked,
+        document.getElementById('serviceDashboard').checked,
+        document.getElementById('serviceDoors').checked,
+        document.getElementById('serviceOther').checked
+    ];
+
+    if(!selected.some(Boolean)){
+        document.getElementById('servicesMessage').textContent =
+            '⚠️ اختر خدمة واحدة على الأقل';
+        return;
+    }
+
+    const total=calculateTotal();
+
+    document.getElementById('paymentServicesTotal').textContent =
+        total.toLocaleString('ar-YE');
+
+    document.getElementById('paymentSection').classList.remove('hidden');
+
+    initSignature();
+
+    calculatePayment();
+
+    window.scrollTo({
+        top:document.getElementById('paymentSection').offsetTop-20,
+        behavior:'smooth'
+    });
+}
+
+function calculatePayment(){
+    const total=calculateTotal();
+
+    let discount=Number(document.getElementById('discountAmount').value)||0;
+    let deposit=Number(document.getElementById('depositAmount').value)||0;
+
+    if(discount<0) discount=0;
+    if(discount>total){
+        discount=total;
+        document.getElementById('discountAmount').value=total;
+    }
+
+    const finalTotal=Math.max(0,total-discount);
+
+    if(deposit<0) deposit=0;
+    if(deposit>finalTotal){
+        deposit=finalTotal;
+        document.getElementById('depositAmount').value=finalTotal;
+    }
+
+    const remaining=Math.max(0,finalTotal-deposit);
+
+    document.getElementById('paymentServicesTotal').textContent =
+        total.toLocaleString('ar-YE');
+
+    document.getElementById('paymentDiscount').textContent =
+        discount.toLocaleString('ar-YE');
+
+    document.getElementById('finalTotal').textContent =
+        finalTotal.toLocaleString('ar-YE');
+
+    document.getElementById('remainingAmount').textContent =
+        remaining.toLocaleString('ar-YE');
+
+    return {
+        total,
+        discount,
+        finalTotal,
+        deposit,
+        remaining
+    };
+}
+
+let signatureInitialized=false;
+
+function initSignature(){
+    const canvas=document.getElementById('signatureCanvas');
+
+    if(!canvas || signatureInitialized)return;
+
+    const ratio=Math.max(window.devicePixelRatio||1,1);
+    const rect=canvas.getBoundingClientRect();
+
+    canvas.width=rect.width*ratio;
+    canvas.height=220*ratio;
+
+    const ctx=canvas.getContext('2d');
+    ctx.scale(ratio,ratio);
+    ctx.lineWidth=2;
+    ctx.lineCap='round';
+    ctx.lineJoin='round';
+
+    let drawing=false;
+
+    function point(e){
+        const r=canvas.getBoundingClientRect();
+        const touch=e.touches ? e.touches[0] : e;
+        return {
+            x:touch.clientX-r.left,
+            y:touch.clientY-r.top
+        };
+    }
+
+    function start(e){
+        e.preventDefault();
+        drawing=true;
+        const p=point(e);
+        ctx.beginPath();
+        ctx.moveTo(p.x,p.y);
+    }
+
+    function move(e){
+        if(!drawing)return;
+        e.preventDefault();
+        const p=point(e);
+        ctx.lineTo(p.x,p.y);
+        ctx.stroke();
+    }
+
+    function end(e){
+        if(e && e.preventDefault)e.preventDefault();
+        drawing=false;
+    }
+
+    canvas.addEventListener('mousedown',start);
+    canvas.addEventListener('mousemove',move);
+    canvas.addEventListener('mouseup',end);
+    canvas.addEventListener('mouseleave',end);
+
+    canvas.addEventListener('touchstart',start,{passive:false});
+    canvas.addEventListener('touchmove',move,{passive:false});
+    canvas.addEventListener('touchend',end,{passive:false});
+
+    signatureInitialized=true;
+}
+
+function clearSignature(){
+    const canvas=document.getElementById('signatureCanvas');
+    if(!canvas)return;
+
+    const ctx=canvas.getContext('2d');
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+}
+
+function signatureData(){
+    const canvas=document.getElementById('signatureCanvas');
+
+    if(!canvas)return '';
+
+    return canvas.toDataURL('image/png');
+}
+
+let savingWorkOrder = false;
+
+function collectV2Services(){
+    const services = [];
+
+    if(document.getElementById('serviceChairs').checked){
+        services.push({
+            service_id: 2,
+            unit_price: Number(document.getElementById('chairsPrice').value || 0),
+            notes:
+                'المواصفات: ' +
+                (document.getElementById('chairsSpec').value || 'بدون تحديد') +
+                ' — اللون: ' +
+                (document.getElementById('chairsColor').value || 'غير محدد')
+        });
+    }
+
+    if(document.getElementById('serviceFloor').checked){
+        services.push({
+            service_id: 3,
+            unit_price: Number(document.getElementById('floorPrice').value || 0),
+            notes:
+                'المواصفات: ' +
+                (document.getElementById('floorSpec').value || 'بدون تحديد')
+        });
+    }
+
+    if(document.getElementById('serviceRoof').checked){
+        services.push({
+            service_id: 4,
+            unit_price: Number(document.getElementById('roofPrice').value || 0),
+            notes:
+                document.getElementById('roofDetails').value || 'بدون ملاحظات'
+        });
+    }
+
+    if(document.getElementById('serviceDashboard').checked){
+        services.push({
+            service_id: 5,
+            unit_price: Number(document.getElementById('dashboardPrice').value || 0),
+            notes:
+                'المواصفات: ' +
+                (document.getElementById('dashboardSpec').value || 'بدون تحديد')
+        });
+    }
+
+    if(document.getElementById('serviceDoors').checked){
+        services.push({
+            service_id: 6,
+            unit_price: Number(document.getElementById('doorsPrice').value || 0),
+            notes:
+                document.getElementById('doorsDetails').value || 'بدون ملاحظات'
+        });
+    }
+
+    if(document.getElementById('serviceOther').checked){
+        services.push({
+            service_id: 7,
+            unit_price: Number(document.getElementById('otherPrice').value || 0),
+            notes:
+                document.getElementById('otherDetails').value || 'بدون وصف'
+        });
+    }
+
+    return services;
+}
+
+async function saveWorkOrderV2(){
+    document.getElementById('paymentMessage').textContent =
+        '🧪 تم الضغط على زر حفظ أمر التشغيل';
+
+    if(savingWorkOrder) return;
+
+    if(!selectedCustomer){
+        document.getElementById('paymentMessage').textContent =
+            '⚠️ يجب اختيار العميل أولاً';
+        return;
+    }
+
+    if(!selectedVehicle){
+        document.getElementById('paymentMessage').textContent =
+            '⚠️ يجب اختيار السيارة أولاً';
+        return;
+    }
+
+    const deliveryDate = document.getElementById('deliveryDate').value;
+    const deliveryTime = document.getElementById('deliveryTime').value || '17:00';
+    const notes = document.getElementById('orderNotes').value.trim();
+
+    if(!deliveryDate){
+        document.getElementById('paymentMessage').textContent =
+            '⚠️ يجب تحديد موعد التسليم';
+        return;
+    }
+
+    const payment = calculatePayment();
+    const user = currentUser();
+
+    if(!user || !user.branch_id){
+        document.getElementById('paymentMessage').textContent =
+            '❌ تعذر تحديد فرع المستخدم. أعد تسجيل الدخول.';
+        return;
+    }
+
+    savingWorkOrder = true;
+
+    const btn = document.querySelector(
+        'button[onclick="saveWorkOrderV2()"]'
+    );
+
+    if(btn){
+        btn.disabled = true;
+        btn.textContent = '⏳ جارٍ حفظ أمر التشغيل...';
+    }
+
+    try{
+        const delivery = new Date(
+            `${deliveryDate}T${deliveryTime}:00`
+        );
+
+        const res = await fetch('/api/work-orders',{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json',
+                'Authorization':'Bearer '+token()
+            },
+            body:JSON.stringify({
+                branch_id:Number(user.branch_id),
+                customer_id:Number(selectedCustomer.customer_id),
+                vehicle_id:Number(selectedVehicle.vehicle_id),
+                priority:'NORMAL',
+                promised_at:delivery.toISOString(),
+                customer_notes:notes,
+                internal_notes:null,
+                subtotal:payment.total,
+                discount_amount:payment.discount,
+                tax_amount:0,
+                deposit_amount:payment.deposit
+            })
+        });
+
+        const data = await res.json();
+
+        if(!res.ok){
+
+            throw new Error(
+                data.message || 'تعذر إنشاء أمر التشغيل'
+            );
+        }
+
+        const order = data.work_order;
+        const selectedServices = collectV2Services();
+
+        for(const service of selectedServices){
+            const serviceRes = await fetch(
+                '/api/work-orders/' +
+                Number(order.work_order_id) +
+                '/services',
+                {
+                    method:'POST',
+                    headers:{
+                        'Content-Type':'application/json',
+                        'Authorization':'Bearer '+token()
+                    },
+                    body:JSON.stringify({
+                        service_id:service.service_id,
+                        quantity:1,
+                        unit_price:service.unit_price,
+                        discount:0,
+                        notes:service.notes
+                    })
+                }
+            );
+
+            const serviceData = await serviceRes.json();
+
+            if(!serviceRes.ok){
+                throw new Error(
+                    serviceData.message ||
+                    'تم إنشاء أمر العمل لكن تعذر حفظ إحدى الخدمات'
+                );
+            }
+        }
+
+        /*
+         * تجهيز رسالة واتساب بعد نجاح إنشاء أمر التشغيل.
+         */
+        let phone = String(selectedCustomer.phone || '')
+            .replace(/[^0-9]/g, '');
+
+        if(phone.startsWith('00')){
+            phone = phone.substring(2);
+        }
+
+        if(phone.startsWith('0')){
+            phone = '967' + phone.substring(1);
+        }else if(
+            !phone.startsWith('967') &&
+            phone.length === 9 &&
+            phone.startsWith('7')
+        ){
+            phone = '967' + phone;
+        }
+
+        const vehicleName = [
+            selectedVehicle.make,
+            selectedVehicle.model,
+            selectedVehicle.model_year
+        ].filter(Boolean).join(' ');
+
+        const serviceNames = {
+            2: 'تنجيد الكراسي',
+            3: 'تنجيد فرشة الأرضية',
+            4: 'تنجيد السقف',
+            5: 'فرشة للطبلون',
+            6: 'تنجيد الأبواب',
+            7: 'خدمة أخرى'
+        };
+
+        const servicesText = selectedServices.length
+            ? selectedServices.map((service, index) => {
+                const details = service.notes || 'بدون تفاصيل';
+                const price = Number(service.unit_price || 0)
+                    .toLocaleString('ar-YE');
+
+                return `${index + 1}. ${serviceNames[service.service_id] || 'خدمة'}
+💵 السعر: ${price} ريال
+📝 التفاصيل: ${details}`;
+            }).join('\n\n')
+            : 'لا توجد خدمات مسجلة';
+
+        const waText = `السلام عليكم ورحمة الله وبركاته 🌹
+
+عميلنا الكريم،
+تم تسجيل أمر التشغيل الخاص بكم لدى:
+
+👑 ملوك التنجيد لخدمات التنجيد
+
+━━━━━━━━━━━━━━
+📋 بيانات أمر التشغيل
+━━━━━━━━━━━━━━
+رقم أمر التشغيل: ${order.work_order_no || ''}
+
+👤 بيانات العميل
+الاسم: ${selectedCustomer.full_name || ''}
+رقم العميل: ${selectedCustomer.customer_no || ''}
+الجوال: ${selectedCustomer.phone || ''}
+
+🚗 بيانات السيارة
+السيارة: ${vehicleName || 'غير محددة'}
+اللوحة: ${selectedVehicle.plate_no || 'غير محددة'}
+
+🛠️ الخدمات المطلوبة
+${servicesText}
+
+━━━━━━━━━━━━━━
+💰 الحسابات
+━━━━━━━━━━━━━━
+الإجمالي: ${payment.finalTotal.toLocaleString('ar-YE')} ريال
+المدفوع: ${payment.deposit.toLocaleString('ar-YE')} ريال
+المتبقي: ${payment.remaining.toLocaleString('ar-YE')} ريال
+
+📅 موعد التسليم: ${deliveryDate}
+⏰ الوقت: ${deliveryTime}
+
+سيتم إبلاغكم عند اكتمال العمل وجاهزية السيارة للتسليم.
+
+شكرًا لاختياركم ملوك التنجيد 👑
+نتمنى لكم تجربة مميزة.`;
+
+        const whatsappUrl = phone
+            ? 'https://api.whatsapp.com/send?phone=' +
+              phone +
+              '&text=' +
+              encodeURIComponent(waText)
+            : null;
+
+        document.getElementById('finalReview').innerHTML = `
+            <strong>✅ تم إنشاء أمر التشغيل بنجاح</strong><br><br>
+
+            <strong>🧾 رقم أمر العمل:</strong>
+            <span style="white-space:nowrap">
+                ${escapeHtml(order.work_order_no || '')}
+            </span><br>
+
+            <strong>👤 العميل:</strong>
+            ${escapeHtml(selectedCustomer.full_name)}<br>
+
+            <strong>🆔 رقم العميل:</strong>
+            <span style="white-space:nowrap">
+                ${escapeHtml(selectedCustomer.customer_no || '')}
+            </span><br>
+
+            <strong>📞 الجوال:</strong>
+            <span style="white-space:nowrap">
+                ${escapeHtml(selectedCustomer.phone || '')}
+            </span><br>
+
+            <strong>🚗 السيارة:</strong>
+            ${escapeHtml(selectedVehicle.make || '')}
+            ${escapeHtml(selectedVehicle.model || '')}
+            — ${escapeHtml(selectedVehicle.plate_no || 'غير محدد')}<br><br>
+
+            <strong>💵 الإجمالي:</strong>
+            ${payment.finalTotal.toLocaleString('ar-YE')} ريال<br>
+
+            <strong>💳 المدفوع:</strong>
+            ${payment.deposit.toLocaleString('ar-YE')} ريال<br>
+
+            <strong>📌 الباقي:</strong>
+            ${payment.remaining.toLocaleString('ar-YE')} ريال
+        `;
+
+        document.getElementById('paymentMessage').textContent =
+            '✅ تم حفظ أمر التشغيل رقم ' +
+            (order.work_order_no || '');
+
+        // زر إرسال تفاصيل أمر التشغيل عبر واتساب
+        if (whatsappUrl) {
+            const finalReview = document.getElementById('finalReview');
+
+            const waButton = document.createElement('button');
+            waButton.type = 'button';
+            waButton.id = 'sendWorkOrderWhatsApp';
+            waButton.textContent = '📲 إرسال تفاصيل أمر التشغيل عبر واتساب';
+            waButton.style.cssText =
+                'background:#25D366;color:white;border:0;padding:14px 22px;' +
+                'border-radius:10px;font-size:16px;font-weight:bold;cursor:pointer;' +
+                'margin-top:15px;';
+
+            waButton.onclick = function () {
+                window.location.href = whatsappUrl;
+            };
+
+            finalReview.appendChild(document.createElement('br'));
+            finalReview.appendChild(document.createElement('br'));
+            finalReview.appendChild(waButton);
+        }
+
+        if(btn){
+            btn.disabled = true;
+            btn.textContent = '✅ تم حفظ أمر التشغيل';
+        }
+
+        saveSucceeded = true;
+
+        console.log('V2 work order created:', order);
+
+    }catch(error){
+        console.error('V2 save error:',error);
+
+
+        document.getElementById('paymentMessage').textContent =
+            '❌ ' + error.message;
+
+    }finally{
+        if(!saveSucceeded){
+            savingWorkOrder = false;
+
+            if(btn){
+                btn.disabled = false;
+                btn.textContent = 'مراجعة وحفظ أمر التشغيل';
+            }
+        }
+    }
+}
+
+function prepareFinalReview(){
+    const payment=calculatePayment();
+    const deliveryDate=document.getElementById('deliveryDate').value;
+    const deliveryTime=document.getElementById('deliveryTime').value;
+    const notes=document.getElementById('orderNotes').value.trim();
+
+    if(!deliveryDate){
+        document.getElementById('paymentMessage').textContent =
+            '⚠️ يجب تحديد موعد التسليم';
+        return;
+    }
+
+    const services=[];
+
+    if(document.getElementById('serviceChairs').checked){
+        services.push(
+            'تنجيد الكراسي — '+
+            (document.getElementById('chairsSpec').value||'بدون تحديد')+
+            ' — لون: '+
+            (document.getElementById('chairsColor').value||'غير محدد')+
+            ' — '+
+            Number(document.getElementById('chairsPrice').value||0).toLocaleString('ar-YE')+
+            ' ريال'
+        );
+    }
+
+    if(document.getElementById('serviceFloor').checked){
+        services.push(
+            'فرشة الأرضية — '+
+            (document.getElementById('floorSpec').value||'بدون تحديد')+
+            ' — '+
+            Number(document.getElementById('floorPrice').value||0).toLocaleString('ar-YE')+
+            ' ريال'
+        );
+    }
+
+    if(document.getElementById('serviceRoof').checked){
+        services.push(
+            'تنجيد السقف — '+
+            (document.getElementById('roofDetails').value||'بدون ملاحظات')+
+            ' — '+
+            Number(document.getElementById('roofPrice').value||0).toLocaleString('ar-YE')+
+            ' ريال'
+        );
+    }
+
+    if(document.getElementById('serviceDashboard').checked){
+        services.push(
+            'فرشة الطبلون — '+
+            (document.getElementById('dashboardSpec').value||'بدون تحديد')+
+            ' — '+
+            Number(document.getElementById('dashboardPrice').value||0).toLocaleString('ar-YE')+
+            ' ريال'
+        );
+    }
+
+    if(document.getElementById('serviceDoors').checked){
+        services.push(
+            'تنجيد الأبواب — '+
+            (document.getElementById('doorsDetails').value||'بدون ملاحظات')+
+            ' — '+
+            Number(document.getElementById('doorsPrice').value||0).toLocaleString('ar-YE')+
+            ' ريال'
+        );
+    }
+
+    if(document.getElementById('serviceOther').checked){
+        services.push(
+            'أخرى — '+
+            (document.getElementById('otherDetails').value||'بدون وصف')+
+            ' — '+
+            Number(document.getElementById('otherPrice').value||0).toLocaleString('ar-YE')+
+            ' ريال'
+        );
+    }
+
+    document.getElementById('finalReview').innerHTML=`
+        <strong>👤 العميل:</strong>
+        ${escapeHtml(selectedCustomer.full_name)}
+        — ${escapeHtml(selectedCustomer.customer_no||'')}<br><br>
+
+        <strong>🚗 السيارة:</strong>
+        ${escapeHtml(selectedVehicle.make||'')}
+        ${escapeHtml(selectedVehicle.model||'')}
+        — ${escapeHtml(selectedVehicle.plate_no||'غير محدد')}<br><br>
+
+        <strong>🛠️ الخدمات:</strong><br>
+        ${services.map(x=>'• '+escapeHtml(x)).join('<br>')}<br><br>
+
+        <strong>💰 إجمالي الخدمات:</strong>
+        ${payment.total.toLocaleString('ar-YE')} ريال<br>
+
+        <strong>🏷️ الخصم:</strong>
+        ${payment.discount.toLocaleString('ar-YE')} ريال<br>
+
+        <strong>💵 الإجمالي بعد الخصم:</strong>
+        ${payment.finalTotal.toLocaleString('ar-YE')} ريال<br>
+
+        <strong>💳 المدفوع:</strong>
+        ${payment.deposit.toLocaleString('ar-YE')} ريال<br>
+
+        <strong>📌 الباقي:</strong>
+        ${payment.remaining.toLocaleString('ar-YE')} ريال<br><br>
+
+        <strong>📅 موعد التسليم:</strong>
+        ${escapeHtml(deliveryDate)}
+        ${deliveryTime ? ' — '+escapeHtml(deliveryTime) : ''}<br>
+
+        ${notes ? '<br><strong>📝 الملاحظات:</strong> '+escapeHtml(notes) : ''}
+    `;
+
+    document.getElementById('paymentMessage').textContent =
+        '✅ تمت مراجعة البيانات. الحفظ النهائي سيُربط بقاعدة بيانات أوامر العمل.';
+}
+
+
+
+function escapeHtml(value){
+    return String(value??'')
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;')
+        .replace(/'/g,'&#039;');
+}
+</script>
+</body>
+</html>

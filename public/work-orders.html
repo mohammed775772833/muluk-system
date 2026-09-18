@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;font-family:Tahoma,Arial,sans-serif;background:#f3f3f1;color:#171717}
+body{direction:rtl;min-height:100vh}
+.page{max-width:1450px;margin:auto;padding:24px}
+.hero{
+    position:relative;overflow:hidden;border-radius:28px;padding:34px;
+    background:linear-gradient(135deg,#080808,#191919 55%,#292313);
+    color:#fff;box-shadow:0 20px 55px rgba(0,0,0,.18);margin-bottom:22px
+}
+.hero:before,.hero:after{
+    content:"";position:absolute;border:1px solid rgba(212,175,55,.22);
+    border-radius:50%;pointer-events:none
+}
+.hero:before{width:430px;height:430px;left:-170px;top:-240px}
+.hero:after{width:330px;height:330px;right:-150px;bottom:-240px}
+.hero-content{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{display:flex;align-items:center;gap:18px}
+.brand-icon{
+    width:76px;height:76px;border-radius:22px;display:grid;place-items:center;
+    background:rgba(255,255,255,.08);border:1px solid rgba(212,175,55,.35);
+    font-size:38px;box-shadow:inset 0 0 25px rgba(212,175,55,.08)
+}
+.hero h1{margin:0 0 8px;font-size:34px}
+.hero p{margin:0;color:#cfcfcf;font-size:15px}
+.back-btn{
+    border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);
+    color:white;border-radius:15px;padding:13px 20px;cursor:pointer;font-size:15px
+}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:22px}
+.stat{
+    background:#fff;border:1px solid #e7e7e7;border-radius:22px;padding:22px;
+    box-shadow:0 10px 30px rgba(0,0,0,.06);position:relative;overflow:hidden
+}
+.stat:after{content:"";position:absolute;width:110px;height:110px;border-radius:50%;background:#f7f3e8;left:-45px;bottom:-55px}
+.stat-icon{font-size:25px;margin-bottom:15px}
+.stat-label{color:#777;font-size:14px}
+.stat-value{font-size:32px;font-weight:bold;margin-top:7px}
+.toolbar{
+    background:#fff;border:1px solid #e7e7e7;border-radius:24px;padding:18px;
+    box-shadow:0 10px 30px rgba(0,0,0,.06);margin-bottom:22px
+}
+.search{
+    width:100%;border:1px solid #ddd;border-radius:16px;padding:16px 18px;
+    font-size:16px;outline:none;margin-bottom:14px;background:#fafafa
+}
+.filters{display:flex;gap:12px;flex-wrap:wrap}
+.filters select,.filters button{
+    min-height:48px;border:1px solid #ddd;border-radius:14px;background:#fff;
+    padding:0 17px;font-size:14px;cursor:pointer
+}
+.filters button.primary{
+    background:#151515;color:#fff;border-color:#151515;padding:0 22px
+}
+.orders-panel{
+    background:#fff;border:1px solid #e7e7e7;border-radius:26px;
+    box-shadow:0 10px 35px rgba(0,0,0,.06);overflow:hidden
+}
+.panel-head{padding:24px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center}
+.panel-head h2{margin:0;font-size:24px}
+.panel-head small{color:#888}
+#content{padding:0;overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:850px}
+th{background:#fafafa;color:#666;font-size:13px;padding:16px;text-align:right}
+td{padding:17px;border-top:1px solid #eee;font-size:14px}
+tr{transition:.2s}
+tr:hover{background:#fcfbf7}
+.badge{display:inline-block;border-radius:999px;padding:7px 11px;font-size:12px;background:#eee}
+.loading{text-align:center;padding:70px;color:#999;font-size:18px}
+.empty{text-align:center;padding:70px;color:#999}
+#newOrderBox{
+    margin-top:22px!important;border-radius:26px!important;
+    border:1px solid #e7e7e7!important;box-shadow:0 10px 35px rgba(0,0,0,.06)!important
+}
+@media(max-width:1000px){.stats{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:700px){
+    .page{padding:12px}
+    .hero{padding:24px 20px;border-radius:22px}
+    .hero-content{align-items:flex-start}
+    .hero h1{font-size:26px}
+    .brand-icon{width:62px;height:62px;font-size:30px}
+    .stats{grid-template-columns:repeat(2,1fr);gap:12px}
+    .stat{padding:17px;border-radius:19px}
+    .stat-value{font-size:28px}
+    .panel-head{padding:20px}
+}
+
+<style>
+.mobile-orders{display:none}
+
+@media(max-width:700px){
+    .desktop-orders{display:none!important}
+    .mobile-orders{display:block!important}
+    
+    .mobile-order-card{
+        background:#fff;
+        border:1px solid #e8e8e8;
+        border-radius:20px;
+        margin:12px;
+        padding:18px;
+        box-shadow:0 8px 25px rgba(0,0,0,.06);
+        animation:mobileCardIn .35s ease both;
+    }
+
+    .mobile-order-top{
+        display:flex;
+        justify-content:space-between;
+        align-items:flex-start;
+        gap:10px;
+        margin-bottom:15px;
+    }
+
+    .mobile-order-no{
+        font-size:15px;
+        font-weight:bold;
+        color:#171717;
+        direction:ltr;
+        text-align:right;
+    }
+
+    .mobile-order-customer{
+        color:#777;
+        font-size:13px;
+        margin-top:5px;
+    }
+
+    .mobile-order-badges{
+        display:flex;
+        flex-direction:column;
+        align-items:flex-end;
+        gap:6px;
+    }
+
+    .mobile-badge{
+        padding:6px 10px;
+        border-radius:999px;
+        font-size:11px;
+        white-space:nowrap;
+        background:#f2f2f2;
+    }
+
+    .mobile-order-info{
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+        background:#fafafa;
+        border-radius:15px;
+        padding:13px;
+        margin-bottom:14px;
+    }
+
+    .mobile-info-item{
+        display:flex;
+        flex-direction:column;
+        gap:4px;
+    }
+
+    .mobile-info-label{
+        color:#999;
+        font-size:11px;
+    }
+
+    .mobile-info-value{
+        color:#222;
+        font-size:13px;
+        font-weight:bold;
+    }
+
+    .mobile-order-money{
+        display:grid;
+        grid-template-columns:repeat(3,1fr);
+        gap:7px;
+        margin-bottom:14px;
+    }
+
+    .mobile-money{
+        background:#f8f6ef;
+        border-radius:12px;
+        padding:10px 5px;
+        text-align:center;
+    }
+
+    .mobile-money small{
+        display:block;
+        color:#999;
+        font-size:10px;
+        margin-bottom:5px;
+    }
+
+    .mobile-money strong{
+        font-size:12px;
+        direction:ltr;
+        display:block;
+    }
+
+    .mobile-details-btn{
+        width:100%;
+        border:0;
+        border-radius:13px;
+        padding:12px;
+        background:#171717;
+        color:#fff;
+        font-size:14px;
+        cursor:pointer;
+    }
+
+    @keyframes mobileCardIn{
+        from{opacity:0;transform:translateY(12px)}
+        to{opacity:1;transform:translateY(0)}
+    }
+}
+
+/* ===== الشعار الرسمي في أوامر العمل ===== */
+.work-orders-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 16px;
+    display: block;
+    background: white;
+    padding: 3px;
+}
+
+</style>
+</style>
+</head>
+
+<body>
+<div class="page">
+
+    <!-- HEADER -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="brand">
+                <div class="brand-icon">
+    <img src="/muluk-logo.jpg"
+         alt="ملوك التنجيد"
+         class="work-orders-logo">
+</div>
+                <div>
+                    <h1>أوامر العمل</h1>
+                    <p>إدارة ومتابعة أعمال الورشة باحترافية</p>
+                </div>
+            </div>
+
+            <button class="back-btn" onclick="window.location.href='/dashboard.html'">
+                ← الرئيسية
+            </button>
+        </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="stats">
+
+        <div class="stat">
+            <div class="stat-icon">📋</div>
+            <div class="stat-label">إجمالي الأوامر</div>
+            <div class="stat-value" id="stat-total">0</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-icon">🆕</div>
+            <div class="stat-label">أوامر جديدة</div>
+            <div class="stat-value" id="stat-new">0</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-icon">🔧</div>
+            <div class="stat-label">قيد التنفيذ</div>
+            <div class="stat-value" id="stat-progress">0</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-icon">⏳</div>
+            <div class="stat-label">بانتظار الموافقة</div>
+            <div class="stat-value" id="stat-waiting">0</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-icon">🚗</div>
+            <div class="stat-label">تم التسليم</div>
+            <div class="stat-value" id="stat-delivered">0</div>
+        </div>
+
+    </section>
+
+    <!-- CONTROL PANEL -->
+    <section class="toolbar">
+
+        <div class="search-wrap">
+            <span>🔎</span>
+            <input
+                id="workOrderSearch"
+                class="search"
+                type="search"
+                placeholder="ابحث برقم الأمر، العميل، السيارة أو اللوحة..."
+                oninput="filterWorkOrders()"
+            >
+        </div>
+
+        <div class="filters">
+
+            <select id="statusFilter" onchange="filterWorkOrders()">
+                <option value="">كل الحالات</option>
+                <option value="NEW">جديدة</option>
+                <option value="INSPECTION">فحص</option>
+                <option value="WAITING_CUSTOMER_APPROVAL">بانتظار موافقة العميل</option>
+                <option value="APPROVED">معتمدة</option>
+                <option value="IN_PROGRESS">قيد التنفيذ</option>
+                <option value="QUALITY_CHECK">فحص الجودة</option>
+                <option value="CORRECTION_REQUIRED">مطلوب تصحيح</option>
+                <option value="READY_FOR_DELIVERY">جاهزة للتسليم</option>
+                <option value="DELIVERED">تم التسليم</option>
+                <option value="CLOSED">مغلقة</option>
+                <option value="CANCELLED">ملغاة</option>
+            </select>
+
+            <select id="priorityFilter" onchange="filterWorkOrders()">
+                <option value="">كل الأولويات</option>
+                <option value="LOW">منخفضة</option>
+                <option value="NORMAL">عادية</option>
+                <option value="HIGH">عالية</option>
+                <option value="URGENT">عاجلة</option>
+            </select>
+
+            <button onclick="loadWorkOrders()">🔄 تحديث</button>
+
+            <button class="primary" onclick="window.location.href='/new-work-order-v2.html'">
+                ＋ إنشاء أمر عمل جديد
+            </button>
+
+        </div>
+    </section>
+
+    <!-- ORDERS -->
+    <section class="orders-panel">
+
+        <div class="panel-head">
+            <div>
+                <h2>📋 سجل أوامر العمل</h2>
+                <small id="orders-result-count">جاري التحميل...</small>
+            </div>
+        </div>
+
+        <div id="content">
+            <div class="loading">جاري تحميل أوامر العمل...</div>
+        </div>
+
+    </section>
+
+    <!-- LEGACY CREATE FORM
+         محفوظ للتوافق مع الوظائف الحالية ولا يظهر في الواجهة -->
+    <div id="newOrderBox" style="display:none">
+
+        <h2>➕ إنشاء أمر عمل جديد</h2>
+
+        <label>الفرع</label>
+        <select id="branch_id"></select>
+
+        <label>العميل</label>
+        <select id="customer_id" onchange="loadVehicles()"></select>
+
+        <label>السيارة</label>
+        <select id="vehicle_id"></select>
+
+        <label>الموظف المسؤول عن أمر العمل</label>
+        <select id="assigned_to"></select>
+
+        <label>الأولوية</label>
+        <select id="priority">
+            <option value="LOW">منخفضة</option>
+            <option value="NORMAL" selected>عادية</option>
+            <option value="HIGH">عالية</option>
+            <option value="URGENT">عاجلة</option>
+        </select>
+
+        <label>المبلغ قبل الخصم</label>
+        <input id="subtotal" type="number">
+
+        <label>الخصم</label>
+        <input id="discount_amount" type="number">
+
+        <label>الضريبة</label>
+        <input id="tax_amount" type="number">
+
+        <label>الدفعة المقدمة</label>
+        <input id="deposit_amount" type="number">
+
+        <label>ملاحظات العميل</label>
+        <textarea id="customer_notes"></textarea>
+
+        <button onclick="createWorkOrder()">💾 حفظ أمر العمل</button>
+        <button onclick="document.getElementById('newOrderBox').style.display='none'">
+            إلغاء
+        </button>
+
+        <div id="formMessage"></div>
+    </div>
+
+</div>
+<script>
+async function loadBranches() {
+    document.getElementById('branch_id').innerHTML =
+        '<option value="1">ملوك التنجيد - الفرع الرئيسي</option>';
+}
+
+async function loadCustomers() {
+    const token = localStorage.getItem('token');
+
+    const res = await fetch('/api/customers', {
+        headers: { 'Authorization': 'Bearer ' + token }
+    });
+
+    if (!res.ok) {
+        document.getElementById('customer_id').innerHTML =
+            '<option value="">تعذر تحميل العملاء</option>';
+        return;
+    }
+
+    const data = await res.json();
+    const rows = data.customers || [];
+
+    document.getElementById('customer_id').innerHTML =
+        '<option value="">اختر العميل</option>' +
+        rows.map(c =>
+            '<option value="' + c.customer_id + '" data-phone="' + (c.phone || '') + '">' +
+            (c.full_name || c.customer_name || '') +
+            '</option>'
+        ).join('');
+}
+
+async function loadEmployees() {
+    const token = localStorage.getItem('token');
+    const select = document.getElementById('assigned_to');
+
+    try {
+        const res = await fetch('/api/employees', {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        });
+
+        if (!res.ok) {
+            select.innerHTML = '<option value="">تعذر تحميل الموظفين</option>';
+            return;
+        }
+
+        const data = await res.json();
+        const rows = data.employees || [];
+
+        select.innerHTML =
+            '<option value="">-- بدون تعيين --</option>' +
+            rows
+                .filter(e => e.is_active !== false)
+                .map(e =>
+                    '<option value="' + e.employee_id + '">' +
+                    (e.full_name || '') +
+                    '</option>'
+                )
+                .join('');
+    } catch (error) {
+        console.error('Load employees error:', error);
+        select.innerHTML = '<option value="">تعذر تحميل الموظفين</option>';
+    }
+}
+
+async function loadVehicles() {
+    const customerId = document.getElementById('customer_id').value;
+    const select = document.getElementById('vehicle_id');
+
+    if (!customerId) {
+        select.innerHTML = '<option value="">اختر العميل أولاً</option>';
+        return;
+    }
+
+    const token = localStorage.getItem('token');
+
+    const res = await fetch('/api/vehicles', {
+        headers: { 'Authorization': 'Bearer ' + token }
+    });
+
+    if (!res.ok) {
+        select.innerHTML = '<option value="">تعذر تحميل السيارات</option>';
+        return;
+    }
+
+    const data = await res.json();
+    const rows = (data.vehicles || []).filter(
+        v => Number(v.customer_id) === Number(customerId)
+    );
+
+    select.innerHTML =
+        '<option value="">اختر السيارة</option>' +
+        rows.map(v =>
+            '<option value="' + v.vehicle_id + '">' +
+            (v.plate_no || '') + ' - ' +
+            (v.make || '') + ' ' +
+            (v.model || '') +
+            '</option>'
+        ).join('');
+
+    if (rows.length === 0) {
+        select.innerHTML =
+            '<option value="">لا توجد سيارة مسجلة لهذا العميل</option>';
+    }
+}
+
+
+async function createWorkOrder() {
+    const token = localStorage.getItem('token');
+    const message = document.getElementById('formMessage');
+
+    const body = {
+        branch_id: Number(document.getElementById('branch_id').value),
+        customer_id: Number(document.getElementById('customer_id').value),
+        vehicle_id: Number(document.getElementById('vehicle_id').value),
+        assigned_to: document.getElementById('assigned_to').value
+            ? Number(document.getElementById('assigned_to').value)
+            : null,
+        priority: document.getElementById('priority').value,
+        subtotal: Number(document.getElementById('subtotal').value || 0),
+        discount_amount: Number(document.getElementById('discount_amount').value || 0),
+        tax_amount: Number(document.getElementById('tax_amount').value || 0),
+        deposit_amount: Number(document.getElementById('deposit_amount').value || 0),
+        customer_notes: document.getElementById('customer_notes').value
+    };
+
+    if (!body.branch_id || !body.customer_id || !body.vehicle_id) {
+        message.innerHTML = '⚠️ اختر الفرع والعميل والسيارة أولاً.';
+        return;
+    }
+
+    /*
+     * نفتح واتساب من ضغطة المستخدم نفسها.
+     * هذا يمنع Android/Chrome من حظر فتح التطبيق بعد fetch.
+     */
+    let whatsappWindow = null;
+
+    try {
+        const customerSelect = document.getElementById('customer_id');
+        const selectedOption =
+            customerSelect.options[customerSelect.selectedIndex];
+
+        const phone = (selectedOption?.dataset?.phone || '')
+            .replace(/[^0-9]/g, '');
+
+        if (phone) {
+            whatsappWindow = window.open(
+                'https://wa.me/' + phone,
+                '_blank'
+            );
+        }
+    } catch (e) {
+        alert('رقم العميل الذي قرأته الصفحة: ' + customerPhone);\n    console.log('WhatsApp initial open error:', e);
+    }
+
+    try {
+        const res = await fetch('/api/work-orders', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify(body)
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            if (whatsappWindow && !whatsappWindow.closed) {
+                whatsappWindow.close();
+            }
+
+            message.innerHTML =
+                '❌ ' + (data.message || 'فشل إنشاء أمر العمل');
+            return;
+        }
+
+        message.innerHTML =
+            '✅ تم إنشاء أمر العمل بنجاح: <strong>' +
+            (data.work_order_no ||
+             data.work_order?.work_order_no ||
+             data.data?.work_order_no ||
+             '') +
+            '</strong>';
+
+        document.getElementById('newOrderBox').style.display = 'none';
+
+        /*
+         * بعد نجاح الحفظ، ننتقل في نافذة واتساب المفتوحة
+         * إلى الرابط الذي أنشأه السيرفر، وفيه الرسالة كاملة.
+         */
+        if (data.whatsapp_url) {
+            console.log('WhatsApp URL:', data.whatsapp_url);
+
+            if (whatsappWindow && !whatsappWindow.closed) {
+                whatsappWindow.location.href = data.whatsapp_url;
+            } else {
+                window.location.href = data.whatsapp_url;
+            }
+        } else {
+            alert('⚠️ تم إنشاء أمر العمل، لكن السيرفر لم يرجع رابط واتساب.');
+        }
+
+        loadWorkOrders();
+
+    } catch (error) {
+        console.error('Create work order error:', error);
+
+        if (whatsappWindow && !whatsappWindow.closed) {
+            whatsappWindow.close();
+        }
+
+        message.innerHTML = '❌ تعذر الاتصال بالسيرفر.';
+    }
+}
+
+</script>
+<script>
+
+
+function updateStats(orders) {
+    const list = Array.isArray(orders) ? orders : [];
+
+    const counts = {
+        total: list.length,
+        newOrders: list.filter(o => o.status === 'NEW').length,
+        progress: list.filter(o => o.status === 'IN_PROGRESS').length,
+        waiting: list.filter(o => o.status === 'WAITING_CUSTOMER_APPROVAL').length,
+        delivered: list.filter(o => o.status === 'DELIVERED').length
+    };
+
+    const ids = {
+        total: 'stat-total',
+        newOrders: 'stat-new',
+        progress: 'stat-progress',
+        waiting: 'stat-waiting',
+        delivered: 'stat-delivered'
+    };
+
+    Object.keys(ids).forEach(key => {
+        const el = document.getElementById(ids[key]);
+        if (el) el.textContent = counts[key];
+    });
+}
+
+async function loadWorkOrders() {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        window.location.href = '/index.html';
+        return;
+    }
+
+    const content = document.getElementById('content');
+    content.innerHTML = 'جاري تحميل أوامر العمل...';
+
+    try {
+        const response = await fetch('/api/work-orders', {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        });
+
+        if (response.status === 401) {
+            localStorage.removeItem('token');
+            window.location.href = '/index.html';
+            return;
+        }
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(data.message || 'تعذر تحميل أوامر العمل');
+        }
+
+        window.allWorkOrders = data.work_orders || [];
+
+        // الحالة القادمة من لوحة التحكم
+        const params = new URLSearchParams(window.location.search);
+        const requestedStatus = params.get('status');
+
+        if (requestedStatus) {
+            const statusFilter = document.getElementById('statusFilter');
+
+            if (
+                statusFilter &&
+                Array.from(statusFilter.options).some(
+                    option => option.value === requestedStatus
+                )
+            ) {
+                statusFilter.value = requestedStatus;
+            }
+        }
+
+        updateStats(window.allWorkOrders);
+
+        renderWorkOrders(getFilteredWorkOrders());
+
+    } catch (error) {
+        console.error(error);
+
+        content.innerHTML = `
+            <strong>حدث خطأ</strong>
+            <p>${escapeHtml(error.message)}</p>
+            <button class="primary" onclick="loadWorkOrders()">
+                إعادة المحاولة
+            </button>
+        `;
+    }
+}
+
+
+function getFilteredWorkOrders() {
+    const orders = window.allWorkOrders || [];
+
+    const selectedStatus =
+        document.getElementById('statusFilter')?.value || '';
+
+    const selectedPriority =
+        document.getElementById('priorityFilter')?.value || '';
+
+    const searchText =
+        (document.getElementById('workOrderSearch')?.value || '')
+        .trim()
+        .toLowerCase();
+
+    return orders.filter(order => {
+        const matchesStatus =
+            !selectedStatus || order.status === selectedStatus;
+
+        const matchesPriority =
+            !selectedPriority || order.priority === selectedPriority;
+
+        const searchableText = [
+            order.work_order_no,
+            order.customer_name,
+            order.customer_phone,
+            order.make,
+            order.model,
+            order.plate_no
+        ]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase();
+
+        const matchesSearch =
+            !searchText || searchableText.includes(searchText);
+
+        return matchesStatus && matchesPriority && matchesSearch;
+    });
+}
+
+
+function filterWorkOrders() {
+    renderWorkOrders(getFilteredWorkOrders());
+}
+
+
+function renderWorkOrders(orders) {
+    const content = document.getElementById('content');
+
+    if (!orders.length) {
+        content.innerHTML = `
+            <div style="text-align:center;padding:45px 20px;color:#777;">
+                <div style="font-size:42px;margin-bottom:12px;">📭</div>
+                <strong>لا توجد أوامر مطابقة</strong>
+                <p style="margin-top:8px;">
+                    جرّب تغيير البحث أو الفلاتر.
+                </p>
+            </div>
+        `;
+        return;
+    }
+
+    const statusNames = {
+        NEW: 'جديد',
+        INSPECTION: 'فحص',
+        WAITING_CUSTOMER_APPROVAL: 'بانتظار الموافقة',
+        APPROVED: 'معتمد',
+        IN_PROGRESS: 'قيد التنفيذ',
+        QUALITY_CHECK: 'فحص الجودة',
+        CORRECTION_REQUIRED: 'مطلوب تصحيح',
+        READY_FOR_DELIVERY: 'جاهز للتسليم',
+        DELIVERED: 'تم التسليم',
+        CLOSED: 'مغلق',
+        CANCELLED: 'ملغى'
+    };
+
+    const priorityNames = {
+        LOW: 'منخفضة',
+        NORMAL: 'عادية',
+        HIGH: 'عالية',
+        URGENT: 'عاجلة'
+    };
+
+    let html = `
+        <table>
+            <thead>
+                <tr>
+                    <th>رقم الأمر</th>
+                    <th>العميل</th>
+                    <th>السيارة</th>
+                    <th>اللوحة</th>
+                    <th>الحالة</th>
+                    <th>الأولوية</th>
+                    <th>الإجمالي</th>
+                    <th>العربون</th>
+                    <th>المتبقي</th>
+                    <th>التفاصيل</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+    orders.forEach(order => {
+        const vehicle = [
+            order.make,
+            order.model,
+            order.model_year
+        ].filter(Boolean).join(' ');
+
+        html += `
+            <tr>
+                <td>${escapeHtml(order.work_order_no || '')}</td>
+
+                <td>
+                    ${escapeHtml(order.customer_name || '')}
+                </td>
+
+                <td>
+                    ${escapeHtml(vehicle)}
+                </td>
+
+                <td>
+                    ${escapeHtml(order.plate_no || '')}
+                </td>
+
+                <td class="status">
+                    ${escapeHtml(
+                        statusNames[order.status] || order.status || ''
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        priorityNames[order.priority] ||
+                        order.priority ||
+                        ''
+                    )}
+                </td>
+
+                <td>${order.total_amount ?? 0}</td>
+                <td>${order.deposit_amount ?? 0}</td>
+                <td>${order.balance_amount ?? 0}</td>
+
+                <td>
+                    <button
+                        class="primary"
+                        onclick="viewWorkOrder(${order.work_order_id})">
+                        👁️ التفاصيل
+                    </button>
+
+                    ${
+                        order.status === 'READY_FOR_DELIVERY'
+                        ? `
+                        <button
+                            class="primary"
+                            style="margin-top:6px;"
+                            onclick="notifyCustomerReady(${order.work_order_id})">
+                            📲 إشعار العميل
+                        </button>
+                        `
+                        : ''
+                    }
+                </td>
+            </tr>
+        `;
+    });
+
+    html += `
+            </tbody>
+        </table>
+    `;
+
+
+    const mobileHtml = orders.map((order, index) => {
+        const vehicle = [
+            order.make,
+            order.model,
+            order.model_year
+        ].filter(Boolean).join(' ');
+
+        return `
+            <article
+                class="mobile-order-card"
+                style="animation-delay:${Math.min(index * 0.04, 0.4)}s">
+
+                <div class="mobile-order-top">
+                    <div>
+                        <div class="mobile-order-no">
+                            ${escapeHtml(order.work_order_no || '')}
+                        </div>
+
+                        <div class="mobile-order-customer">
+                            👤 ${escapeHtml(
+                                order.customer_name || 'بدون اسم'
+                            )}
+                        </div>
+                    </div>
+
+                    <div class="mobile-order-badges">
+                        <span class="mobile-badge">
+                            ${escapeHtml(
+                                statusNames[order.status] ||
+                                order.status ||
+                                ''
+                            )}
+                        </span>
+
+                        <span class="mobile-badge">
+                            ⚡ ${escapeHtml(
+                                priorityNames[order.priority] ||
+                                order.priority ||
+                                ''
+                            )}
+                        </span>
+                    </div>
+                </div>
+
+
+                <div class="mobile-order-info">
+
+                    <div class="mobile-info-item">
+                        <span class="mobile-info-label">
+                            🚗 السيارة
+                        </span>
+
+                        <span class="mobile-info-value">
+                            ${escapeHtml(vehicle || 'غير محدد')}
+                        </span>
+                    </div>
+
+                    <div class="mobile-info-item">
+                        <span class="mobile-info-label">
+                            🔢 اللوحة
+                        </span>
+
+                        <span class="mobile-info-value">
+                            ${escapeHtml(order.plate_no || 'غير محدد')}
+                        </span>
+                    </div>
+
+                </div>
+
+
+                <div class="mobile-order-money">
+
+                    <div class="mobile-money">
+                        <small>الإجمالي</small>
+                        <strong>${order.total_amount ?? 0}</strong>
+                    </div>
+
+                    <div class="mobile-money">
+                        <small>العربون</small>
+                        <strong>${order.deposit_amount ?? 0}</strong>
+                    </div>
+
+                    <div class="mobile-money">
+                        <small>المتبقي</small>
+                        <strong>${order.balance_amount ?? 0}</strong>
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="mobile-details-btn"
+                    onclick="viewWorkOrder(${order.work_order_id})">
+                    👁️ عرض تفاصيل أمر العمل
+                </button>
+
+                ${
+                    order.status === 'READY_FOR_DELIVERY'
+                    ? `
+                    <button
+                        class="mobile-details-btn"
+                        style="margin-top:8px;"
+                        onclick="notifyCustomerReady(${order.work_order_id})">
+                        📲 إشعار العميل
+                    </button>
+                    `
+                    : ''
+                }
+
+            </article>
+        `;
+    }).join('');
+
+
+    content.innerHTML = `
+        <div class="desktop-orders">
+            ${html}
+        </div>
+
+        <div class="mobile-orders">
+            ${mobileHtml}
+        </div>
+    `;
+}
+
+
+function notifyCustomerReady(id) {
+    const order = (window.allWorkOrders || []).find(
+        item => Number(item.work_order_id) === Number(id)
+    );
+
+    if (!order) {
+        alert('تعذر العثور على أمر العمل.');
+        return;
+    }
+
+    let cleanPhone = String(
+        order.customer_phone || ''
+    ).replace(/[^0-9]/g, '');
+
+    // تحويل الرقم اليمني إلى صيغة واتساب الدولية
+    if (cleanPhone.startsWith('0')) {
+        cleanPhone = '967' + cleanPhone.substring(1);
+    } else if (
+        cleanPhone.length === 9 &&
+        cleanPhone.startsWith('7')
+    ) {
+        cleanPhone = '967' + cleanPhone;
+    }
+
+    if (!cleanPhone) {
+        alert('لا يوجد رقم هاتف مسجل لهذا العميل.');
+        return;
+    }
+
+    const vehicle = [
+        order.make,
+        order.model,
+        order.model_year
+    ].filter(Boolean).join(' ');
+
+    const message =
+`السلام عليكم ورحمة الله وبركاته
+
+عميلنا الكريم، نود إبلاغكم بأن العمل على سيارتكم قد اكتمل وأصبحت السيارة جاهزة للتسليم.
+
+رقم أمر العمل: ${order.work_order_no || ''}
+السيارة: ${vehicle || 'غير محددة'}
+اللوحة: ${order.plate_no || 'غير محددة'}
+المبلغ المتبقي: ${order.balance_amount ?? 0} ريال
+
+شكرًا لاختياركم ملوك التنجيد 👑`;
+
+    const whatsappUrl =
+        'https://wa.me/' +
+        cleanPhone +
+        '?text=' +
+        encodeURIComponent(message);
+
+    window.open(whatsappUrl, '_blank');
+}
+
+
+function viewWorkOrder(id) {
+    window.location.href = '/work-order-details.html?id=' + encodeURIComponent(id);
+}
+
+
+function escapeHtml(value) {
+
+    return String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+}
+
+
+function newWorkOrder() {
+
+    document.getElementById('newOrderBox').style.display = 'block';
+    loadCustomers();
+    loadBranches();
+    loadEmployees();
+
+}
+
+
+loadWorkOrders();
+
+</script>
+</body></html>

@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ملوك التنجيد | السيارات</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Tahoma, sans-serif;
+            background: #f4f5f7;
+            color: #222;
+        }
+
+        .header {
+            background: #111;
+            color: white;
+            padding: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,.15);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .brand h1 {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        .brand p {
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        .back-btn {
+            background: #333;
+            color: white;
+            border: 1px solid #555;
+            padding: 8px 12px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 18px 14px 30px;
+        }
+
+        .top-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .title {
+            font-size: 22px;
+        }
+
+        .add-btn {
+            background: #111;
+            color: white;
+            border: none;
+            padding: 11px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .search-box {
+            background: white;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.05);
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        .message {
+            display: none;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .message.error {
+            display: block;
+            background: #ffe5e5;
+            color: #a00000;
+        }
+
+        .message.success {
+            display: block;
+            background: #e5f8e9;
+            color: #176b2c;
+        }
+
+        .vehicles {
+            display: grid;
+            gap: 12px;
+        }
+
+        .vehicle-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.06);
+        }
+
+        .vehicle-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .vehicle-name {
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .plate {
+            display: inline-block;
+            background: #eee;
+            padding: 5px 9px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .vehicle-info {
+            display: grid;
+            gap: 7px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .empty,
+        .loading {
+            background: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 12px;
+            color: #777;
+        }
+
+        /* Modal */
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.55);
+            z-index: 200;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            width: 100%;
+            max-width: 520px;
+            background: white;
+            border-radius: 14px;
+            padding: 20px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .modal-header h2 {
+            font-size: 19px;
+        }
+
+        .close-btn {
+            border: none;
+            background: #eee;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 13px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            font-size: 14px;
+            font-family: inherit;
+            background: white;
+        }
+
+        .form-group textarea {
+            min-height: 75px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .form-actions button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .save-btn {
+            background: #111;
+            color: white;
+            border: none;
+        }
+
+        .cancel-btn {
+            background: #eee;
+            color: #222;
+            border: none;
+        }
+
+        @media (min-width: 700px) {
+            .vehicles {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1000px) {
+            .vehicles {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    
+/* ===== الهوية الموحدة - السيارات ===== */
+
+.unified-header {
+    background: linear-gradient(135deg, #17365f, #285c9f);
+    padding: 14px 18px;
+    box-shadow: 0 4px 18px rgba(0,0,0,.12);
+}
+
+.unified-header-content {
+    max-width: 1250px;
+    min-height: 72px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 20px;
+}
+
+.unified-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: white;
+}
+
+.unified-logo {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    background: white;
+    padding: 3px;
+    border-radius: 13px;
+}
+
+.unified-brand h1 {
+    font-size: 22px;
+    color: white;
+    margin: 0 0 4px;
+}
+
+.unified-brand p {
+    color: rgba(255,255,255,.82);
+    margin: 0;
+}
+
+.unified-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-self: start;
+    color: white;
+}
+
+.unified-user small {
+    display: block;
+    opacity: .75;
+    margin-bottom: 3px;
+}
+
+.unified-user strong {
+    font-size: 14px;
+}
+
+.unified-user-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+    background: rgba(255,255,255,.14);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.unified-back {
+    justify-self: end;
+    background: rgba(255,255,255,.12);
+    border-color: rgba(255,255,255,.25);
+}
+
+.add-btn {
+    background: #285c9f;
+}
+
+.vehicle-card {
+    border: 1px solid #e7eaf0;
+    border-radius: 16px;
+    box-shadow: 0 5px 18px rgba(0,0,0,.06);
+}
+
+.search-box {
+    border-radius: 16px;
+}
+
+@media (max-width: 700px) {
+
+    .unified-header {
+        padding: 10px 12px;
+    }
+
+    .unified-header-content {
+        min-height: 62px;
+        grid-template-columns: auto 1fr auto;
+        gap: 8px;
+    }
+
+    .unified-user {
+        display: none;
+    }
+
+    .unified-logo {
+        width: 50px;
+        height: 50px;
+    }
+
+    .unified-brand {
+        gap: 7px;
+        justify-content: flex-start;
+    }
+
+    .unified-brand h1 {
+        font-size: 18px;
+    }
+
+    .unified-brand p {
+        font-size: 11px;
+    }
+
+    .unified-back {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="header unified-header">
+    <div class="header-content unified-header-content">
+
+        <div class="unified-user">
+            <div class="unified-user-avatar">👤</div>
+            <div>
+                <small>مرحبًا</small>
+                <strong>إدارة السيارات</strong>
+            </div>
+        </div>
+
+        <div class="brand unified-brand">
+            <img src="/muluk-logo.jpg"
+                 alt="ملوك التنجيد"
+                 class="unified-logo">
+            <div>
+                <h1>ملوك التنجيد</h1>
+                <p>إدارة السيارات</p>
+            </div>
+        </div>
+
+        <button class="back-btn unified-back"
+                onclick="goDashboard()">
+            ← الرئيسية
+        </button>
+
+    </div>
+</header>
+
+
+<main class="container">
+
+    <div class="top-section">
+
+        <h2 class="title">
+            🚗 السيارات
+        </h2>
+
+        <button
+            id="addVehicleBtn"
+            class="add-btn"
+            onclick="openModal()">
+            ＋ إضافة سيارة
+        </button>
+
+    </div>
+
+
+    <div id="message" class="message"></div>
+
+
+    <div class="search-box">
+
+        <input
+            type="search"
+            id="searchInput"
+            placeholder="🔎 ابحث باللوحة أو العميل أو الماركة أو الموديل..."
+            oninput="filterVehicles()">
+
+    </div>
+
+
+    <div id="vehiclesList" class="vehicles">
+
+        <div class="loading">
+            جاري تحميل السيارات...
+        </div>
+
+    </div>
+
+</main>
+
+
+<!-- نافذة إضافة سيارة -->
+
+<div id="vehicleModal" class="modal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2>➕ إضافة سيارة جديدة</h2>
+
+            <button
+                class="close-btn"
+                onclick="closeModal()">
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="vehicleForm">
+
+            <div class="form-group">
+
+                <label>
+                    العميل *
+                </label>
+
+                <select id="customer_id" required>
+
+                    <option value="">
+                        جاري تحميل العملاء...
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>
+                        رقم اللوحة
+                    </label>
+
+                    <input
+                        type="text"
+                        id="plate_no">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        رقم الهيكل VIN
+                    </label>
+
+                    <input
+                        type="text"
+                        id="vin">
+
+                </div>
+
+            </div>
+
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>
+                        الشركة / الماركة
+                    </label>
+
+                    <input
+                        type="text"
+                        id="make"
+                        placeholder="Toyota">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        الموديل
+                    </label>
+
+                    <input
+                        type="text"
+                        id="model"
+                        placeholder="Yaris">
+
+                </div>
+
+            </div>
+
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>
+                        سنة الصنع
+                    </label>
+
+                    <input
+                        type="number"
+                        id="model_year"
+                        min="1900"
+                        max="2100">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        اللون
+                    </label>
+
+                    <input
+                        type="text"
+                        id="color">
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    العداد / المسافة
+                </label>
+
+                <input
+                    type="number"
+                    id="mileage"
+                    min="0">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    ملاحظات
+                </label>
+
+                <textarea id="notes"></textarea>
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <button
+                    type="button"
+                    class="cancel-btn"
+                    onclick="closeModal()">
+                    إلغاء
+                </button>
+
+                <button
+                    type="submit"
+                    class="save-btn">
+                    حفظ السيارة
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    // ==========================================
+    // Token
+    // ==========================================
+
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        window.location.href = '/login.html';
+    }
+
+
+    let allVehicles = [];
+    let allCustomers = [];
+
+
+    // ==========================================
+    // تحميل السيارات
+    // ==========================================
+
+    async function loadVehicles() {
+
+        const list =
+            document.getElementById('vehiclesList');
+
+        list.innerHTML = `
+            <div class="loading">
+                جاري تحميل السيارات...
+            </div>
+        `;
+
+        try {
+
+            const response = await fetch(
+                '/api/vehicles',
+                {
+                    method: 'GET',
+                    headers: {
+                        'Authorization':
+                            `Bearer ${token}`
+                    }
+                }
+            );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                if (response.status === 401) {
+                    logout();
+                    return;
+                }
+
+                throw new Error(
+                    data.message ||
+                    'فشل تحميل السيارات'
+                );
+            }
+
+
+            allVehicles =
+                data.vehicles || [];
+
+
+            renderVehicles(allVehicles);
+
+
+        } catch (error) {
+
+            console.error(
+                'Load vehicles error:',
+                error
+            );
+
+            list.innerHTML = `
+                <div class="empty">
+                    ❌ ${escapeHtml(error.message)}
+                </div>
+            `;
+        }
+    }
+
+
+    // ==========================================
+    // عرض السيارات
+    // ==========================================
+
+    function renderVehicles(vehicles) {
+
+        const list =
+            document.getElementById('vehiclesList');
+
+
+        if (!vehicles.length) {
+
+            list.innerHTML = `
+                <div class="empty">
+                    لا توجد سيارات حتى الآن.
+                </div>
+            `;
+
+            return;
+        }
+
+
+        list.innerHTML =
+            vehicles.map(vehicle => `
+
+                <div class="vehicle-card">
+
+                    <div class="vehicle-header">
+
+                        <div>
+
+                            <div class="vehicle-name">
+
+                                ${escapeHtml(
+                                    [
+                                        vehicle.make,
+                                        vehicle.model,
+                                        vehicle.model_year
+                                    ]
+                                    .filter(Boolean)
+                                    .join(' ')
+                                    ||
+                                    'سيارة'
+                                )}
+
+                            </div>
+
+                            <div style="font-size:12px;color:#888;margin-top:4px">
+
+                                العميل:
+                                ${escapeHtml(
+                                    vehicle.customer_name ||
+                                    '-'
+                                )}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="plate">
+
+                            ${escapeHtml(
+                                vehicle.plate_no ||
+                                'بدون لوحة'
+                            )}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="vehicle-info">
+
+                        ${
+                            vehicle.customer_phone
+                            ? `<div>📞 ${escapeHtml(vehicle.customer_phone)}</div>`
+                            : ''
+                        }
+
+                        ${
+                            vehicle.color
+                            ? `<div>🎨 اللون: ${escapeHtml(vehicle.color)}</div>`
+                            : ''
+                        }
+
+                        ${
+                            vehicle.vin
+                            ? `<div>🔢 VIN: ${escapeHtml(vehicle.vin)}</div>`
+                            : ''
+                        }
+
+                        ${
+                            vehicle.mileage !== null &&
+                            vehicle.mileage !== undefined
+                            ? `<div>🛣️ العداد: ${escapeHtml(vehicle.mileage)}</div>`
+                            : ''
+                        }
+
+                        ${
+                            vehicle.notes
+                            ? `<div>📝 ${escapeHtml(vehicle.notes)}</div>`
+                            : ''
+                        }
+
+                    </div>
+
+                </div>
+
+            `).join('');
+    }
+
+
+    // ==========================================
+    // تحميل العملاء للقائمة
+    // ==========================================
+
+    async function loadCustomers() {
+
+        const select =
+            document.getElementById('customer_id');
+
+
+        try {
+
+            const response = await fetch(
+                '/api/customers',
+                {
+                    method: 'GET',
+                    headers: {
+                        'Authorization':
+                            `Bearer ${token}`
+                    }
+                }
+            );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                if (response.status === 401) {
+                    logout();
+                    return;
+                }
+
+                throw new Error(
+                    data.message ||
+                    'فشل تحميل العملاء'
+                );
+            }
+
+
+            allCustomers =
+                data.customers || [];
+
+
+            select.innerHTML = `
+                <option value="">
+                    اختر العميل
+                </option>
+            `;
+
+
+            allCustomers.forEach(customer => {
+
+                const option =
+                    document.createElement('option');
+
+                option.value =
+                    customer.customer_id;
+
+                option.textContent =
+                    `${customer.customer_no || ''} - ${customer.full_name} - ${customer.phone || ''}`;
+
+                select.appendChild(option);
+            });
+
+
+        } catch (error) {
+
+            console.error(
+                'Load customers error:',
+                error
+            );
+
+            select.innerHTML = `
+                <option value="">
+                    تعذر تحميل العملاء
+                </option>
+            `;
+
+            showMessage(
+                error.message,
+                'error'
+            );
+        }
+    }
+
+
+    // ==========================================
+    // البحث
+    // ==========================================
+
+    function filterVehicles() {
+
+        const search =
+            document
+                .getElementById('searchInput')
+                .value
+                .trim()
+                .toLowerCase();
+
+
+        if (!search) {
+
+            renderVehicles(allVehicles);
+
+            return;
+        }
+
+
+        const filtered =
+            allVehicles.filter(vehicle => {
+
+                const text = [
+
+                    vehicle.plate_no,
+                    vehicle.customer_name,
+                    vehicle.customer_no,
+                    vehicle.make,
+                    vehicle.model,
+                    vehicle.color,
+                    vehicle.vin
+
+                ]
+                .filter(Boolean)
+                .join(' ')
+                .toLowerCase();
+
+
+                return text.includes(search);
+            });
+
+
+        renderVehicles(filtered);
+    }
+
+
+    // ==========================================
+    // فتح النافذة
+    // ==========================================
+
+    async function openModal() {
+
+        document
+            .getElementById('vehicleModal')
+            .classList.add('active');
+
+
+        await loadCustomers();
+
+
+        document
+            .getElementById('customer_id')
+            .focus();
+    }
+
+
+    // ==========================================
+    // إغلاق النافذة
+    // ==========================================
+
+    function closeModal() {
+
+        document
+            .getElementById('vehicleModal')
+            .classList.remove('active');
+
+
+        document
+            .getElementById('vehicleForm')
+            .reset();
+    }
+
+
+    // ==========================================
+    // إضافة سيارة
+    // ==========================================
+
+    document
+        .getElementById('vehicleForm')
+        .addEventListener(
+            'submit',
+            async function(event) {
+
+                event.preventDefault();
+
+
+                const button =
+                    this.querySelector('.save-btn');
+
+
+                button.disabled = true;
+
+                button.textContent =
+                    'جاري الحفظ...';
+
+
+                const vehicle = {
+
+                    customer_id:
+                        document
+                            .getElementById('customer_id')
+                            .value,
+
+                    plate_no:
+                        document
+                            .getElementById('plate_no')
+                            .value
+                            .trim(),
+
+                    vin:
+                        document
+                            .getElementById('vin')
+                            .value
+                            .trim(),
+
+                    make:
+                        document
+                            .getElementById('make')
+                            .value
+                            .trim(),
+
+                    model:
+                        document
+                            .getElementById('model')
+                            .value
+                            .trim(),
+
+                    model_year:
+                        document
+                            .getElementById('model_year')
+                            .value
+                            || null,
+
+                    color:
+                        document
+                            .getElementById('color')
+                            .value
+                            .trim(),
+
+                    mileage:
+                        document
+                            .getElementById('mileage')
+                            .value
+                            || null,
+
+                    notes:
+                        document
+                            .getElementById('notes')
+                            .value
+                            .trim()
+                };
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            '/api/vehicles',
+                            {
+                                method: 'POST',
+
+                                headers: {
+
+                                    'Content-Type':
+                                        'application/json',
+
+                                    'Authorization':
+                                        `Bearer ${token}`
+                                },
+
+                                body:
+                                    JSON.stringify(vehicle)
+                            }
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (!response.ok) {
+
+                        if (response.status === 401) {
+                            logout();
+                            return;
+                        }
+
+                        throw new Error(
+                            data.message ||
+                            'فشل إنشاء السيارة'
+                        );
+                    }
+
+
+                    closeModal();
+
+
+                    showMessage(
+                        'تمت إضافة السيارة بنجاح ✅',
+                        'success'
+                    );
+
+
+                    await loadVehicles();
+
+
+                } catch (error) {
+
+                    console.error(
+                        'Create vehicle error:',
+                        error
+                    );
+
+
+                    showMessage(
+                        error.message,
+                        'error'
+                    );
+
+
+                } finally {
+
+                    button.disabled = false;
+
+                    button.textContent =
+                        'حفظ السيارة';
+                }
+
+            }
+        );
+
+
+    // ==========================================
+    // الرسائل
+    // ==========================================
+
+    function showMessage(text, type) {
+
+        const message =
+            document.getElementById('message');
+
+
+        message.textContent = text;
+
+        message.className =
+            `message ${type}`;
+
+
+        setTimeout(() => {
+
+            message.className =
+                'message';
+
+        }, 4000);
+    }
+
+
+    // ==========================================
+    // حماية HTML
+    // ==========================================
+
+    function escapeHtml(value) {
+
+        return String(value ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+
+    // ==========================================
+    // الرئيسية
+    // ==========================================
+
+    function goDashboard() {
+
+        window.location.href =
+            '/dashboard.html';
+    }
+
+
+    // ==========================================
+    // تسجيل الخروج
+    // ==========================================
+
+    function logout() {
+
+        localStorage.removeItem('token');
+
+        window.location.href =
+            '/login.html';
+    }
+
+
+    // ==========================================
+    // بدء الصفحة
+    // ==========================================
+
+    loadVehicles();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,2972 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الموظفون - ملوك التنجيد</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f5f5f5;
+    color: #222;
+}
+
+header {
+    background: #222;
+    color: white;
+    padding: 18px;
+    text-align: center;
+}
+
+.container {
+    max-width: 1250px;
+    margin: 20px auto;
+    padding: 0 15px;
+}
+
+.top-bar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+button {
+    border: none;
+    border-radius: 8px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.primary {
+    background: #222;
+    color: white;
+}
+
+.back {
+    background: #ddd;
+}
+
+.finance {
+    background: #0b7a3b;
+    color: white;
+}
+
+.withdraw {
+    background: #b42318;
+    color: white;
+}
+
+.advance {
+    background: #8a5a00;
+    color: white;
+}
+
+.statement {
+    background: #3157a4;
+    color: white;
+}
+
+#addEmployeeBox,
+#financeBox,
+#statementBox {
+    display: none;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+}
+
+input,
+textarea,
+select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.table-box {
+    background: white;
+    border-radius: 12px;
+    overflow-x: auto;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1200px;
+}
+
+th,
+td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    text-align: right;
+    vertical-align: middle;
+}
+
+th {
+    background: #f0f0f0;
+}
+
+.active {
+    color: green;
+    font-weight: bold;
+}
+
+.inactive {
+    color: #999;
+    font-weight: bold;
+}
+
+.balance {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.balance-positive {
+    color: #087443;
+}
+
+.balance-negative {
+    color: #b42318;
+}
+
+.balance-zero {
+    color: #777;
+}
+
+.actions {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.finance-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.summary-card {
+    background: #f7f7f7;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.summary-title {
+    color: #666;
+    margin-bottom: 7px;
+}
+
+.summary-value {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.55);
+    z-index: 9999;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.modal {
+    background: white;
+    max-width: 850px;
+    margin: 30px auto;
+    border-radius: 14px;
+    padding: 22px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.close-btn {
+    background: #eee;
+}
+
+.notice {
+    padding: 12px;
+    border-radius: 8px;
+    background: #f7f7f7;
+    margin: 10px 0;
+}
+
+.positive {
+    color: #087443;
+    font-weight: bold;
+}
+
+.negative {
+    color: #b42318;
+    font-weight: bold;
+}
+
+.transaction-table {
+    min-width: 750px;
+}
+
+
+/* ===== كشف الحساب - تصميم الجوال ===== */
+@media (max-width: 700px) {
+
+    #statementModal {
+        padding: 8px;
+    }
+
+    #statementModal .modal {
+        margin: 8px auto;
+        padding: 14px;
+        border-radius: 12px;
+        max-width: 100%;
+    }
+
+    #statementModal .modal-header h2 {
+        font-size: 18px;
+    }
+
+    #statementModal .finance-summary {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    #statementModal .summary-card {
+        padding: 12px;
+    }
+
+    #statementModal .summary-value {
+        font-size: 18px;
+    }
+
+    #statementModal .table-box {
+        overflow: visible;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    #statementModal .transaction-table {
+        min-width: 0;
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 10px;
+    }
+
+    #statementModal .transaction-table thead {
+        display: none;
+    }
+
+    #statementModal .transaction-table tbody,
+    #statementModal .transaction-table tr,
+    #statementModal .transaction-table td {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    #statementModal .transaction-table tr {
+        background: #fff;
+        border-radius: 12px;
+        padding: 12px;
+        margin-bottom: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,.08);
+        border: 1px solid #eee;
+    }
+
+    #statementModal .transaction-table td {
+        border: 0;
+        border-bottom: 1px solid #f0f0f0;
+        padding: 8px 4px;
+        text-align: right;
+        font-size: 14px;
+    }
+
+    #statementModal .transaction-table td:last-child {
+        border-bottom: 0;
+        font-size: 18px;
+        padding-top: 10px;
+    }
+
+    #statementModal .transaction-table td:nth-child(1)::before {
+        content: "🧾 رقم الحركة";
+    }
+
+    #statementModal .transaction-table td:nth-child(2)::before {
+        content: "📅 التاريخ";
+    }
+
+    #statementModal .transaction-table td:nth-child(3)::before {
+        content: "📌 النوع";
+    }
+
+    #statementModal .transaction-table td:nth-child(4)::before {
+        content: "📝 الوصف";
+    }
+
+    #statementModal .transaction-table td:nth-child(5)::before {
+        content: "📋 المرجع";
+    }
+
+    #statementModal .transaction-table td:nth-child(6)::before {
+        content: "💰 المبلغ";
+    }
+
+    #statementModal .transaction-table td::before {
+        display: block;
+        color: #777;
+        font-size: 12px;
+        font-weight: bold;
+        margin-bottom: 4px;
+    }
+
+    #statementModal .transaction-table td.positive {
+        color: #087443;
+    }
+
+    #statementModal .transaction-table td.negative {
+        color: #b42318;
+    }
+}
+
+.small {
+    color: #777;
+    font-size: 13px;
+}
+
+/* ===== كشف حساب الموظف - التصميم الاحترافي ===== */
+
+.statement-modal {
+    max-width: 980px;
+    padding: 0;
+    overflow: hidden;
+    background: #f5f7fb;
+}
+
+.statement-top {
+    background: linear-gradient(135deg, #17365f, #285c9f);
+    color: white;
+    padding: 24px;
+    position: relative;
+}
+
+.statement-top h2 {
+    margin: 0;
+    font-size: 26px;
+}
+
+.statement-top p {
+    margin: 7px 0 0;
+    opacity: .85;
+    font-size: 14px;
+}
+
+.statement-close {
+    position: absolute;
+    left: 18px;
+    top: 18px;
+    width: 48px;
+    height: 48px;
+    border: 0;
+    border-radius: 14px;
+    background: rgba(255,255,255,.14);
+    color: white;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.statement-body {
+    padding: 20px;
+}
+
+.statement-employee {
+    background: white;
+    border-radius: 18px;
+    padding: 20px;
+    margin-top: -42px;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 8px 25px rgba(0,0,0,.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.statement-employee-main {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.statement-avatar {
+    width: 62px;
+    height: 62px;
+    border-radius: 18px;
+    background: #eaf2ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+}
+
+.statement-employee-name {
+    font-size: 21px;
+    font-weight: bold;
+    color: #172b4d;
+}
+
+.statement-employee-meta {
+    margin-top: 5px;
+    color: #667085;
+}
+
+.statement-id {
+    text-align: center;
+    background: #f5f7fb;
+    padding: 10px 16px;
+    border-radius: 12px;
+    color: #17365f;
+    font-weight: bold;
+}
+
+.statement-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin: 20px 0;
+}
+
+.statement-card {
+    background: white;
+    border-radius: 18px;
+    padding: 18px;
+    box-shadow: 0 5px 18px rgba(0,0,0,.05);
+}
+
+.statement-card-title {
+    color: #667085;
+    font-size: 14px;
+    margin-bottom: 9px;
+}
+
+.statement-card-value {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.statement-card.balance .statement-card-value {
+    color: #087443;
+}
+
+.statement-card.credit .statement-card-value {
+    color: #087443;
+}
+
+.statement-card.debit .statement-card-value {
+    color: #b42318;
+}
+
+.statement-section {
+    background: white;
+    border-radius: 18px;
+    padding: 18px;
+    box-shadow: 0 5px 18px rgba(0,0,0,.05);
+}
+
+.statement-section-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.statement-section-title h3 {
+    margin: 0;
+    color: #172b4d;
+}
+
+.statement-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.statement-filter {
+    display: grid;
+    grid-template-columns: 1fr 180px;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.statement-filter input,
+.statement-filter select {
+    background: #f8fafc;
+    border: 1px solid #dbe2ea;
+}
+
+.statement-transactions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.statement-transaction {
+    border: 1px solid #e5eaf0;
+    border-radius: 16px;
+    padding: 16px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 15px;
+    align-items: center;
+    background: #fff;
+}
+
+.statement-transaction-info {
+    min-width: 0;
+}
+
+.statement-transaction-no {
+    font-weight: bold;
+    color: #17365f;
+    font-size: 16px;
+}
+
+.statement-transaction-date {
+    color: #7b8494;
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+.statement-transaction-type {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.statement-transaction-desc {
+    color: #4b5563;
+    margin-top: 5px;
+}
+
+.statement-reference {
+    color: #3157a4;
+    font-size: 13px;
+    margin-top: 6px;
+}
+
+.statement-amount {
+    min-width: 145px;
+    padding: 14px;
+    border-radius: 14px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.statement-amount.credit {
+    color: #087443;
+    background: #ecfdf5;
+}
+
+.statement-amount.debit {
+    color: #b42318;
+    background: #fff1f2;
+}
+
+.statement-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.statement-footer button {
+    border: 0;
+    border-radius: 12px;
+    padding: 12px 20px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.statement-print {
+    background: #285c9f;
+    color: white;
+}
+
+.statement-close-bottom {
+    background: #e9edf3;
+}
+
+@media (max-width: 700px) {
+    .statement-modal {
+        margin: 8px auto;
+        width: calc(100% - 12px);
+        max-width: none;
+        border-radius: 18px;
+    }
+
+    .statement-top {
+        padding: 22px 18px 55px;
+    }
+
+    .statement-top h2 {
+        font-size: 22px;
+        padding-left: 50px;
+    }
+
+    .statement-body {
+        padding: 14px;
+    }
+
+    .statement-employee {
+        margin-top: -38px;
+        padding: 16px;
+        display: block;
+    }
+
+    .statement-employee-main {
+        align-items: flex-start;
+    }
+
+    .statement-avatar {
+        width: 52px;
+        height: 52px;
+        font-size: 25px;
+    }
+
+    .statement-employee-name {
+        font-size: 18px;
+    }
+
+    .statement-id {
+        margin-top: 12px;
+        text-align: right;
+    }
+
+    .statement-summary {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .statement-card {
+        padding: 15px;
+    }
+
+    .statement-card-value {
+        font-size: 22px;
+    }
+
+    .statement-section {
+        padding: 13px;
+    }
+
+    .statement-filter {
+        grid-template-columns: 1fr;
+    }
+
+    .statement-transaction {
+        grid-template-columns: 1fr;
+        padding: 14px;
+    }
+
+    .statement-amount {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .statement-footer {
+        flex-direction: column;
+    }
+
+    .statement-footer button {
+        width: 100%;
+    }
+}
+
+@media print {
+    body * {
+        visibility: hidden !important;
+    }
+
+    #statementModal,
+    #statementModal * {
+        visibility: visible !important;
+    }
+
+    #statementModal {
+        position: absolute !important;
+        inset: 0 !important;
+        background: white !important;
+    }
+
+    .statement-close,
+    .statement-footer,
+    .statement-filter,
+    .modal-overlay {
+        box-shadow: none !important;
+    }
+
+    .statement-close,
+    .statement-footer,
+    .statement-filter {
+        display: none !important;
+    }
+}
+
+
+/* =====================================================
+   الهوية الموحدة لنظام ملوك التنجيد
+   ===================================================== */
+
+body {
+    background: #f5f7fb;
+    color: #172b4d;
+}
+
+.unified-header {
+    background: linear-gradient(135deg, #17365f, #285c9f);
+    color: white;
+    padding: 14px 20px;
+    box-shadow: 0 4px 18px rgba(0,0,0,.12);
+}
+
+.unified-header-inner {
+    max-width: 1250px;
+    margin: auto;
+    min-height: 82px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 20px;
+}
+
+.unified-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    text-align: right;
+}
+
+.unified-logo {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    border-radius: 12px;
+    background: white;
+    padding: 3px;
+    box-sizing: border-box;
+}
+
+.unified-brand h1 {
+    margin: 0;
+    font-size: 23px;
+    color: white;
+}
+
+.unified-brand p {
+    margin: 5px 0 0;
+    font-size: 13px;
+    opacity: .88;
+}
+
+.unified-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-self: start;
+}
+
+.unified-user-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+    background: rgba(255,255,255,.14);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.unified-user small {
+    display: block;
+    opacity: .75;
+    margin-bottom: 3px;
+}
+
+.unified-user strong {
+    font-size: 14px;
+}
+
+.unified-menu {
+    justify-self: end;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border-radius: 12px;
+    background: rgba(255,255,255,.14);
+    color: white;
+    font-size: 22px;
+}
+
+.container {
+    max-width: 1250px;
+    margin: 24px auto;
+}
+
+.top-bar {
+    background: white;
+    padding: 14px;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0,0,0,.06);
+    margin-bottom: 20px;
+}
+
+button {
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+
+button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,.10);
+}
+
+.primary {
+    background: #285c9f;
+}
+
+.table-box {
+    border-radius: 16px;
+    box-shadow: 0 5px 18px rgba(0,0,0,.06);
+}
+
+th {
+    background: #eef3f9;
+    color: #17365f;
+}
+
+#addEmployeeBox,
+#financeBox {
+    border-radius: 16px;
+    box-shadow: 0 5px 18px rgba(0,0,0,.06);
+}
+
+@media (max-width: 700px) {
+
+    .unified-header {
+        padding: 12px;
+    }
+
+    .unified-header-inner {
+        min-height: 70px;
+        grid-template-columns: auto 1fr auto;
+        gap: 8px;
+    }
+
+    .unified-logo {
+        width: 52px;
+        height: 52px;
+    }
+
+    .unified-brand {
+        gap: 7px;
+    }
+
+    .unified-brand h1 {
+        font-size: 18px;
+    }
+
+    .unified-brand p {
+        font-size: 11px;
+    }
+
+    .unified-user {
+        display: none;
+    }
+
+    .unified-menu {
+        width: 40px;
+        height: 40px;
+    }
+
+    .container {
+        margin: 14px auto;
+        padding: 0 10px;
+    }
+
+    .top-bar {
+        padding: 10px;
+    }
+
+    .top-bar button {
+        flex: 1;
+        min-width: 110px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="unified-header">
+    <div class="unified-header-inner">
+
+        <div class="unified-user">
+            <div class="unified-user-avatar">👤</div>
+            <div>
+                <small>مرحبًا</small>
+                <strong>إدارة الموظفين</strong>
+            </div>
+        </div>
+
+        <div class="unified-brand">
+            <img src="/muluk-logo.jpg"
+                 alt="ملوك التنجيد"
+                 class="unified-logo">
+            <div>
+                <h1>ملوك التنجيد</h1>
+                <p>إدارة الموظفين والحسابات المالية</p>
+            </div>
+        </div>
+
+        <button class="unified-menu"
+                onclick="window.location.href='/dashboard.html'">
+            ☰
+        </button>
+
+    </div>
+</header>
+
+<div class="container">
+
+    <div class="top-bar">
+
+        <button class="back"
+                onclick="window.location.href='/dashboard.html'">
+            ← الرئيسية
+        </button>
+
+        <button class="primary"
+                onclick="loadEmployees()">
+            🔄 تحديث
+        </button>
+
+        <button class="primary"
+                onclick="showAddEmployee()">
+            ➕ إضافة موظف
+        </button>
+
+    </div>
+
+
+    <!-- إضافة / تعديل موظف -->
+
+    <div id="addEmployeeBox">
+
+        <h2>➕ إضافة موظف جديد</h2>
+
+        <div class="form-grid">
+
+            <input id="employeeNo"
+                   type="text"
+                   placeholder="رقم الموظف">
+
+            <input id="fullName"
+                   type="text"
+                   placeholder="الاسم الكامل">
+
+            <input id="phone"
+                   type="text"
+                   placeholder="رقم الهاتف">
+
+            <input id="jobTitle"
+                   type="text"
+                   placeholder="المسمى الوظيفي">
+
+            <input id="hireDate"
+                   type="date">
+
+            <select id="isActive">
+                <option value="true">نشط</option>
+                <option value="false">غير نشط</option>
+            </select>
+
+            <input id="qualification"
+                   type="text"
+                   placeholder="المؤهل">
+
+            <textarea id="skills"
+                      placeholder="المهارات"></textarea>
+
+        </div>
+
+        <br>
+
+        <button class="primary"
+                onclick="saveEmployeeForm()">
+            💾 حفظ
+        </button>
+
+        <button onclick="hideAddEmployee()">
+            ❌ إلغاء
+        </button>
+
+    </div>
+
+
+    <!-- الحساب المالي -->
+
+    <div id="financeBox">
+
+        <h2>💰 الحساب المالي</h2>
+
+        <div id="financeEmployeeInfo"
+             class="notice">
+        </div>
+
+        <div class="finance-summary">
+
+            <div class="summary-card">
+                <div class="summary-title">
+                    الرصيد الحالي
+                </div>
+                <div id="financeBalance"
+                     class="summary-value">
+                    0 ريال
+                </div>
+            </div>
+
+            <div class="summary-card">
+                <div class="summary-title">
+                    إجمالي المستحقات
+                </div>
+                <div id="financeCredits"
+                     class="summary-value">
+                    0 ريال
+                </div>
+            </div>
+
+            <div class="summary-card">
+                <div class="summary-title">
+                    إجمالي المصروف
+                </div>
+                <div id="financeDebits"
+                     class="summary-value">
+                    0 ريال
+                </div>
+            </div>
+
+        </div>
+
+        <button class="finance"
+                onclick="openTransactionForm('PIECE_EARNING')">
+            ➕ أجر قطعة
+        </button>
+
+        <button class="withdraw"
+                onclick="openTransactionForm('WITHDRAWAL')">
+            💵 تسجيل سحب
+        </button>
+
+        <button class="advance"
+                onclick="openTransactionForm('ADVANCE')">
+            💳 تسجيل سلفة
+        </button>
+
+        <button class="statement"
+                onclick="openStatement(financeEmployeeId)">
+            📋 كشف الحساب
+        </button>
+
+        <button onclick="closeFinanceBox()">
+            ❌ إغلاق
+        </button>
+
+    </div>
+
+
+    <!-- جدول الموظفين -->
+
+    <div class="table-box">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>رقم الموظف</th>
+                    <th>الاسم</th>
+                    <th>الهاتف</th>
+                    <th>المسمى الوظيفي</th>
+                    <th>تاريخ التعيين</th>
+                    <th>الحالة</th>
+                    <th>الرصيد المستحق</th>
+                    <th>الإجراءات</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="employeesTable">
+
+                <tr>
+                    <td colspan="8">
+                        جاري تحميل الموظفين...
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- نافذة الحركة المالية -->
+
+<div id="transactionModal"
+     class="modal-overlay">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <h2 id="transactionTitle">
+                حركة مالية
+            </h2>
+
+            <button class="close-btn"
+                    onclick="closeTransactionModal()">
+                ✕
+            </button>
+
+        </div>
+
+        <div id="transactionEmployeeInfo"
+             class="notice">
+        </div>
+
+        <div id="withdrawWarning"
+             class="notice"
+             style="display:none">
+        </div>
+
+        <div class="form-grid">
+
+            <div id="workOrderField">
+
+                <label>
+                    أمر التشغيل
+                    <span class="small">(اختياري)</span>
+                </label>
+
+                <input id="workOrderSearch"
+                       type="text"
+                       placeholder="رقم أمر التشغيل مثل MK-WO-2026-000041">
+
+                <button type="button"
+                        onclick="lookupWorkOrder()"
+                        style="margin-top:7px">
+                    🔎 استدعاء أمر تشغيل
+                </button>
+
+                <div id="workOrderResult"
+                     class="small">
+                </div>
+
+            </div>
+
+            <div>
+
+                <label>وصف الحركة</label>
+
+                <input id="transactionDescription"
+                       type="text"
+                       placeholder="مثال: أجر تنجيد">
+
+            </div>
+
+            <div>
+
+                <label>المبلغ</label>
+
+                <input id="transactionAmount"
+                       type="number"
+                       min="1"
+                       step="0.01"
+                       placeholder="المبلغ بالريال">
+
+            </div>
+
+            <div>
+
+                <label>التاريخ</label>
+
+                <input id="transactionDate"
+                       type="datetime-local">
+
+            </div>
+
+        </div>
+
+        <br>
+
+        <label>ملاحظات</label>
+
+        <textarea id="transactionNotes"
+                  placeholder="ملاحظات إضافية"></textarea>
+
+        <br><br>
+
+        <button class="primary"
+                onclick="saveFinancialTransaction()">
+            💾 حفظ الحركة
+        </button>
+
+        <button onclick="closeTransactionModal()">
+            ❌ إلغاء
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- كشف الحساب -->
+<div id="statementModal" class="modal-overlay">
+
+    <div class="modal statement-modal">
+
+        <div class="statement-top">
+            <button
+                class="statement-close"
+                onclick="closeStatement()"
+                type="button">
+                ✕
+            </button>
+
+            <h2>📋 كشف حساب الموظف</h2>
+            <p>جميع الحركات المالية الخاصة بالموظف</p>
+        </div>
+
+        <div class="statement-body">
+
+            <div class="statement-employee">
+
+                <div class="statement-employee-main">
+
+                    <div class="statement-avatar">
+                        👨‍🔧
+                    </div>
+
+                    <div>
+                        <div
+                            id="statementEmployeeInfo"
+                            class="statement-employee-name">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="statement-id">
+                    الحساب المالي
+                </div>
+
+            </div>
+
+
+            <div class="statement-summary">
+
+                <div class="statement-card balance">
+                    <div class="statement-card-title">
+                        💰 الرصيد الحالي
+                    </div>
+
+                    <div
+                        id="statementBalance"
+                        class="statement-card-value">
+                        0 ريال
+                    </div>
+                </div>
+
+
+                <div class="statement-card credit">
+                    <div class="statement-card-title">
+                        📈 إجمالي المستحقات
+                    </div>
+
+                    <div
+                        id="statementCredits"
+                        class="statement-card-value">
+                        0 ريال
+                    </div>
+                </div>
+
+
+                <div class="statement-card debit">
+                    <div class="statement-card-title">
+                        📉 إجمالي المصروف
+                    </div>
+
+                    <div
+                        id="statementDebits"
+                        class="statement-card-value">
+                        0 ريال
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="statement-section">
+
+                <div class="statement-section-title">
+
+                    <h3>📒 سجل الحركات</h3>
+
+                </div>
+
+
+                <div class="statement-filter">
+
+                    <input
+                        id="statementSearch"
+                        type="search"
+                        placeholder="🔎 بحث في الحركات..."
+                        oninput="filterStatementTransactions()">
+
+                    <select
+                        id="statementTypeFilter"
+                        onchange="filterStatementTransactions()">
+
+                        <option value="">جميع الحركات</option>
+                        <option value="PIECE_EARNING">أجر قطعة</option>
+                        <option value="WITHDRAWAL">سحب</option>
+                        <option value="ADVANCE">سلفة</option>
+                        <option value="DEDUCTION">خصم</option>
+                        <option value="BONUS">مكافأة</option>
+                        <option value="SETTLEMENT">تسوية</option>
+                        <option value="ADJUSTMENT">تعديل</option>
+
+                    </select>
+
+                </div>
+
+
+                <div
+                    id="statementTransactions"
+                    class="statement-transactions">
+                </div>
+
+            </div>
+
+
+            <div class="statement-footer">
+
+                <button
+                    type="button"
+                    class="statement-print"
+                    onclick="window.print()">
+                    🖨️ طباعة / PDF
+                </button>
+
+                <button
+                    type="button"
+                    class="statement-close-bottom"
+                    onclick="closeStatement()">
+                    ❌ إغلاق
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+let editingEmployeeId = null;
+
+let financeEmployees = [];
+
+let financeEmployeeId = null;
+
+let currentTransactionType = null;
+
+let currentWorkOrderId = null;
+
+let currentWorkOrderNo = null;
+
+
+function getToken() {
+
+    return localStorage.getItem('token');
+
+}
+
+
+function money(value) {
+
+    return Number(value || 0).toLocaleString(
+        'ar-YE',
+        {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2
+        }
+    ) + ' ريال';
+
+}
+
+
+function escapeHtml(value) {
+
+    return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+
+}
+
+
+function getBalanceClass(balance) {
+
+    const n = Number(balance || 0);
+
+    if (n > 0) return 'balance balance-positive';
+
+    if (n < 0) return 'balance balance-negative';
+
+    return 'balance balance-zero';
+
+}
+
+
+async function loadEmployees() {
+
+    const token = getToken();
+
+    if (!token) {
+        window.location.href = '/';
+        return;
+    }
+
+    const table =
+        document.getElementById('employeesTable');
+
+    try {
+
+        const response = await fetch(
+            '/api/employee-finance/employees',
+            {
+                headers: {
+                    'Authorization':
+                        'Bearer ' + token
+                }
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+
+            table.innerHTML =
+                '<tr><td colspan="8">❌ ' +
+                escapeHtml(
+                    data.message ||
+                    'تعذر تحميل الموظفين'
+                ) +
+                '</td></tr>';
+
+            return;
+        }
+
+        financeEmployees =
+            data.employees || [];
+
+        let html = '';
+
+        financeEmployees.forEach(employee => {
+
+            const status =
+                employee.is_active
+                    ? '<span class="active">نشط</span>'
+                    : '<span class="inactive">غير نشط</span>';
+
+            html += `
+                <tr>
+
+                    <td>
+                        ${escapeHtml(employee.employee_no)}
+                    </td>
+
+                    <td>
+                        <strong>
+                            ${escapeHtml(employee.full_name)}
+                        </strong>
+                    </td>
+
+                    <td>
+                        ${escapeHtml(employee.phone || '—')}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(employee.job_title || '—')}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(employee.hire_date || '—')}
+                    </td>
+
+                    <td>
+                        ${status}
+                    </td>
+
+                    <td class="${getBalanceClass(employee.current_balance)}">
+                        ${money(employee.current_balance)}
+                    </td>
+
+                    <td>
+
+                        <div class="actions">
+
+                            <button class="finance"
+                                    onclick="openFinance(${employee.employee_id})">
+                                💰 الحساب
+                            </button>
+
+                            <button class="statement"
+                                    onclick="openStatement(${employee.employee_id})">
+                                📋 كشف
+                            </button>
+
+                            <button
+                                onclick="editEmployee(${employee.employee_id})">
+                                ✏️ تعديل
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+            `;
+
+        });
+
+        if (!html) {
+
+            html =
+                '<tr><td colspan="8">لا يوجد موظفون</td></tr>';
+
+        }
+
+        table.innerHTML = html;
+
+    } catch (error) {
+
+        console.error(
+            'Load employee finance error:',
+            error
+        );
+
+        table.innerHTML =
+            '<tr><td colspan="8">❌ تعذر الاتصال بالخادم</td></tr>';
+
+    }
+
+}
+
+
+async function openFinance(employeeId) {
+
+    const employee =
+        financeEmployees.find(
+            e =>
+                Number(e.employee_id) ===
+                Number(employeeId)
+        );
+
+    if (!employee) {
+
+        alert('❌ لم يتم العثور على الموظف');
+
+        return;
+
+    }
+
+    financeEmployeeId =
+        Number(employeeId);
+
+    document.getElementById(
+        'financeEmployeeInfo'
+    ).innerHTML =
+        '<strong>' +
+        escapeHtml(employee.full_name) +
+        '</strong><br>' +
+        escapeHtml(employee.employee_no) +
+        ' — ' +
+        escapeHtml(employee.job_title || '');
+
+    document.getElementById(
+        'financeBox'
+    ).style.display = 'block';
+
+    await refreshFinanceBox();
+
+    document.getElementById(
+        'financeBox'
+    ).scrollIntoView({
+        behavior: 'smooth'
+    });
+
+}
+
+
+async function refreshFinanceBox() {
+
+    if (!financeEmployeeId) return;
+
+    const token = getToken();
+
+    try {
+
+        const response = await fetch(
+            '/api/employee-finance/' +
+            financeEmployeeId,
+            {
+                headers: {
+                    'Authorization':
+                        'Bearer ' + token
+                }
+            }
+        );
+
+        const data =
+            await response.json();
+
+        if (!response.ok || !data.success) {
+
+            alert(
+                '❌ ' +
+                (
+                    data.message ||
+                    'تعذر تحميل الحساب'
+                )
+            );
+
+            return;
+
+        }
+
+        const balance =
+            data.balance || {};
+
+        document.getElementById(
+            'financeBalance'
+        ).textContent =
+            money(balance.current_balance);
+
+        document.getElementById(
+            'financeCredits'
+        ).textContent =
+            money(balance.total_credits);
+
+        document.getElementById(
+            'financeDebits'
+        ).textContent =
+            money(balance.total_debits);
+
+    } catch (error) {
+
+        console.error(
+            'Refresh finance box error:',
+            error
+        );
+
+    }
+
+}
+
+
+function closeFinanceBox() {
+
+    document.getElementById(
+        'financeBox'
+    ).style.display = 'none';
+
+    financeEmployeeId = null;
+
+}
+
+
+function openTransactionForm(type) {
+
+    if (!financeEmployeeId) {
+
+        alert('اختر موظفًا أولًا');
+
+        return;
+
+    }
+
+    currentTransactionType = type;
+
+    currentWorkOrderId = null;
+    currentWorkOrderNo = null;
+
+    const employee =
+        financeEmployees.find(
+            e =>
+                Number(e.employee_id) ===
+                Number(financeEmployeeId)
+        );
+
+    if (!employee) return;
+
+    const titles = {
+
+        PIECE_EARNING:
+            '➕ تسجيل أجر قطعة',
+
+        WITHDRAWAL:
+            '💵 تسجيل سحب',
+
+        ADVANCE:
+            '💳 تسجيل سلفة'
+
+    };
+
+    document.getElementById(
+        'transactionTitle'
+    ).textContent =
+        titles[type] || 'حركة مالية';
+
+    document.getElementById(
+        'transactionEmployeeInfo'
+    ).innerHTML =
+        '<strong>' +
+        escapeHtml(employee.full_name) +
+        '</strong><br>' +
+        'الرصيد الحالي: <strong>' +
+        money(employee.current_balance) +
+        '</strong>';
+
+    document.getElementById(
+        'transactionAmount'
+    ).value = '';
+
+    document.getElementById(
+        'transactionDescription'
+    ).value =
+        type === 'PIECE_EARNING'
+            ? 'أجر قطعة'
+            : type === 'WITHDRAWAL'
+                ? 'سحب من المستحقات'
+                : 'سلفة';
+
+    document.getElementById(
+        'transactionNotes'
+    ).value = '';
+
+    document.getElementById(
+        'workOrderSearch'
+    ).value = '';
+
+    document.getElementById(
+        'workOrderResult'
+    ).textContent = '';
+
+    document.getElementById(
+        'withdrawWarning'
+    ).style.display =
+        type === 'WITHDRAWAL'
+            ? 'block'
+            : 'none';
+
+    if (type === 'WITHDRAWAL') {
+
+        document.getElementById(
+            'withdrawWarning'
+        ).textContent =
+            '⚠️ السحب يتم من الرصيد المستحق الحالي. لا يمكن سحب مبلغ أكبر من الرصيد.';
+
+    }
+
+    document.getElementById(
+        'workOrderField'
+    ).style.display =
+        type === 'PIECE_EARNING'
+            ? 'block'
+            : 'none';
+
+    const now =
+        new Date();
+
+    now.setMinutes(
+        now.getMinutes() -
+        now.getTimezoneOffset()
+    );
+
+    document.getElementById(
+        'transactionDate'
+    ).value =
+        now.toISOString()
+            .slice(0, 16);
+
+    document.getElementById(
+        'transactionModal'
+    ).style.display = 'block';
+
+}
+
+
+function closeTransactionModal() {
+
+    document.getElementById(
+        'transactionModal'
+    ).style.display = 'none';
+
+}
+
+
+async function lookupWorkOrder() {
+    const input = document.getElementById('workOrderSearch');
+    const resultBox = document.getElementById('workOrderResult');
+
+    const value = input.value.trim();
+
+    if (!value) {
+        alert('أدخل رقم أمر التشغيل أولًا');
+        return;
+    }
+
+    const token = getToken();
+
+    if (!token) {
+        alert('❌ انتهت جلسة تسجيل الدخول');
+        window.location.href = '/';
+        return;
+    }
+
+    resultBox.innerHTML = '⏳ جاري البحث...';
+
+    try {
+        const response = await fetch(
+            '/api/work-orders',
+            {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            resultBox.innerHTML =
+                '❌ تعذر تحميل أوامر التشغيل';
+            return;
+        }
+
+        const orders = data.work_orders || [];
+
+        /*
+         * البحث الذكي:
+         * 41        ← يطابق آخر أرقام الأمر
+         * 000041    ← يطابق آخر أرقام الأمر
+         * MK-WO...  ← يطابق الرقم الكامل أو أي جزء منه
+         */
+        const searchValue = value.toLowerCase();
+
+        window.lastWorkOrderSearchResults = orders;
+
+        const matches = orders.filter(order => {
+            const orderNo = String(
+                order.work_order_no || ''
+            ).toLowerCase();
+
+            const normalizedOrderNo =
+                orderNo.replace(/[^0-9]/g, '');
+
+            const normalizedSearch =
+                searchValue.replace(/[^0-9]/g, '');
+
+            if (orderNo.includes(searchValue)) {
+                return true;
+            }
+
+            if (
+                normalizedSearch &&
+                normalizedOrderNo.endsWith(normalizedSearch)
+            ) {
+                return true;
+            }
+
+            return false;
+        });
+
+        if (!matches.length) {
+            resultBox.innerHTML =
+                '❌ لم يتم العثور على أمر تشغيل مطابق';
+
+            currentWorkOrderId = null;
+            currentWorkOrderNo = null;
+
+            return;
+        }
+
+        /*
+         * عرض النتائج
+         */
+        let html = '';
+
+        matches.forEach(order => {
+
+            const vehicle = [
+                order.make,
+                order.model,
+                order.model_year
+            ].filter(Boolean).join(' ');
+
+            html += `
+                <div class="work-order-search-result"
+                     style="
+                        background:#f7f7f7;
+                        border:1px solid #ddd;
+                        border-radius:12px;
+                        padding:14px;
+                        margin-top:10px;
+                     ">
+
+                    <div style="
+                        font-size:18px;
+                        font-weight:bold;
+                        margin-bottom:10px;
+                    ">
+                        📋 ${escapeHtml(
+                            order.work_order_no || ''
+                        )}
+                    </div>
+
+                    <div style="line-height:1.9;">
+                        👤 <strong>العميل:</strong>
+                        ${escapeHtml(
+                            order.customer_name || '—'
+                        )}
+                        <br>
+
+                        📞 <strong>الجوال:</strong>
+                        ${escapeHtml(
+                            order.customer_phone || '—'
+                        )}
+                        <br>
+
+                        🚗 <strong>السيارة:</strong>
+                        ${escapeHtml(vehicle || '—')}
+                        <br>
+
+                        🔢 <strong>اللوحة:</strong>
+                        ${escapeHtml(
+                            order.plate_no || '—'
+                        )}
+                        <br>
+
+                        🎨 <strong>اللون:</strong>
+                        ${escapeHtml(
+                            order.color || '—'
+                        )}
+                        <br>
+
+                        📌 <strong>الحالة:</strong>
+                        ${escapeHtml(
+                            order.status || '—'
+                        )}
+                        <br>
+
+                        💰 <strong>الإجمالي:</strong>
+                        ${money(order.total_amount || 0)}
+                        <br>
+
+                        💵 <strong>المدفوع:</strong>
+                        ${money(order.deposit_amount || 0)}
+                        <br>
+
+                        🧮 <strong>المتبقي:</strong>
+                        ${money(order.balance_amount || 0)}
+                    </div>
+
+                    <button
+                        type="button"
+                        onclick="selectWorkOrderForEmployee(${Number(order.work_order_id)})"
+                        style="
+                            margin-top:12px;
+                            width:100%;
+                            background:#3157a4;
+                            color:white;
+                            border:0;
+                            padding:12px;
+                            border-radius:8px;
+                            font-size:15px;
+                            font-weight:bold;
+                            cursor:pointer;
+                        "
+                    >
+                        ✅ اختيار أمر التشغيل
+                    </button>
+
+                </div>
+            `;
+        });
+
+        resultBox.innerHTML = html;
+
+    } catch (error) {
+        console.error(
+            'Lookup work order error:',
+            error
+        );
+
+        resultBox.innerHTML =
+            '❌ تعذر الاتصال بالخادم';
+    }
+}
+
+function selectWorkOrderForEmployee(workOrderId) {
+
+    const resultBox =
+        document.getElementById('workOrderResult');
+
+    const orders =
+        window.lastWorkOrderSearchResults || [];
+
+    const order =
+        orders.find(
+            o => Number(o.work_order_id) === Number(workOrderId)
+        );
+
+    /*
+     * في حالة عدم وجود النسخة المحلية،
+     * نستخدم رقم الأمر الموجود في البطاقة.
+     */
+    const card =
+        resultBox.querySelector(
+            '.work-order-search-result'
+        );
+
+    if (!order && !card) {
+        alert('❌ تعذر تحديد أمر التشغيل');
+        return;
+    }
+
+    currentWorkOrderId = Number(workOrderId);
+
+    if (order) {
+        currentWorkOrderNo =
+            order.work_order_no;
+    } else {
+        const numberElement =
+            card.querySelector('div');
+
+        currentWorkOrderNo =
+            numberElement
+                ? numberElement.textContent
+                    .replace('📋', '')
+                    .trim()
+                : '';
+    }
+
+    resultBox.innerHTML =
+        '✅ تم اختيار أمر التشغيل: <strong>' +
+        escapeHtml(currentWorkOrderNo || '') +
+        '</strong>';
+}
+
+async function saveFinancialTransaction() {
+
+    if (!financeEmployeeId) {
+
+        alert('❌ لم يتم تحديد الموظف');
+
+        return;
+
+    }
+
+    const amount =
+        Number(
+            document.getElementById(
+                'transactionAmount'
+            ).value
+        );
+
+    if (!Number.isFinite(amount) ||
+        amount <= 0) {
+
+        alert(
+            'يرجى إدخال مبلغ صحيح أكبر من صفر'
+        );
+
+        return;
+
+    }
+
+    if (
+        currentTransactionType ===
+        'WITHDRAWAL'
+    ) {
+
+        const employee =
+            financeEmployees.find(
+                e =>
+                    Number(e.employee_id) ===
+                    Number(financeEmployeeId)
+            );
+
+        const balance =
+            Number(
+                employee?.current_balance ||
+                0
+            );
+
+        if (amount > balance) {
+
+            alert(
+                '⚠️ المبلغ أكبر من الرصيد المستحق الحالي: ' +
+                money(balance)
+            );
+
+            return;
+
+        }
+
+    }
+
+    const token = getToken();
+
+    const payload = {
+
+        employee_id:
+            financeEmployeeId,
+
+        transaction_type:
+            currentTransactionType,
+
+        amount:
+
+            amount,
+
+        description:
+            document.getElementById(
+                'transactionDescription'
+            ).value.trim() ||
+            null,
+
+        notes:
+            document.getElementById(
+                'transactionNotes'
+            ).value.trim() ||
+            null,
+
+        transaction_date:
+            document.getElementById(
+                'transactionDate'
+            ).value ||
+            null
+
+    };
+
+    if (
+        currentTransactionType ===
+        'PIECE_EARNING' &&
+        currentWorkOrderId
+    ) {
+
+        payload.work_order_id =
+            currentWorkOrderId;
+
+    }
+
+    try {
+
+        const response =
+            await fetch(
+                '/api/employee-finance/transactions',
+                {
+                    method: 'POST',
+
+                    headers: {
+                        'Content-Type':
+                            'application/json',
+
+                        'Authorization':
+                            'Bearer ' + token
+                    },
+
+                    body:
+                        JSON.stringify(payload)
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (!response.ok ||
+            !data.success) {
+
+            alert(
+                '❌ ' +
+                (
+                    data.message ||
+                    'تعذر حفظ الحركة'
+                )
+            );
+
+            return;
+
+        }
+
+        alert(
+            '✅ تم تسجيل الحركة بنجاح\n' +
+            'رقم الحركة: ' +
+            data.transaction.transaction_no
+        );
+
+        closeTransactionModal();
+
+        await loadEmployees();
+
+        await openFinance(
+            financeEmployeeId
+        );
+
+    } catch (error) {
+
+        console.error(
+            'Save financial transaction error:',
+            error
+        );
+
+        alert(
+            '❌ تعذر الاتصال بالخادم'
+        );
+
+    }
+
+}
+
+
+async function openStatement(employeeId) {
+
+    const token = getToken();
+
+    if (!token) {
+        alert('❌ انتهت جلسة تسجيل الدخول');
+        window.location.href = '/';
+        return;
+    }
+
+    try {
+
+        const response = await fetch(
+            '/api/employee-finance/' + Number(employeeId),
+            {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+
+            alert(
+                '❌ ' +
+                (data.message || 'تعذر تحميل كشف الحساب')
+            );
+
+            return;
+        }
+
+
+        const employee = data.employee;
+        const balance = data.balance || {};
+
+        window.statementTransactions =
+            data.transactions || [];
+
+
+        document.getElementById(
+            'statementEmployeeInfo'
+        ).innerHTML =
+            escapeHtml(employee.full_name || '') +
+            '<div class="statement-employee-meta">' +
+            escapeHtml(employee.employee_no || '') +
+            ' — ' +
+            escapeHtml(employee.job_title || 'موظف') +
+            '</div>';
+
+
+        document.getElementById(
+            'statementBalance'
+        ).textContent =
+            money(balance.current_balance);
+
+
+        document.getElementById(
+            'statementCredits'
+        ).textContent =
+            money(balance.total_credits);
+
+
+        document.getElementById(
+            'statementDebits'
+        ).textContent =
+            money(balance.total_debits);
+
+
+        const search =
+            document.getElementById('statementSearch');
+
+        const typeFilter =
+            document.getElementById('statementTypeFilter');
+
+        if (search) search.value = '';
+        if (typeFilter) typeFilter.value = '';
+
+
+        renderStatementTransactions(
+            window.statementTransactions
+        );
+
+
+        document.getElementById(
+            'statementModal'
+        ).style.display = 'block';
+
+
+    } catch (error) {
+
+        console.error(
+            'Open statement error:',
+            error
+        );
+
+        alert('❌ تعذر الاتصال بالخادم');
+    }
+}
+
+
+function renderStatementTransactions(transactions) {
+
+    const box =
+        document.getElementById(
+            'statementTransactions'
+        );
+
+    if (!transactions || !transactions.length) {
+
+        box.innerHTML = `
+            <div class="notice">
+                📭 لا توجد حركات مالية حتى الآن
+            </div>
+        `;
+
+        return;
+    }
+
+
+    const typeNames = {
+
+        PIECE_EARNING: 'أجر قطعة',
+        WITHDRAWAL: 'سحب',
+        ADVANCE: 'سلفة',
+        DEDUCTION: 'خصم',
+        BONUS: 'مكافأة',
+        SETTLEMENT: 'تسوية',
+        ADJUSTMENT: 'تعديل'
+
+    };
+
+
+    let html = '';
+
+
+    transactions.forEach(transaction => {
+
+        const isCredit =
+            transaction.direction === 'CREDIT';
+
+
+        const date =
+            new Date(
+                transaction.transaction_date
+            ).toLocaleString(
+                'ar-YE',
+                {
+                    dateStyle: 'medium',
+                    timeStyle: 'short'
+                }
+            );
+
+
+        html += `
+
+            <div class="statement-transaction">
+
+                <div class="statement-transaction-info">
+
+                    <div class="statement-transaction-no">
+                        🧾 ${escapeHtml(
+                            transaction.transaction_no || ''
+                        )}
+                    </div>
+
+                    <div class="statement-transaction-date">
+                        📅 ${escapeHtml(date)}
+                    </div>
+
+                    <div class="statement-transaction-type">
+                        ${isCredit ? '🟢' : '🔴'}
+                        ${escapeHtml(
+                            typeNames[
+                                transaction.transaction_type
+                            ] ||
+                            transaction.transaction_type ||
+                            'حركة مالية'
+                        )}
+                    </div>
+
+                    <div class="statement-transaction-desc">
+                        📝 ${escapeHtml(
+                            transaction.description || '—'
+                        )}
+                    </div>
+
+                    <div class="statement-reference">
+                        📋 المرجع:
+                        ${
+                            transaction.work_order_no
+                            ? escapeHtml(
+                                transaction.work_order_no
+                            )
+                            : '—'
+                        }
+                    </div>
+
+                </div>
+
+
+                <div class="statement-amount ${
+                    isCredit ? 'credit' : 'debit'
+                }">
+
+                    ${
+                        isCredit ? '+' : '-'
+                    }
+
+                    ${money(transaction.amount)}
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+
+    box.innerHTML = html;
+}
+
+
+function filterStatementTransactions() {
+
+    const transactions =
+        window.statementTransactions || [];
+
+
+    const search =
+        (
+            document.getElementById(
+                'statementSearch'
+            ).value || ''
+        )
+        .trim()
+        .toLowerCase();
+
+
+    const type =
+        document.getElementById(
+            'statementTypeFilter'
+        ).value;
+
+
+    const filtered =
+        transactions.filter(transaction => {
+
+            const text = [
+
+                transaction.transaction_no,
+                transaction.transaction_type,
+                transaction.description,
+                transaction.notes,
+                transaction.work_order_no
+
+            ]
+            .filter(Boolean)
+            .join(' ')
+            .toLowerCase();
+
+
+            const matchesSearch =
+                !search ||
+                text.includes(search);
+
+
+            const matchesType =
+                !type ||
+                transaction.transaction_type === type;
+
+
+            return matchesSearch && matchesType;
+
+        });
+
+
+    renderStatementTransactions(filtered);
+}
+
+
+function closeStatement() {
+
+    document.getElementById(
+        'statementModal'
+    ).style.display = 'none';
+
+}
+
+
+function showAddEmployee() {
+
+    editingEmployeeId = null;
+
+    const box =
+        document.getElementById(
+            'addEmployeeBox'
+        );
+
+    box.style.display = 'block';
+
+    document.querySelector(
+        '#addEmployeeBox h2'
+    ).textContent =
+        '➕ إضافة موظف جديد';
+
+    document.querySelector(
+        '#addEmployeeBox button.primary'
+    ).textContent =
+        '💾 حفظ';
+
+    document.getElementById(
+        'employeeNo'
+    ).value = '';
+
+    document.getElementById(
+        'fullName'
+    ).value = '';
+
+    document.getElementById(
+        'phone'
+    ).value = '';
+
+    document.getElementById(
+        'jobTitle'
+    ).value = '';
+
+    document.getElementById(
+        'hireDate'
+    ).value = '';
+
+    document.getElementById(
+        'qualification'
+    ).value = '';
+
+    document.getElementById(
+        'skills'
+    ).value = '';
+
+    document.getElementById(
+        'isActive'
+    ).value = 'true';
+
+}
+
+
+function hideAddEmployee() {
+
+    document.getElementById(
+        'addEmployeeBox'
+    ).style.display = 'none';
+
+    editingEmployeeId = null;
+
+}
+
+
+function clearEmployeeForm() {
+
+    document.getElementById(
+        'employeeNo'
+    ).value = '';
+
+    document.getElementById(
+        'fullName'
+    ).value = '';
+
+    document.getElementById(
+        'phone'
+    ).value = '';
+
+    document.getElementById(
+        'jobTitle'
+    ).value = '';
+
+    document.getElementById(
+        'hireDate'
+    ).value = '';
+
+    document.getElementById(
+        'qualification'
+    ).value = '';
+
+    document.getElementById(
+        'skills'
+    ).value = '';
+
+    document.getElementById(
+        'isActive'
+    ).value = 'true';
+
+}
+
+
+async function editEmployee(id) {
+
+    const token = getToken();
+
+    if (!token) {
+
+        window.location.href = '/';
+
+        return;
+
+    }
+
+    try {
+
+        const response =
+            await fetch(
+                '/api/employees/' + id,
+                {
+                    headers: {
+                        'Authorization':
+                            'Bearer ' + token
+                    }
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (!response.ok ||
+            !data.success) {
+
+            alert(
+                '❌ ' +
+                (
+                    data.message ||
+                    'تعذر تحميل بيانات الموظف'
+                )
+            );
+
+            return;
+
+        }
+
+        const employee =
+            data.employee;
+
+        editingEmployeeId = id;
+
+        document.getElementById(
+            'employeeNo'
+        ).value =
+            employee.employee_no || '';
+
+        document.getElementById(
+            'fullName'
+        ).value =
+            employee.full_name || '';
+
+        document.getElementById(
+            'phone'
+        ).value =
+            employee.phone || '';
+
+        document.getElementById(
+            'jobTitle'
+        ).value =
+            employee.job_title || '';
+
+        document.getElementById(
+            'hireDate'
+        ).value =
+            employee.hire_date || '';
+
+        document.getElementById(
+            'qualification'
+        ).value =
+            employee.qualification || '';
+
+        document.getElementById(
+            'skills'
+        ).value =
+            employee.skills || '';
+
+        document.getElementById(
+            'isActive'
+        ).value =
+            employee.is_active
+                ? 'true'
+                : 'false';
+
+        document.getElementById(
+            'addEmployeeBox'
+        ).style.display =
+            'block';
+
+        document.querySelector(
+            '#addEmployeeBox h2'
+        ).textContent =
+            '✏️ تعديل بيانات الموظف';
+
+        document.querySelector(
+            '#addEmployeeBox button.primary'
+        ).textContent =
+            '💾 حفظ التعديل';
+
+        document.getElementById(
+            'addEmployeeBox'
+        ).scrollIntoView({
+            behavior: 'smooth'
+        });
+
+    } catch (error) {
+
+        console.error(
+            'Edit employee error:',
+            error
+        );
+
+        alert(
+            '❌ تعذر الاتصال بالخادم'
+        );
+
+    }
+
+}
+
+
+async function saveEmployeeForm() {
+
+    const token = getToken();
+
+    if (!token) {
+
+        alert(
+            'انتهت جلسة تسجيل الدخول.'
+        );
+
+        window.location.href = '/';
+
+        return;
+
+    }
+
+    const employee_no =
+        document.getElementById(
+            'employeeNo'
+        ).value.trim();
+
+    const full_name =
+        document.getElementById(
+            'fullName'
+        ).value.trim();
+
+    const phone =
+        document.getElementById(
+            'phone'
+        ).value.trim();
+
+    const job_title =
+        document.getElementById(
+            'jobTitle'
+        ).value.trim();
+
+    const hire_date =
+        document.getElementById(
+            'hireDate'
+        ).value;
+
+    const qualification =
+        document.getElementById(
+            'qualification'
+        ).value.trim();
+
+    const skills =
+        document.getElementById(
+            'skills'
+        ).value.trim();
+
+    const is_active =
+        document.getElementById(
+            'isActive'
+        ).value === 'true';
+
+    if (!employee_no ||
+        !full_name) {
+
+        alert(
+            'يرجى إدخال رقم الموظف والاسم الكامل.'
+        );
+
+        return;
+
+    }
+
+    try {
+
+        const url =
+            editingEmployeeId
+                ? '/api/employees/' +
+                  editingEmployeeId
+                : '/api/employees';
+
+        const method =
+            editingEmployeeId
+                ? 'PATCH'
+                : 'POST';
+
+        const response =
+            await fetch(
+                url,
+                {
+                    method,
+
+                    headers: {
+                        'Content-Type':
+                            'application/json',
+
+                        'Authorization':
+                            'Bearer ' + token
+                    },
+
+                    body:
+                        JSON.stringify({
+                            employee_no,
+                            full_name,
+                            phone,
+                            job_title,
+                            hire_date:
+                                hire_date ||
+                                null,
+                            qualification,
+                            skills,
+                            is_active
+                        })
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (!response.ok ||
+            !data.success) {
+
+            alert(
+                '❌ ' +
+                (
+                    data.message ||
+                    'تعذر حفظ الموظف'
+                )
+            );
+
+            return;
+
+        }
+
+        alert(
+            editingEmployeeId
+                ? '✅ تم تعديل الموظف بنجاح'
+                : '✅ تم إضافة الموظف بنجاح'
+        );
+
+        hideAddEmployee();
+
+        loadEmployees();
+
+    } catch (error) {
+
+        console.error(
+            'Save employee error:',
+            error
+        );
+
+        alert(
+            '❌ تعذر الاتصال بالخادم'
+        );
+
+    }
+
+}
+
+
+loadEmployees();
+
+</script>
+
+</body>
+</html>

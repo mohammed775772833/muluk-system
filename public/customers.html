@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ملوك التنجيد | العملاء</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Tahoma, sans-serif;
+            background: #f4f5f7;
+            color: #222;
+        }
+
+        .header {
+            background: #111;
+            color: white;
+            padding: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,.15);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .brand h1 {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        .brand p {
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        .back-btn {
+            background: #333;
+            color: white;
+            border: 1px solid #555;
+            padding: 8px 12px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 18px 14px 30px;
+        }
+
+        .top-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .title {
+            font-size: 22px;
+        }
+
+        .add-btn {
+            background: #111;
+            color: white;
+            border: none;
+            padding: 11px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .search-box {
+            background: white;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.05);
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        .message {
+            display: none;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .message.error {
+            display: block;
+            background: #ffe5e5;
+            color: #a00000;
+        }
+
+        .message.success {
+            display: block;
+            background: #e5f8e9;
+            color: #176b2c;
+        }
+
+        .customers {
+            display: grid;
+            gap: 12px;
+        }
+
+        .customer-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.06);
+        }
+
+        .customer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .customer-name {
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .customer-no {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .customer-info {
+            display: grid;
+            gap: 7px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .empty {
+            background: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 12px;
+            color: #888;
+        }
+
+        .loading {
+            background: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 12px;
+            color: #777;
+        }
+
+        /* نافذة الإضافة */
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.55);
+            z-index: 200;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            border-radius: 14px;
+            padding: 20px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .modal-header h2 {
+            font-size: 19px;
+        }
+
+        .close-btn {
+            border: none;
+            background: #eee;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 13px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .form-actions button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .save-btn {
+            background: #111;
+            color: white;
+            border: none;
+        }
+
+        .cancel-btn {
+            background: #eee;
+            color: #222;
+            border: none;
+        }
+
+        @media (min-width: 700px) {
+            .customers {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1000px) {
+            .customers {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    
+/* ===== الهوية الموحدة - العملاء ===== */
+
+.unified-header {
+    background: linear-gradient(135deg, #17365f, #285c9f);
+    padding: 14px 18px;
+    box-shadow: 0 4px 18px rgba(0,0,0,.12);
+}
+
+.unified-header-content {
+    max-width: 1250px;
+    min-height: 72px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 20px;
+}
+
+.unified-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: white;
+}
+
+.unified-logo {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    background: white;
+    padding: 3px;
+    border-radius: 13px;
+}
+
+.unified-brand h1 {
+    font-size: 22px;
+    color: white;
+    margin: 0 0 4px;
+}
+
+.unified-brand p {
+    color: rgba(255,255,255,.82);
+    margin: 0;
+}
+
+.unified-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-self: start;
+    color: white;
+}
+
+.unified-user small {
+    display: block;
+    opacity: .75;
+    margin-bottom: 3px;
+}
+
+.unified-user strong {
+    font-size: 14px;
+}
+
+.unified-user-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+    background: rgba(255,255,255,.14);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.unified-back {
+    justify-self: end;
+    background: rgba(255,255,255,.12);
+    border-color: rgba(255,255,255,.25);
+}
+
+.add-btn {
+    background: #285c9f;
+}
+
+@media (max-width: 700px) {
+    .unified-header {
+        padding: 10px 12px;
+    }
+
+    .unified-header-content {
+        min-height: 62px;
+        grid-template-columns: auto 1fr auto;
+        gap: 8px;
+    }
+
+    .unified-user {
+        display: none;
+    }
+
+    .unified-logo {
+        width: 50px;
+        height: 50px;
+    }
+
+    .unified-brand {
+        gap: 7px;
+        justify-content: flex-start;
+    }
+
+    .unified-brand h1 {
+        font-size: 18px;
+    }
+
+    .unified-brand p {
+        font-size: 11px;
+    }
+
+    .unified-back {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="header unified-header">
+    <div class="header-content unified-header-content">
+
+        <div class="unified-user">
+            <div class="unified-user-avatar">👤</div>
+            <div>
+                <small>مرحبًا</small>
+                <strong>إدارة العملاء</strong>
+            </div>
+        </div>
+
+        <div class="brand unified-brand">
+            <img src="/muluk-logo.jpg"
+                 alt="ملوك التنجيد"
+                 class="unified-logo">
+            <div>
+                <h1>ملوك التنجيد</h1>
+                <p>إدارة العملاء</p>
+            </div>
+        </div>
+
+        <button class="back-btn unified-back"
+                onclick="goDashboard()">
+            ← الرئيسية
+        </button>
+
+    </div>
+</header>
+
+
+<main class="container">
+
+    <div class="top-section">
+
+        <h2 class="title">
+            👥 العملاء
+        </h2>
+
+        <button
+            id="addCustomerBtn"
+            class="add-btn"
+            onclick="openModal()">
+            ＋ إضافة عميل
+        </button>
+
+    </div>
+
+
+    <div id="message" class="message"></div>
+
+
+    <div class="search-box">
+        <input
+            type="search"
+            id="searchInput"
+            placeholder="🔎 ابحث بالاسم أو رقم الهاتف أو رقم العميل..."
+            oninput="filterCustomers()">
+    </div>
+
+
+    <div id="customersList" class="customers">
+
+        <div class="loading">
+            جاري تحميل العملاء...
+        </div>
+
+    </div>
+
+</main>
+
+
+<!-- نافذة إضافة عميل -->
+
+<div id="customerModal" class="modal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2>➕ إضافة عميل جديد</h2>
+
+            <button
+                class="close-btn"
+                onclick="closeModal()">
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="customerForm">
+
+            <div class="form-group">
+
+                <label>
+                    الاسم الكامل *
+                </label>
+
+                <input
+                    type="text"
+                    id="full_name"
+                    required
+                    autocomplete="name">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    رقم الهاتف *
+                </label>
+
+                <input
+                    type="tel"
+                    id="phone"
+                    required
+                    autocomplete="tel">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    رقم هاتف إضافي
+                </label>
+
+                <input
+                    type="tel"
+                    id="alternate_phone">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    البريد الإلكتروني
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    autocomplete="email">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    العنوان
+                </label>
+
+                <input
+                    type="text"
+                    id="address">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    ملاحظات
+                </label>
+
+                <textarea
+                    id="notes"></textarea>
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <button
+                    type="button"
+                    class="cancel-btn"
+                    onclick="closeModal()">
+                    إلغاء
+                </button>
+
+                <button
+                    type="submit"
+                    class="save-btn">
+                    حفظ العميل
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    // ==========================================
+    // التحقق من Token
+    // ==========================================
+
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        window.location.href = '/login.html';
+    }
+
+
+    let allCustomers = [];
+
+
+    // ==========================================
+    // جلب العملاء
+    // ==========================================
+
+    async function loadCustomers() {
+
+        const list = document.getElementById('customersList');
+
+        list.innerHTML = `
+            <div class="loading">
+                جاري تحميل العملاء...
+            </div>
+        `;
+
+        try {
+
+            const response = await fetch('/api/customers', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+
+            const data = await response.json();
+
+
+            if (!response.ok) {
+
+                if (response.status === 401) {
+                    logout();
+                    return;
+                }
+
+                throw new Error(
+                    data.message || 'فشل تحميل العملاء'
+                );
+            }
+
+
+            allCustomers = data.customers || [];
+
+            renderCustomers(allCustomers);
+
+
+        } catch (error) {
+
+            console.error('Load customers error:', error);
+
+            list.innerHTML = `
+                <div class="empty">
+                    ❌ ${escapeHtml(error.message)}
+                </div>
+            `;
+        }
+    }
+
+
+    // ==========================================
+    // عرض العملاء
+    // ==========================================
+
+    function renderCustomers(customers) {
+
+        const list = document.getElementById('customersList');
+
+        if (!customers.length) {
+
+            list.innerHTML = `
+                <div class="empty">
+                    لا يوجد عملاء حتى الآن.
+                </div>
+            `;
+
+            return;
+        }
+
+
+        list.innerHTML = customers.map(customer => `
+
+            <div class="customer-card">
+
+                <div class="customer-header">
+
+                    <div>
+
+                        <div class="customer-name">
+                            ${escapeHtml(customer.full_name)}
+                        </div>
+
+                        <div class="customer-no">
+                            رقم العميل:
+                            ${escapeHtml(customer.customer_no || '-')}
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="customer-info">
+
+                    <div>
+                        📞
+                        ${escapeHtml(customer.phone || '-')}
+                    </div>
+
+                    ${
+                        customer.alternate_phone
+                        ? `<div>📱 ${escapeHtml(customer.alternate_phone)}</div>`
+                        : ''
+                    }
+
+                    ${
+                        customer.email
+                        ? `<div>✉️ ${escapeHtml(customer.email)}</div>`
+                        : ''
+                    }
+
+                    ${
+                        customer.address
+                        ? `<div>📍 ${escapeHtml(customer.address)}</div>`
+                        : ''
+                    }
+
+                    ${
+                        customer.notes
+                        ? `<div>📝 ${escapeHtml(customer.notes)}</div>`
+                        : ''
+                    }
+
+                </div>
+
+            </div>
+
+        `).join('');
+    }
+
+
+    // ==========================================
+    // البحث
+    // ==========================================
+
+    function filterCustomers() {
+
+        const search =
+            document
+                .getElementById('searchInput')
+                .value
+                .trim()
+                .toLowerCase();
+
+
+        if (!search) {
+
+            renderCustomers(allCustomers);
+
+            return;
+        }
+
+
+        const filtered = allCustomers.filter(customer => {
+
+            return (
+
+                String(customer.full_name || '')
+                    .toLowerCase()
+                    .includes(search)
+
+                ||
+
+                String(customer.phone || '')
+                    .toLowerCase()
+                    .includes(search)
+
+                ||
+
+                String(customer.customer_no || '')
+                    .toLowerCase()
+                    .includes(search)
+
+            );
+
+        });
+
+
+        renderCustomers(filtered);
+    }
+
+
+    // ==========================================
+    // فتح النافذة
+    // ==========================================
+
+    function openModal() {
+
+        document
+            .getElementById('customerModal')
+            .classList.add('active');
+
+        document
+            .getElementById('full_name')
+            .focus();
+    }
+
+
+    // ==========================================
+    // إغلاق النافذة
+    // ==========================================
+
+    function closeModal() {
+
+        document
+            .getElementById('customerModal')
+            .classList.remove('active');
+
+        document
+            .getElementById('customerForm')
+            .reset();
+    }
+
+
+    // ==========================================
+    // إضافة عميل
+    // ==========================================
+
+    document
+        .getElementById('customerForm')
+        .addEventListener('submit', async function(event) {
+
+            event.preventDefault();
+
+
+            const button =
+                this.querySelector('.save-btn');
+
+
+            button.disabled = true;
+            button.textContent = 'جاري الحفظ...';
+
+
+            const customer = {
+
+                full_name:
+                    document
+                        .getElementById('full_name')
+                        .value
+                        .trim(),
+
+                phone:
+                    document
+                        .getElementById('phone')
+                        .value
+                        .trim(),
+
+                alternate_phone:
+                    document
+                        .getElementById('alternate_phone')
+                        .value
+                        .trim(),
+
+                email:
+                    document
+                        .getElementById('email')
+                        .value
+                        .trim(),
+
+                address:
+                    document
+                        .getElementById('address')
+                        .value
+                        .trim(),
+
+                notes:
+                    document
+                        .getElementById('notes')
+                        .value
+                        .trim()
+            };
+
+
+            try {
+
+                const response = await fetch('/api/customers', {
+
+                    method: 'POST',
+
+                    headers: {
+
+                        'Content-Type':
+                            'application/json',
+
+                        'Authorization':
+                            `Bearer ${token}`
+                    },
+
+                    body:
+                        JSON.stringify(customer)
+                });
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    if (response.status === 401) {
+                        logout();
+                        return;
+                    }
+
+                    throw new Error(
+                        data.message ||
+                        'فشل إنشاء العميل'
+                    );
+                }
+
+
+                closeModal();
+
+
+                showMessage(
+                    'تم إضافة العميل بنجاح ✅',
+                    'success'
+                );
+
+
+                await loadCustomers();
+
+
+            } catch (error) {
+
+                console.error(
+                    'Create customer error:',
+                    error
+                );
+
+
+                showMessage(
+                    error.message,
+                    'error'
+                );
+
+
+            } finally {
+
+                button.disabled = false;
+
+                button.textContent =
+                    'حفظ العميل';
+            }
+
+        });
+
+
+    // ==========================================
+    // الرسائل
+    // ==========================================
+
+    function showMessage(text, type) {
+
+        const message =
+            document.getElementById('message');
+
+
+        message.textContent = text;
+
+        message.className =
+            `message ${type}`;
+
+
+        setTimeout(() => {
+
+            message.className =
+                'message';
+
+        }, 4000);
+    }
+
+
+    // ==========================================
+    // حماية النصوص
+    // ==========================================
+
+    function escapeHtml(value) {
+
+        return String(value ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+
+    // ==========================================
+    // العودة للوحة التحكم
+    // ==========================================
+
+    function goDashboard() {
+
+        window.location.href =
+            '/dashboard.html';
+    }
+
+
+    // ==========================================
+    // تسجيل الخروج
+    // ==========================================
+
+    function logout() {
+
+        localStorage.removeItem('token');
+
+        window.location.href =
+            '/login.html';
+    }
+
+
+    // ==========================================
+    // بدء الصفحة
+    // ==========================================
+
+    loadCustomers();
+
+</script>
+
+</body>
+</html>

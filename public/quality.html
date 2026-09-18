@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الجودة - Muluk QMS</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f6f8;
+            color: #222;
+        }
+
+        header {
+            background: #111827;
+            color: white;
+            padding: 18px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .back-btn {
+            color: white;
+            text-decoration: none;
+            background: #374151;
+            padding: 9px 14px;
+            border-radius: 8px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 25px auto;
+            padding: 0 15px;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            border: 0;
+            border-radius: 8px;
+            padding: 10px 16px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+
+        .box {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.06);
+        }
+
+        .box h2 {
+            margin-top: 0;
+            font-size: 19px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            font-size: 14px;
+        }
+
+        textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        .actions {
+            margin-top: 18px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        th,
+        td {
+            padding: 11px 9px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        th {
+            background: #f3f4f6;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .passed {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .failed {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 30px;
+            color: #6b7280;
+        }
+
+        .quality-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.06);
+            text-align: center;
+        }
+
+        .stat-title {
+            color: #6b7280;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .stat-number {
+            font-size: 30px;
+            font-weight: bold;
+            color: #111827;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 18px;
+            }
+
+            .container {
+                margin-top: 15px;
+            }
+        }
+    
+/* ===== الهوية الموحدة - الجودة ===== */
+
+.unified-header {
+    background: linear-gradient(135deg, #17365f, #285c9f);
+    color: white;
+    padding: 14px 18px;
+    border-radius: 0 0 24px 24px;
+    box-shadow: 0 5px 20px rgba(0,0,0,.12);
+}
+
+.unified-header-inner {
+    max-width: 1250px;
+    min-height: 72px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 20px;
+}
+
+.unified-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.unified-logo {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    background: white;
+    padding: 3px;
+    border-radius: 13px;
+}
+
+.unified-brand h1 {
+    margin: 0 0 4px;
+    font-size: 22px;
+    color: white;
+}
+
+.unified-brand p {
+    margin: 0;
+    color: rgba(255,255,255,.82);
+    font-size: 13px;
+}
+
+.unified-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-self: start;
+}
+
+.unified-user small {
+    display: block;
+    opacity: .75;
+    margin-bottom: 3px;
+}
+
+.unified-user strong {
+    font-size: 14px;
+}
+
+.unified-user-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+    background: rgba(255,255,255,.14);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.unified-back {
+    justify-self: end;
+    border: 1px solid rgba(255,255,255,.25);
+    background: rgba(255,255,255,.12);
+    color: white;
+    border-radius: 12px;
+    padding: 11px 16px;
+    cursor: pointer;
+    font: inherit;
+    font-weight: bold;
+}
+
+@media (max-width:650px) {
+    .unified-header {
+        padding: 10px 12px;
+    }
+
+    .unified-header-inner {
+        min-height: 62px;
+        grid-template-columns: auto 1fr auto;
+        gap: 8px;
+    }
+
+    .unified-user {
+        display: none;
+    }
+
+    .unified-logo {
+        width: 50px;
+        height: 50px;
+    }
+
+    .unified-brand {
+        justify-content: flex-start;
+        gap: 7px;
+    }
+
+    .unified-brand h1 {
+        font-size: 18px;
+    }
+
+    .unified-brand p {
+        font-size: 11px;
+    }
+
+    .unified-back {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="unified-header">
+    <div class="unified-header-inner">
+
+        <div class="unified-user">
+            <div class="unified-user-avatar">👤</div>
+            <div>
+                <small>مرحبًا</small>
+                <strong>قسم الجودة</strong>
+            </div>
+        </div>
+
+        <div class="unified-brand">
+            <img src="/muluk-logo.jpg"
+                 alt="ملوك التنجيد"
+                 class="unified-logo">
+            <div>
+                <h1>ملوك التنجيد</h1>
+                <p>إدارة الجودة</p>
+            </div>
+        </div>
+
+        <button type="button"
+                class="unified-back"
+                onclick="window.location.href='/dashboard.html'">
+            ← الرئيسية
+        </button>
+
+    </div>
+</header>
+
+<div class="container">
+
+    <div id="errorBox" class="error"></div>
+
+    <div class="quality-stats">
+        <div class="stat-card">
+            <div class="stat-title">إجمالي الفحوصات</div>
+            <div id="totalInspections" class="stat-number">0</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-title">فحوصات ناجحة</div>
+            <div id="passedInspections" class="stat-number">0</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-title">فحوصات فاشلة</div>
+            <div id="failedInspections" class="stat-number">0</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-title">إجراءات مفتوحة</div>
+            <div id="openCorrectiveActions" class="stat-number">0</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-title">إجراءات مكتملة</div>
+            <div id="completedCorrectiveActions" class="stat-number">0</div>
+        </div>
+    </div>
+
+    <div class="top-bar">
+        <h2>فحوصات الجودة</h2>
+        <button class="btn btn-primary" onclick="showInspectionForm()">
+            ➕ إضافة فحص جودة
+        </button>
+    </div>
+
+    <div id="inspectionFormBox" class="box" style="display:none;">
+        <h2 id="formTitle">إضافة فحص جودة</h2>
+
+        <div class="form-grid">
+
+            <div>
+                <label>أمر العمل</label>
+                <select id="workOrderId">
+                    <option value="">اختر أمر العمل</option>
+                </select>
+            </div>
+
+            <div>
+                <label>الفاحص</label>
+                <select id="inspectorId">
+                    <option value="">اختر الفاحص</option>
+                </select>
+            </div>
+
+            <div>
+                <label>جولة الفحص</label>
+                <input id="inspectionRound" type="number" min="1" value="1">
+            </div>
+
+            <div>
+                <label>النتيجة العامة</label>
+                <select id="result">
+                    <option value="PENDING">قيد الفحص</option>
+                    <option value="PASSED">ناجح</option>
+                    <option value="FAILED">فشل</option>
+                </select>
+            </div>
+
+            <div>
+                <label>جودة التنفيذ</label>
+                <select id="workmanshipResult">
+                    <option value="PENDING">قيد الفحص</option>
+                    <option value="PASSED">ناجح</option>
+                    <option value="FAILED">فشل</option>
+                </select>
+            </div>
+
+            <div>
+                <label>جودة المواد</label>
+                <select id="materialResult">
+                    <option value="PENDING">قيد الفحص</option>
+                    <option value="PASSED">ناجح</option>
+                    <option value="FAILED">فشل</option>
+                </select>
+            </div>
+
+            <div>
+                <label>المظهر</label>
+                <select id="appearanceResult">
+                    <option value="PENDING">قيد الفحص</option>
+                    <option value="PASSED">ناجح</option>
+                    <option value="FAILED">فشل</option>
+                </select>
+            </div>
+
+            <div>
+                <label>الوظائف</label>
+                <select id="functionResult">
+                    <option value="PENDING">قيد الفحص</option>
+                    <option value="PASSED">ناجح</option>
+                    <option value="FAILED">فشل</option>
+                </select>
+            </div>
+
+            <div>
+                <label>مطابقة متطلبات العميل</label>
+                <select id="customerRequirementsResult">
+                    <option value="PENDING">قيد الفحص</option>
+                    <option value="PASSED">ناجح</option>
+                    <option value="FAILED">فشل</option>
+                </select>
+            </div>
+
+            <div class="full">
+                <label>العيوب المكتشفة</label>
+                <textarea id="defectsFound" placeholder="اكتب العيوب إن وجدت"></textarea>
+            </div>
+
+            <div class="full">
+                <label>الملاحظات</label>
+                <textarea id="notes" placeholder="ملاحظات مسؤول الجودة"></textarea>
+            </div>
+
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-primary" onclick="saveInspection()">
+                💾 حفظ الفحص
+            </button>
+
+            <button class="btn btn-secondary" onclick="hideInspectionForm()">
+                إلغاء
+            </button>
+        </div>
+    </div>
+
+    <div class="box">
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>رقم الفحص</th>
+                        <th>أمر العمل</th>
+                        <th>الفاحص</th>
+                        <th>الجولة</th>
+                        <th>النتيجة</th>
+                        <th>التنفيذ</th>
+                        <th>المواد</th>
+                        <th>المظهر</th>
+                        <th>الوظائف</th>
+                        <th>متطلبات العميل</th>
+                        <th>التاريخ</th>
+                    </tr>
+                </thead>
+
+                <tbody id="inspectionsTable">
+                    <tr>
+                        <td colspan="11" class="empty">جاري تحميل البيانات...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+    <div class="box" style="margin-top:25px;">
+        <div class="top-bar">
+            <h2>⚠️ عدم المطابقة والإجراءات التصحيحية</h2>
+
+            <button class="btn btn-primary" onclick="showCorrectiveActionForm()">
+                ➕ إضافة إجراء تصحيحي
+            </button>
+        </div>
+
+        <div id="correctiveFormBox" style="display:none; margin-bottom:20px;">
+            <h2 id="correctiveFormTitle">إضافة إجراء تصحيحي</h2>
+
+            <div class="form-grid">
+
+                <div>
+                    <label>فحص الجودة</label>
+                    <select id="correctiveInspectionId">
+                        <option value="">اختر فحص الجودة</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>الموظف المسؤول</label>
+                    <select id="correctiveResponsibleEmployeeId">
+                        <option value="">اختر الموظف</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>تاريخ الاستحقاق</label>
+                    <input id="correctiveDueDate" type="date">
+                </div>
+
+                <div>
+                    <label>الحالة</label>
+                    <select id="correctiveStatus">
+                        <option value="OPEN">مفتوح</option>
+                        <option value="IN_PROGRESS">قيد التنفيذ</option>
+                        <option value="COMPLETED">مكتمل</option>
+                        <option value="CLOSED">مغلق</option>
+                    </select>
+                </div>
+
+                <div class="full">
+                    <label>وصف عدم المطابقة</label>
+                    <textarea id="correctiveDescription"
+                        placeholder="ما المشكلة أو عدم المطابقة؟"></textarea>
+                </div>
+
+                <div class="full">
+                    <label>السبب الجذري</label>
+                    <textarea id="correctiveRootCause"
+                        placeholder="ما السبب الجذري للمشكلة؟"></textarea>
+                </div>
+
+                <div class="full">
+                    <label>الإجراء الاحتوائي</label>
+                    <textarea id="correctiveContainment"
+                        placeholder="ما الإجراء الفوري لمنع استمرار المشكلة؟"></textarea>
+                </div>
+
+                <div class="full">
+                    <label>الإجراء التصحيحي</label>
+                    <textarea id="correctiveAction"
+                        placeholder="ما الإجراء الذي سيزيل سبب المشكلة؟"></textarea>
+                </div>
+
+                <div class="full">
+                    <label>الإجراء الوقائي</label>
+                    <textarea id="correctivePreventive"
+                        placeholder="ما الإجراء لمنع تكرار المشكلة؟"></textarea>
+                </div>
+
+                <div class="full">
+                    <label>التحقق من الفعالية</label>
+                    <textarea id="correctiveEffectiveness"
+                        placeholder="كيف تم التأكد من فعالية الإجراء؟"></textarea>
+                </div>
+
+            </div>
+
+            <div class="actions">
+                <button class="btn btn-primary" onclick="saveCorrectiveAction()">
+                    💾 حفظ الإجراء
+                </button>
+
+                <button class="btn btn-secondary" onclick="hideCorrectiveActionForm()">
+                    إلغاء
+                </button>
+            </div>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>رقم عدم المطابقة</th>
+                        <th>أمر العمل</th>
+                        <th>فحص الجودة</th>
+                        <th>الوصف</th>
+                        <th>المسؤول</th>
+                        <th>الاستحقاق</th>
+                        <th>الحالة</th>
+                        <th>الفعالية</th>
+                    </tr>
+                </thead>
+
+                <tbody id="correctiveActionsTable">
+                    <tr>
+                        <td colspan="9" class="empty">جاري تحميل البيانات...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+<script>
+
+async function loadCorrectiveActions() {
+    const token = getToken();
+
+    if (!token) {
+        window.location.href = '/login.html';
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/corrective-actions', {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(
+                data.message || 'تعذر تحميل الإجراءات التصحيحية'
+            );
+        }
+
+        const openCorrectiveActions = data.data.filter(
+            item => item.status === 'OPEN'
+        ).length;
+
+        const completedCorrectiveActions = data.data.filter(
+            item => item.status === 'COMPLETED'
+        ).length;
+
+        document.getElementById('openCorrectiveActions').textContent =
+            openCorrectiveActions;
+
+        document.getElementById('completedCorrectiveActions').textContent =
+            completedCorrectiveActions;
+
+        const tbody =
+            document.getElementById('correctiveActionsTable');
+
+        if (!data.data.length) {
+            tbody.innerHTML =
+                '<tr><td colspan="9" class="empty">لا توجد إجراءات تصحيحية</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = data.data.map(item => `
+            <tr>
+                <td>${item.nonconformity_no || '-'}</td>
+                <td>${item.work_order_no || '-'}</td>
+                <td>${item.inspection_no || '-'}</td>
+                <td>${item.description || '-'}</td>
+                <td>${item.responsible_employee_name || '-'}</td>
+                <td>${item.due_date ? new Date(item.due_date).toLocaleDateString('ar-YE') : '-'}</td>
+                <td>${item.status || '-'}</td>
+                <td>${item.effectiveness_check || '-'}</td>
+                <td>
+                    <button class="btn btn-primary" onclick="editCorrectiveAction(${item.corrective_action_id})">
+                        ✏️ تعديل
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+
+    } catch (error) {
+        console.error('Load corrective actions error:', error);
+        showError(error.message);
+    }
+}
+
+async function loadCorrectiveFormData() {
+    const token = getToken();
+
+    try {
+        const [inspectionsResponse, employeesResponse] =
+            await Promise.all([
+                fetch('/api/quality/inspections', {
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                }),
+                fetch('/api/employees', {
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                })
+            ]);
+
+        const inspectionsData =
+            await inspectionsResponse.json();
+
+        const employeesData =
+            await employeesResponse.json();
+
+        const inspectionSelect =
+            document.getElementById('correctiveInspectionId');
+
+        const employeeSelect =
+            document.getElementById(
+                'correctiveResponsibleEmployeeId'
+            );
+
+        if (inspectionsResponse.ok && inspectionsData.success) {
+            inspectionSelect.innerHTML =
+                '<option value="">اختر فحص الجودة</option>' +
+                inspectionsData.data.map(item =>
+                    `<option value="${item.quality_inspection_id}">
+                        ${item.inspection_no} - ${item.work_order_no}
+                    </option>`
+                ).join('');
+        }
+
+        if (employeesResponse.ok && employeesData.success) {
+            employeeSelect.innerHTML =
+                '<option value="">اختر الموظف</option>' +
+                employeesData.employees
+                    .filter(employee => employee.is_active)
+                    .map(employee =>
+                        `<option value="${employee.employee_id}">
+                            ${employee.full_name}
+                        </option>`
+                    ).join('');
+        }
+
+    } catch (error) {
+        console.error('Load corrective form data error:', error);
+        showError('تعذر تحميل بيانات الإجراءات التصحيحية');
+    }
+}
+
+function showCorrectiveActionForm() {
+    editingCorrectiveActionId = null;
+
+    document.getElementById('correctiveFormTitle').textContent =
+        'إضافة إجراء تصحيحي';
+
+    document.getElementById('correctiveFormBox').style.display =
+        'block';
+
+    loadCorrectiveFormData();
+}
+
+async function editCorrectiveAction(id) {
+    const token = getToken();
+
+    if (!token) {
+        window.location.href = '/login.html';
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/corrective-actions', {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(data.message || 'تعذر تحميل الإجراء التصحيحي');
+        }
+
+        const item = data.data.find(
+            action => String(action.corrective_action_id) === String(id)
+        );
+
+        if (!item) {
+            alert('الإجراء التصحيحي غير موجود');
+            return;
+        }
+
+        editingCorrectiveActionId = id;
+
+        document.getElementById('correctiveFormTitle').textContent =
+            'تعديل إجراء تصحيحي';
+
+        await loadCorrectiveFormData();
+
+        document.getElementById('correctiveInspectionId').value =
+            item.quality_inspection_id || '';
+
+        document.getElementById('correctiveDescription').value =
+            item.description || '';
+
+        document.getElementById('correctiveRootCause').value =
+            item.root_cause || '';
+
+        document.getElementById('correctiveContainment').value =
+            item.containment_action || '';
+
+        document.getElementById('correctiveAction').value =
+            item.corrective_action || '';
+
+        document.getElementById('correctivePreventive').value =
+            item.preventive_action || '';
+
+        document.getElementById('correctiveResponsibleEmployeeId').value =
+            item.responsible_employee_id || '';
+
+        document.getElementById('correctiveDueDate').value =
+            item.due_date ? item.due_date.substring(0, 10) : '';
+
+        document.getElementById('correctiveStatus').value =
+            item.status || 'OPEN';
+
+        document.getElementById('correctiveEffectiveness').value =
+            item.effectiveness_check || '';
+
+        document.getElementById('correctiveFormBox').style.display =
+            'block';
+
+    } catch (error) {
+        console.error('Edit corrective action error:', error);
+        alert('❌ ' + error.message);
+    }
+}
+
+function hideCorrectiveActionForm() {
+    document.getElementById('correctiveFormBox').style.display =
+        'none';
+}
+
+async function saveCorrectiveAction() {
+    const token = getToken();
+
+    if (!token) {
+        window.location.href = '/login.html';
+        return;
+    }
+
+    const inspectionId =
+        document.getElementById('correctiveInspectionId').value;
+
+    const description =
+        document.getElementById('correctiveDescription').value.trim();
+
+    if (!inspectionId || !description) {
+        alert('يرجى اختيار فحص الجودة وكتابة وصف عدم المطابقة.');
+        return;
+    }
+
+    const body = {
+        quality_inspection_id: Number(inspectionId),
+        responsible_employee_id:
+            document.getElementById('correctiveResponsibleEmployeeId').value
+                ? Number(document.getElementById('correctiveResponsibleEmployeeId').value)
+                : null,
+        due_date:
+            document.getElementById('correctiveDueDate').value || null,
+        status:
+            document.getElementById('correctiveStatus').value,
+        description,
+        root_cause:
+            document.getElementById('correctiveRootCause').value.trim(),
+        containment_action:
+            document.getElementById('correctiveContainment').value.trim(),
+        corrective_action:
+            document.getElementById('correctiveAction').value.trim(),
+        preventive_action:
+            document.getElementById('correctivePreventive').value.trim(),
+        effectiveness_check:
+            document.getElementById('correctiveEffectiveness').value.trim()
+    };
+
+    try {
+        const isEditing = !!editingCorrectiveActionId;
+
+        const response = await fetch(
+            isEditing
+                ? '/api/corrective-actions/' + editingCorrectiveActionId
+                : '/api/corrective-actions',
+            {
+                method: isEditing ? 'PATCH' : 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify(body)
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            alert(
+                '❌ ' +
+                (data.message || 'تعذر حفظ الإجراء التصحيحي')
+            );
+            return;
+        }
+
+        alert(
+            isEditing
+                ? '✅ تم تحديث الإجراء التصحيحي بنجاح'
+                : '✅ تم إنشاء الإجراء التصحيحي بنجاح'
+        );
+
+        hideCorrectiveActionForm();
+        editingCorrectiveActionId = null;
+        loadCorrectiveActions();
+
+    } catch (error) {
+        console.error('Save corrective action error:', error);
+        alert('❌ تعذر الاتصال بالخادم');
+    }
+}
+
+loadInspections();
+loadCorrectiveActions();
+
+
+
+let editingInspectionId = null;
+let editingCorrectiveActionId = null;
+
+function getToken() {
+    return localStorage.getItem('token');
+}
+
+function showError(message) {
+    const box = document.getElementById('errorBox');
+    box.textContent = message;
+    box.style.display = 'block';
+}
+
+function clearError() {
+    const box = document.getElementById('errorBox');
+    box.textContent = '';
+    box.style.display = 'none';
+}
+
+function statusText(value) {
+    if (value === 'PASSED') return 'ناجح';
+    if (value === 'FAILED') return 'فشل';
+    return 'قيد الفحص';
+}
+
+function statusClass(value) {
+    if (value === 'PASSED') return 'passed';
+    if (value === 'FAILED') return 'failed';
+    return 'pending';
+}
+
+async function loadInspections() {
+    clearError();
+
+    const token = getToken();
+
+    if (!token) {
+        window.location.href = '/login.html';
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/quality/inspections', {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(data.message || 'تعذر تحميل فحوصات الجودة');
+        }
+
+        const totalInspections = data.data.length;
+        const passedInspections = data.data.filter(
+            item => item.result === 'PASSED'
+        ).length;
+        const failedInspections = data.data.filter(
+            item => item.result === 'FAILED'
+        ).length;
+
+        document.getElementById('totalInspections').textContent =
+            totalInspections;
+        document.getElementById('passedInspections').textContent =
+            passedInspections;
+        document.getElementById('failedInspections').textContent =
+            failedInspections;
+
+        const tbody = document.getElementById('inspectionsTable');
+
+        if (!data.data.length) {
+            tbody.innerHTML =
+                '<tr><td colspan="11" class="empty">لا توجد فحوصات جودة</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = data.data.map(item => `
+            <tr>
+                <td>${item.inspection_no || '-'}</td>
+                <td>${item.work_order_no || '-'}</td>
+                <td>${item.inspector_name || '-'}</td>
+                <td>${item.inspection_round || 1}</td>
+
+                <td>
+                    <span class="status ${statusClass(item.result)}">
+                        ${statusText(item.result)}
+                    </span>
+                </td>
+
+                <td>${statusText(item.workmanship_result)}</td>
+                <td>${statusText(item.material_result)}</td>
+                <td>${statusText(item.appearance_result)}</td>
+                <td>${statusText(item.function_result)}</td>
+                <td>${statusText(item.customer_requirements_result)}</td>
+
+                <td>
+                    ${item.inspected_at
+                        ? new Date(item.inspected_at).toLocaleString('ar-YE')
+                        : '-'}
+                </td>
+            </tr>
+        `).join('');
+
+    } catch (error) {
+        console.error(error);
+        showError(error.message);
+    }
+}
+
+async function loadFormData() {
+    const token = getToken();
+
+    try {
+        const [ordersResponse, employeesResponse] = await Promise.all([
+            fetch('/api/work-orders', {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            }),
+            fetch('/api/employees', {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+        ]);
+
+        const ordersData = await ordersResponse.json();
+        const employeesData = await employeesResponse.json();
+
+        const orderSelect = document.getElementById('workOrderId');
+        const employeeSelect = document.getElementById('inspectorId');
+
+        if (ordersResponse.ok && ordersData.success) {
+            const orders = ordersData.work_orders || ordersData.data || [];
+
+            orderSelect.innerHTML =
+                '<option value="">اختر أمر العمل</option>' +
+                orders.map(order =>
+                    `<option value="${order.work_order_id}">
+                        ${order.work_order_no}
+                    </option>`
+                ).join('');
+        }
+
+        if (employeesResponse.ok && employeesData.success) {
+            employeeSelect.innerHTML =
+                '<option value="">اختر الفاحص</option>' +
+                employeesData.employees
+                    .filter(employee => employee.is_active)
+                    .map(employee =>
+                        `<option value="${employee.employee_id}">
+                            ${employee.full_name}
+                        </option>`
+                    ).join('');
+        }
+
+    } catch (error) {
+        console.error('Load form data error:', error);
+        showError('تعذر تحميل أوامر العمل والموظفين');
+    }
+}
+
+function showInspectionForm() {
+    editingInspectionId = null;
+
+    document.getElementById('formTitle').textContent =
+        'إضافة فحص جودة';
+
+    document.getElementById('inspectionFormBox').style.display = 'block';
+
+    loadFormData();
+}
+
+function hideInspectionForm() {
+    document.getElementById('inspectionFormBox').style.display = 'none';
+}
+
+async function saveInspection() {
+
+    const token = getToken();
+
+    if (!token) {
+        window.location.href = '/login.html';
+        return;
+    }
+
+    const work_order_id =
+        document.getElementById('workOrderId').value;
+
+    const inspector_id =
+        document.getElementById('inspectorId').value;
+
+    if (!work_order_id || !inspector_id) {
+        alert('يرجى اختيار أمر العمل والفاحص.');
+        return;
+    }
+
+    const body = {
+        work_order_id: Number(work_order_id),
+        inspector_id: Number(inspector_id),
+        inspection_round:
+            Number(document.getElementById('inspectionRound').value || 1),
+
+        result: document.getElementById('result').value,
+
+        workmanship_result:
+            document.getElementById('workmanshipResult').value,
+
+        material_result:
+            document.getElementById('materialResult').value,
+
+        appearance_result:
+            document.getElementById('appearanceResult').value,
+
+        function_result:
+            document.getElementById('functionResult').value,
+
+        customer_requirements_result:
+            document.getElementById('customerRequirementsResult').value,
+
+        defects_found:
+            document.getElementById('defectsFound').value.trim(),
+
+        notes:
+            document.getElementById('notes').value.trim()
+    };
+
+    try {
+
+        const response = await fetch('/api/quality/inspections', {
+            method: 'POST',
+
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+
+            body: JSON.stringify(body)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            alert('❌ ' + (data.message || 'تعذر حفظ فحص الجودة'));
+            return;
+        }
+
+        alert('✅ تم إنشاء فحص الجودة بنجاح');
+
+        hideInspectionForm();
+        loadInspections();
+
+    } catch (error) {
+        console.error(error);
+        alert('❌ تعذر الاتصال بالخادم');
+    }
+}
+
+</script>
+
+</body>
+</html>
