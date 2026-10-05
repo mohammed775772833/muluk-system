@@ -481,6 +481,514 @@ router.patch('/improvements/:improvementId', authenticateToken, requirePermissio
   }
 });
 
+
+router.delete('/:id', authenticateToken, requirePermission('WORK_ORDERS_MANAGE'), async (req, res) => {
+    const client = await pool.connect();
+
+    try {
+        const workOrderId = req.params.id;
+
+        await client.query('BEGIN');
+
+        const orderResult = await client.query(`
+            SELECT
+                work_order_id,
+                work_order_no,
+                status
+            FROM work_orders
+            WHERE work_order_id = $1
+            FOR UPDATE
+        `, [workOrderId]);
+
+        if (orderResult.rows.length === 0) {
+            await client.query('ROLLBACK');
+
+            return res.status(404).json({
+                success: false,
+                message: 'أمر التشغيل غير موجود'
+            });
+        }
+
+        const order = orderResult.rows[0];
+
+        // الحذف مسموح فقط للأوامر الجديدة التي لم يتم الاتفاق عليها
+        if (order.status !== 'NEW') {
+            await client.query('ROLLBACK');
+
+            return res.status(400).json({
+                success: false,
+                message: 'لا يمكن حذف أمر التشغيل بعد اعتماده أو بدء العمل عليه'
+            });
+        }
+
+        // منع حذف أي أمر عليه سند قبض
+        const receiptResult = await client.query(`
+            SELECT COUNT(*)::int AS count
+            FROM payment_receipts
+            WHERE work_order_id = $1
+        `, [workOrderId]);
+
+        if (receiptResult.rows[0].count > 0) {
+            await client.query('ROLLBACK');
+
+            return res.status(400).json({
+                success: false,
+                message: 'لا يمكن حذف أمر التشغيل لأنه مرتبط بسند قبض'
+            });
+        }
+
+        // التحقق من وجود تسليم أو ضمان قبل الحذف
+        const deliveryResult = await client.query(`
+            SELECT COUNT(*)::int AS count
+            FROM deliveries
+            WHERE work_order_id = $1
+        `, [workOrderId]);
+
+        if (deliveryResult.rows[0].count > 0) {
+            await client.query('ROLLBACK');
+
+            return res.status(400).json({
+                success: false,
+                message: 'لا يمكن حذف أمر التشغيل لأنه مرتبط ببيانات تسليم'
+            });
+        }
+
+        const warrantyResult = await client.query(`
+            SELECT COUNT(*)::int AS count
+            FROM warranties
+            WHERE work_order_id = $1
+        `, [workOrderId]);
+
+        if (warrantyResult.rows[0].count > 0) {
+            await client.query('ROLLBACK');
+
+            return res.status(400).json({
+                success: false,
+                message: 'لا يمكن حذف أمر التشغيل لأنه مرتبط بضمان'
+            });
+        }
+
+        await client.query(`
+            DELETE FROM work_orders
+            WHERE work_order_id = $1
+        `, [workOrderId]);
+
+        await client.query('COMMIT');
+
+        res.json({
+            success: true,
+            message: 'تم حذف أمر التشغيل بنجاح',
+            work_order_id: order.work_order_id,
+            work_order_no: order.work_order_no
+        });
+
+    } catch (error) {
+        await client.query('ROLLBACK');
+
+        console.error('DELETE work order error:', error);
+
+        res.status(500).json({
+            success: false,
+            message: 'تعذر حذف أمر التشغيل',
+            error: error.message
+        });
+
+    } finally {
+        client.release();
+    }
+});
+
+
+// PATCH /api/work-orders/:id
+router.patch('/:id', authenticateToken, requirePermission('WORK_ORDERS_MANAGE'), async (req, res) => {
+    const client = await pool.connect();
+
+    try {
+        const workOrderId = Number(req.params.id);
+
+        if (!Number.isInteger(workOrderId) || workOrderId <= 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid work order ID'
+            });
+        }
+
+        const {
+            customer_id,
+            vehicle_id,
+            priority,
+            promised_at,
+            customer_notes,
+            internal_notes,
+            subtotal,
+            discount_amount,
+            tax_amount,
+            total_amount,
+            deposit_amount
+        } = req.body;
+
+        await client.query('BEGIN');
+
+        const existing = await client.query(`
+            SELECT work_order_id, status
+            FROM work_orders
+            WHERE work_order_id = $1
+            FOR UPDATE
+        `, [workOrderId]);
+
+        if (existing.rows.length === 0) {
+            await client.query('ROLLBACK');
+            return res.status(404).json({
+                success: false,
+                message: 'أمر التشغيل غير موجود'
+            });
+        }
+
+        if (existing.rows[0].status !== 'NEW') {
+            await client.query('ROLLBACK');
+            return res.status(400).json({
+                success: false,
+                message: 'يمكن تعديل أمر التشغيل فقط وهو في حالة NEW'
+            });
+        }
+
+        if (customer_id !== undefined) {
+            const customer = await client.query(
+                'SELECT customer_id FROM customers WHERE customer_id = $1',
+                [customer_id]
+            );
+
+            if (customer.rows.length === 0) {
+                await client.query('ROLLBACK');
+                return res.status(400).json({
+                    success: false,
+                    message: 'العميل غير موجود'
+                });
+            }
+        }
+
+        if (vehicle_id !== undefined && vehicle_id !== null) {
+            const vehicle = await client.query(
+                'SELECT vehicle_id FROM vehicles WHERE vehicle_id = $1',
+                [vehicle_id]
+            );
+
+            if (vehicle.rows.length === 0) {
+                await client.query('ROLLBACK');
+                return res.status(400).json({
+                    success: false,
+                    message: 'السيارة غير موجودة'
+                });
+            }
+        }
+
+        const result = await client.query(`
+            UPDATE work_orders
+            SET
+                customer_id = COALESCE($1, customer_id),
+                vehicle_id = $2,
+                priority = COALESCE($3, priority),
+                promised_at = $4,
+                customer_notes = $5,
+                internal_notes = $6,
+                subtotal = COALESCE($7, subtotal),
+                discount_amount = COALESCE($8, discount_amount),
+                tax_amount = COALESCE($9, tax_amount),
+                total_amount = COALESCE($10, total_amount),
+                deposit_amount = COALESCE($11, deposit_amount),
+                balance_amount = COALESCE($10, total_amount) - COALESCE($11, deposit_amount),
+                updated_at = NOW()
+            WHERE work_order_id = $12
+            RETURNING *
+        `, [
+            customer_id,
+            vehicle_id === undefined ? null : vehicle_id,
+            priority,
+            promised_at || null,
+            customer_notes ?? null,
+            internal_notes ?? null,
+            subtotal,
+            discount_amount,
+            tax_amount,
+            total_amount,
+            deposit_amount,
+            workOrderId
+        ]);
+
+        await client.query('COMMIT');
+
+        res.json({
+            success: true,
+            message: 'تم تعديل أمر التشغيل بنجاح',
+            work_order: result.rows[0]
+        });
+
+    } catch (error) {
+        await client.query('ROLLBACK');
+        console.error('PATCH work order error:', error);
+
+        res.status(500).json({
+            success: false,
+            message: 'Failed to update work order',
+            error: error.message
+        });
+    } finally {
+        client.release();
+    }
+});
+
+router.get('/:id/services', authenticateToken, authorizeWorkOrderAccess, requirePermission('WORK_ORDERS_VIEW'), async (req, res) => {
+    try {
+        const workOrderId = Number(req.params.id);
+
+        if (!Number.isInteger(workOrderId) || workOrderId <= 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid work order ID'
+            });
+        }
+
+        const result = await pool.query(`
+            SELECT
+                wos.work_order_service_id,
+                wos.work_order_id,
+                wos.service_id,
+                s.service_name,
+                wos.quantity,
+                wos.unit_price,
+                wos.discount,
+                wos.notes,
+                (wos.quantity * wos.unit_price - wos.discount) AS line_total
+            FROM work_order_services wos
+            JOIN services s
+                ON s.service_id = wos.service_id
+            WHERE wos.work_order_id = $1
+            ORDER BY wos.work_order_service_id ASC
+        `, [workOrderId]);
+
+        res.json({
+            success: true,
+            count: result.rows.length,
+            services: result.rows
+        });
+
+    } catch (error) {
+        console.error('GET work order services error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch work order services'
+        });
+    }
+});
+
+router.patch('/:id/services/:workOrderServiceId', authenticateToken, requirePermission('WORK_ORDERS_MANAGE'), async (req, res) => {
+    const client = await pool.connect();
+
+    try {
+        const workOrderId = Number(req.params.id);
+        const workOrderServiceId = Number(req.params.workOrderServiceId);
+
+        if (!Number.isInteger(workOrderId) || workOrderId <= 0 ||
+            !Number.isInteger(workOrderServiceId) || workOrderServiceId <= 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid service or work order ID'
+            });
+        }
+
+        const {
+            quantity,
+            unit_price,
+            discount,
+            notes
+        } = req.body;
+
+        await client.query('BEGIN');
+
+        const order = await client.query(`
+            SELECT work_order_id, status
+            FROM work_orders
+            WHERE work_order_id = $1
+            FOR UPDATE
+        `, [workOrderId]);
+
+        if (order.rows.length === 0) {
+            await client.query('ROLLBACK');
+            return res.status(404).json({
+                success: false,
+                message: 'أمر التشغيل غير موجود'
+            });
+        }
+
+        if (order.rows[0].status !== 'NEW') {
+            await client.query('ROLLBACK');
+            return res.status(400).json({
+                success: false,
+                message: 'يمكن تعديل الخدمات فقط وأمر التشغيل في حالة NEW'
+            });
+        }
+
+        const existing = await client.query(`
+            SELECT work_order_service_id
+            FROM work_order_services
+            WHERE work_order_service_id = $1
+              AND work_order_id = $2
+        `, [workOrderServiceId, workOrderId]);
+
+        if (existing.rows.length === 0) {
+            await client.query('ROLLBACK');
+            return res.status(404).json({
+                success: false,
+                message: 'الخدمة غير موجودة في أمر التشغيل'
+            });
+        }
+
+        const finalQuantity = Number(quantity);
+        const finalUnitPrice = Number(unit_price);
+        const finalDiscount = Number(discount || 0);
+
+        if (!Number.isFinite(finalQuantity) || finalQuantity <= 0) {
+            await client.query('ROLLBACK');
+            return res.status(400).json({
+                success: false,
+                message: 'العدد يجب أن يكون أكبر من صفر'
+            });
+        }
+
+        if (!Number.isFinite(finalUnitPrice) || finalUnitPrice < 0) {
+            await client.query('ROLLBACK');
+            return res.status(400).json({
+                success: false,
+                message: 'سعر الوحدة غير صحيح'
+            });
+        }
+
+        if (!Number.isFinite(finalDiscount) || finalDiscount < 0) {
+            await client.query('ROLLBACK');
+            return res.status(400).json({
+                success: false,
+                message: 'الخصم غير صحيح'
+            });
+        }
+
+        const result = await client.query(`
+            UPDATE work_order_services
+            SET
+                quantity = $1,
+                unit_price = $2,
+                discount = $3,
+                notes = $4
+            WHERE work_order_service_id = $5
+              AND work_order_id = $6
+            RETURNING *
+        `, [
+            finalQuantity,
+            finalUnitPrice,
+            finalDiscount,
+            notes ?? null,
+            workOrderServiceId,
+            workOrderId
+        ]);
+
+        await client.query('COMMIT');
+
+        res.json({
+            success: true,
+            message: 'تم تعديل الخدمة بنجاح',
+            service: result.rows[0]
+        });
+
+    } catch (error) {
+        await client.query('ROLLBACK');
+        console.error('PATCH work order service error:', error);
+
+        res.status(500).json({
+            success: false,
+            message: 'Failed to update work order service',
+            error: error.message
+        });
+    } finally {
+        client.release();
+    }
+});
+
+router.delete('/:id/services/:workOrderServiceId', authenticateToken, requirePermission('WORK_ORDERS_MANAGE'), async (req, res) => {
+    const client = await pool.connect();
+
+    try {
+        const workOrderId = Number(req.params.id);
+        const workOrderServiceId = Number(req.params.workOrderServiceId);
+
+        if (!Number.isInteger(workOrderId) || workOrderId <= 0 ||
+            !Number.isInteger(workOrderServiceId) || workOrderServiceId <= 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid service or work order ID'
+            });
+        }
+
+        await client.query('BEGIN');
+
+        const order = await client.query(`
+            SELECT work_order_id, status
+            FROM work_orders
+            WHERE work_order_id = $1
+            FOR UPDATE
+        `, [workOrderId]);
+
+        if (order.rows.length === 0) {
+            await client.query('ROLLBACK');
+            return res.status(404).json({
+                success: false,
+                message: 'أمر التشغيل غير موجود'
+            });
+        }
+
+        if (order.rows[0].status !== 'NEW') {
+            await client.query('ROLLBACK');
+            return res.status(400).json({
+                success: false,
+                message: 'يمكن حذف الخدمات فقط وأمر التشغيل في حالة NEW'
+            });
+        }
+
+        const result = await client.query(`
+            DELETE FROM work_order_services
+            WHERE work_order_service_id = $1
+              AND work_order_id = $2
+            RETURNING work_order_service_id
+        `, [workOrderServiceId, workOrderId]);
+
+        if (result.rows.length === 0) {
+            await client.query('ROLLBACK');
+            return res.status(404).json({
+                success: false,
+                message: 'الخدمة غير موجودة في أمر التشغيل'
+            });
+        }
+
+        await client.query('COMMIT');
+
+        res.json({
+            success: true,
+            message: 'تم حذف الخدمة بنجاح',
+            work_order_service_id: result.rows[0].work_order_service_id
+        });
+
+    } catch (error) {
+        await client.query('ROLLBACK');
+        console.error('DELETE work order service error:', error);
+
+        res.status(500).json({
+            success: false,
+            message: 'Failed to delete work order service',
+            error: error.message
+        });
+    } finally {
+        client.release();
+    }
+});
+
 router.post('/:id/services', authenticateToken, requirePermission('WORK_ORDERS_MANAGE'), async (req, res) => {
     try {
         const workOrderId = req.params.id;
@@ -3273,7 +3781,7 @@ router.get(
                     ON b.branch_id = w.branch_id
                 JOIN customers c
                     ON c.customer_id = w.customer_id
-                JOIN vehicles v
+                LEFT JOIN vehicles v
                     ON v.vehicle_id = w.vehicle_id
                 LEFT JOIN users u
                     ON u.user_id = w.created_by
@@ -3541,7 +4049,7 @@ router.get(
                    ON b.branch_id = wo.branch_id
                  JOIN customers c
                    ON c.customer_id = w.customer_id
-                 JOIN vehicles v
+                 LEFT JOIN vehicles v
                    ON v.vehicle_id = w.vehicle_id
                  WHERE w.work_order_id = $1
                  LIMIT 1`,
@@ -3630,7 +4138,7 @@ router.get(
                     ON b.branch_id = w.branch_id
                 JOIN customers c
                     ON c.customer_id = w.customer_id
-                JOIN vehicles v
+                LEFT JOIN vehicles v
                     ON v.vehicle_id = w.vehicle_id
                 LEFT JOIN users u
                     ON u.user_id = w.created_by
@@ -4391,10 +4899,10 @@ router.post(
                 deposit_amount
             } = req.body;
 
-            if (!branch_id || !customer_id || !vehicle_id) {
+            if (!branch_id || !customer_id) {
                 return res.status(400).json({
                     success: false,
-                    message: 'Branch, customer and vehicle are required'
+                    message: 'Branch and customer are required'
                 });
             }
 
@@ -4410,28 +4918,30 @@ router.post(
                 });
             }
 
-            const vehicleResult = await pool.query(
-                `SELECT vehicle_id, customer_id
-                 FROM vehicles
-                 WHERE vehicle_id = $1`,
-                [vehicle_id]
-            );
+            if (vehicle_id) {
+                const vehicleResult = await pool.query(
+                    `SELECT vehicle_id, customer_id
+                     FROM vehicles
+                     WHERE vehicle_id = $1`,
+                    [vehicle_id]
+                );
 
-            if (vehicleResult.rows.length === 0) {
-                return res.status(404).json({
-                    success: false,
-                    message: 'Vehicle not found'
-                });
-            }
+                if (vehicleResult.rows.length === 0) {
+                    return res.status(404).json({
+                        success: false,
+                        message: 'Vehicle not found'
+                    });
+                }
 
-            if (
-                String(vehicleResult.rows[0].customer_id) !==
-                String(customer_id)
-            ) {
-                return res.status(400).json({
-                    success: false,
-                    message: 'Vehicle does not belong to this customer'
-                });
+                if (
+                    String(vehicleResult.rows[0].customer_id) !==
+                    String(customer_id)
+                ) {
+                    return res.status(400).json({
+                        success: false,
+                        message: 'Vehicle does not belong to this customer'
+                    });
+                }
             }
 
             const branchResult = await pool.query(

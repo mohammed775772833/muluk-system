@@ -599,6 +599,20 @@ async function loadDetails() {
 
         window.currentWorkOrderStages = workOrderStages;
 
+        // زر الحذف يظهر فقط عندما يكون أمر التشغيل جديدًا ولم يتم اعتماده
+        const editButton = document.getElementById('editWorkOrderButton');
+        if (editButton) {
+            editButton.style.display =
+                order.status === 'NEW' ? 'inline-block' : 'none';
+        }
+
+        const deleteButton = document.getElementById('deleteWorkOrderButton');
+
+        if (deleteButton) {
+            deleteButton.style.display =
+                order.status === 'NEW' ? 'inline-block' : 'none';
+        }
+
 
         const statusText = {
             NEW: 'جديد',
@@ -640,6 +654,29 @@ async function loadDetails() {
                         <span style="padding:8px 16px;border-radius:20px;background:#f1f1f1;font-weight:700;">
                             ${escapeHtml(priorityText)}
                         </span>
+                    </div>
+
+                    <div id="workOrderActions"
+                        style="margin-top:18px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+                        <button type="button"
+                            onclick="resendWorkOrderWhatsApp()"
+                            style="border:0;background:#25D366;color:#fff;padding:12px 20px;border-radius:10px;cursor:pointer;font-weight:800;font-size:15px;">
+                            📲 إعادة إرسال أمر التشغيل
+                        </button>
+
+                        <button id="editWorkOrderButton"
+                            type="button"
+                            onclick="editCurrentWorkOrder()"
+                            style="display:none;border:0;background:#2563eb;color:#fff;padding:12px 20px;border-radius:10px;cursor:pointer;font-weight:800;font-size:15px;">
+                            ✏️ تعديل أمر التشغيل
+                        </button>
+
+                        <button id="deleteWorkOrderButton"
+                            type="button"
+                            onclick="deleteCurrentWorkOrder()"
+                            style="display:none;border:0;background:#dc2626;color:#fff;padding:12px 20px;border-radius:10px;cursor:pointer;font-weight:800;font-size:15px;">
+                            🗑️ حذف أمر التشغيل
+                        </button>
                     </div>
                 </div>
             </div>
@@ -2048,7 +2085,201 @@ async function saveVehicleInspection() {
 
     
 
-    window.printReceipt = async function (receiptId) {
+
+
+    window.editCurrentWorkOrder = function () {
+    const order = window.currentWorkOrder;
+
+    if (!order) {
+        alert('لم يتم تحميل بيانات أمر التشغيل');
+        return;
+    }
+
+    if (order.status !== 'NEW') {
+        alert('يمكن تعديل أمر التشغيل فقط وهو في حالة NEW');
+        return;
+    }
+
+    window.location.href =
+        '/edit-work-order.html?id=' +
+        encodeURIComponent(order.work_order_id);
+};
+
+window.deleteCurrentWorkOrder = async function () {
+        const order = window.currentWorkOrder;
+
+        if (!order) {
+            alert('لم يتم تحميل بيانات أمر التشغيل');
+            return;
+        }
+
+        if (order.status !== 'NEW') {
+            alert('لا يمكن حذف أمر التشغيل بعد اعتماده أو بدء العمل عليه');
+            return;
+        }
+
+        const confirmed = confirm(
+            '⚠️ هل أنت متأكد من حذف أمر التشغيل؟\n\n' +
+            'رقم الأمر: ' + (order.work_order_no || '') + '\n\n' +
+            'سيتم حذف أمر التشغيل وبياناته التابعة المرتبطة به.\n' +
+            'العميل والسيارة لن يتم حذفهما.\n\n' +
+            'اضغط موافق للمتابعة.'
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+            const tokenValue =
+                localStorage.getItem('token') ||
+                localStorage.getItem('accessToken') ||
+                '';
+
+            if (!tokenValue) {
+                alert('انتهت جلسة الدخول، يرجى تسجيل الدخول مرة أخرى');
+                return;
+            }
+
+            const response = await fetch(
+                '/api/work-orders/' +
+                encodeURIComponent(order.work_order_id),
+                {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': 'Bearer ' + tokenValue
+                    }
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(
+                    data.message || 'تعذر حذف أمر التشغيل'
+                );
+            }
+
+            alert(
+                '✅ تم حذف أمر التشغيل ' +
+                (data.work_order_no || order.work_order_no || '') +
+                ' بنجاح'
+            );
+
+            window.location.href = '/work-orders.html';
+
+        } catch (error) {
+            console.error('Delete work order error:', error);
+            alert(error.message || 'تعذر حذف أمر التشغيل');
+        }
+    };
+
+    window.resendWorkOrderWhatsApp = function () {
+    try {
+        const order = window.currentWorkOrder;
+
+        if (!order) {
+            alert('لم يتم تحميل بيانات أمر التشغيل');
+            return;
+        }
+
+        let phone = String(
+            order.customer_phone ||
+            order.phone ||
+            ''
+        ).replace(/[^0-9]/g, '');
+
+        if (phone.startsWith('00')) {
+            phone = phone.substring(2);
+        }
+
+        if (phone.startsWith('0')) {
+            phone = '967' + phone.substring(1);
+        } else if (
+            !phone.startsWith('967') &&
+            phone.length === 9 &&
+            phone.startsWith('7')
+        ) {
+            phone = '967' + phone;
+        }
+
+        if (!phone) {
+            alert('رقم جوال العميل غير موجود في أمر التشغيل');
+            return;
+        }
+
+        const customerName =
+            order.customer_name ||
+            order.full_name ||
+            'عميلنا الكريم';
+
+        const vehicleName = [
+            order.make,
+            order.model,
+            order.model_year
+        ].filter(Boolean).join(' ');
+
+        const total = Number(order.total_amount || 0);
+        const paid = Number(order.deposit_amount || 0);
+        const balance = Number(
+            order.balance_amount ?? (total - paid)
+        );
+
+        const message = `السلام عليكم ورحمة الله وبركاته 🌹
+
+الأستاذ/ ${customerName}
+
+👑 ملوك التنجيد
+تم تسجيل أمر تشغيل سيارتكم بنجاح.
+
+📋 رقم الأمر: ${order.work_order_no || ''}
+🚗 السيارة: ${vehicleName || 'غير محددة'}
+💰 الإجمالي: ${total.toLocaleString('ar-YE')} ريال
+📌 المتبقي: ${Math.max(balance, 0).toLocaleString('ar-YE')} ريال
+
+نعتز بثقتكم، ونحرص أن تستلموا سيارتكم بأفضل صورة تليق بكم.
+
+ملوك التنجيد لخدمات التنجيد 👑`;
+
+        const webUrl =
+            'https://api.whatsapp.com/send?phone=' +
+            encodeURIComponent(phone) +
+            '&text=' +
+            encodeURIComponent(message);
+
+        const androidUrl =
+            'whatsapp://send?phone=' +
+            encodeURIComponent(phone) +
+            '&text=' +
+            encodeURIComponent(message);
+
+        console.log(
+            'Opening WhatsApp for work order:',
+            order.work_order_no
+        );
+
+        // فتح تطبيق واتساب مباشرة على Android
+        window.location.href = androidUrl;
+
+        // احتياطي في حال لم يستجب التطبيق
+        setTimeout(function () {
+            window.location.href = webUrl;
+        }, 1200);
+
+    } catch (error) {
+        console.error(
+            'Work order WhatsApp error:',
+            error
+        );
+
+        alert(
+            'تعذر تجهيز رسالة واتساب: ' +
+            error.message
+        );
+    }
+};
+
+window.printReceipt = async function (receiptId) {
         try {
             const token = getToken();
 

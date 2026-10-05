@@ -371,7 +371,23 @@ router.post(
                 req.user?.user_id || null
             ]);
 
-            await client.query('COMMIT');
+            if (
+            transaction_type === 'SETTLEMENT' &&
+            finalDirection === 'DEBIT' &&
+            piecework_id
+        ) {
+            await client.query(
+                `UPDATE employee_piecework
+                 SET status = 'PAID',
+                     updated_at = CURRENT_TIMESTAMP
+                 WHERE piecework_id = $1
+                   AND employee_id = $2
+                   AND status = 'DUE'`,
+                [piecework_id, employee_id]
+            );
+        }
+
+        await client.query('COMMIT');
 
             res.status(201).json({
                 success: true,

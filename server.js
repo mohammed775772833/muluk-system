@@ -15,11 +15,13 @@ const inventoryRoutes = require('./src/routes/inventory');
 const materialRoutes = require('./src/routes/materials');
 const branchRoutes = require('./src/routes/branches');
 const employeeRoutes = require('./src/routes/employees');
+const userRoutes = require('./src/routes/users');
 const employeePieceworkRoutes = require('./src/routes/employee-piecework');
 const employeeFinanceRoutes = require('./src/routes/employee-finance');
 const qualityRoutes = require('./src/routes/quality');
 const qualityReportsRoutes = require('./src/routes/quality-reports');
 const correctiveActionRoutes = require('./src/routes/corrective-actions');
+const whatsappRoutes = require('./src/routes/whatsapp');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -44,11 +46,13 @@ app.use('/api/inventory', inventoryRoutes);
 app.use('/api/materials', materialRoutes);
 app.use('/api/branches', branchRoutes);
 app.use('/api/employees', employeeRoutes);
+app.use('/api/users', userRoutes);
 app.use('/api/employee-piecework', employeePieceworkRoutes);
 app.use('/api/employee-finance', employeeFinanceRoutes);
 app.use('/api/quality', qualityRoutes);
 app.use('/api/quality-reports', qualityReportsRoutes);
 app.use('/api/corrective-actions', correctiveActionRoutes);
+app.use('/api/whatsapp', whatsappRoutes);
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');

@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>واتساب | ملوك التنجيد</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Tahoma,sans-serif;background:#f3f5f7;color:#17202a}
+.top{height:64px;background:#fff;border-bottom:1px solid #ddd;display:flex;align-items:center;padding:0 18px;gap:14px;position:sticky;top:0;z-index:5}
+.top h2{margin:0;font-size:20px}
+.back{border:0;background:#eee;border-radius:10px;padding:9px 14px;cursor:pointer;font-size:15px}
+.layout{height:calc(100vh - 64px);display:grid;grid-template-columns:340px 1fr 300px;direction:ltr}
+.panel{background:#fff;overflow:hidden;direction:rtl}
+.conversations{border-left:1px solid #ddd;border-right:1px solid #ddd}
+.search{padding:12px;border-bottom:1px solid #eee}
+.search input{width:100%;padding:11px;border:1px solid #ddd;border-radius:10px;font-size:14px}
+.list{overflow:auto;height:calc(100% - 67px)}
+.conv{padding:14px;border-bottom:1px solid #eee;cursor:pointer;display:flex;justify-content:space-between;gap:10px}
+.conv:hover,.conv.active{background:#f0f7f4}
+.conv-name{font-weight:bold;margin-bottom:7px}
+.preview{font-size:13px;color:#777;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px}
+.time{font-size:11px;color:#999}
+.badge{display:inline-block;background:#19a974;color:#fff;border-radius:20px;padding:3px 7px;font-size:11px;margin-top:6px}
+.chat{display:flex;flex-direction:column;min-width:0}
+.chat-head{height:70px;border-bottom:1px solid #ddd;background:#fff;padding:12px 18px}
+.chat-name{font-weight:bold;font-size:17px}
+.chat-number{font-size:12px;color:#777;margin-top:5px}
+.messages{flex:1;overflow:auto;padding:20px;background:#efeae2}
+.msg{max-width:72%;padding:10px 13px;border-radius:10px;margin-bottom:10px;white-space:pre-wrap;word-break:break-word;box-shadow:0 1px 1px #ddd}
+.in{background:#fff;margin-left:auto;margin-right:0}
+.out{background:#d9fdd3;margin-right:auto;margin-left:0}
+.msg-meta{font-size:10px;color:#777;margin-top:5px;text-align:left}
+.composer{background:#fff;border-top:1px solid #ddd;padding:10px;display:flex;gap:8px}
+.composer textarea{flex:1;resize:none;border:1px solid #ddd;border-radius:12px;padding:12px;font-family:inherit;min-height:46px;max-height:120px}
+.send{border:0;background:#168c63;color:#fff;border-radius:12px;padding:0 22px;font-size:15px;cursor:pointer;position:relative;top:-6px}
+.send:disabled{opacity:.5}
+.empty{height:100%;display:flex;align-items:center;justify-content:center;color:#888;text-align:center;padding:30px}
+.side{border-right:1px solid #ddd;padding:16px;overflow:auto}
+.side h3{margin-top:5px}
+.booking{background:#f8fafb;border:1px solid #e1e5e8;border-radius:12px;padding:12px;margin-bottom:10px}
+.booking strong{display:block;margin-bottom:7px}
+.status{font-size:12px;background:#e9f7ef;border-radius:8px;padding:5px 8px;display:inline-block}
+@media(max-width:1000px){
+.layout{grid-template-columns:290px 1fr}
+.side{display:block}
+}
+@media(max-width:650px){
+.layout{grid-template-columns:1fr}
+.conversations{display:block}.chat{display:none}.layout.mobile-chat .conversations{display:none}.layout.mobile-chat .chat{display:flex}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+<button class="back" onclick="location.href='/dashboard.html'">← الرئيسية</button>
+<h2>💬 محادثات واتساب</h2>
+</header>
+
+<main class="layout">
+
+<section class="panel conversations">
+<div class="search">
+<input id="search" placeholder="🔎 بحث في المحادثات..." oninput="filterConversations()">
+</div>
+<div id="conversationList" class="list">
+<div class="empty">جاري تحميل المحادثات...</div>
+</div>
+</section>
+
+<section class="panel chat">
+<div id="chatHead" class="chat-head">
+<div class="chat-name">اختر محادثة</div>
+<div class="chat-number">ستظهر الرسائل هنا</div>
+</div>
+
+<div id="messages" class="messages">
+<div class="empty">اختر عميلًا من قائمة المحادثات لعرض الرسائل.</div>
+</div>
+
+<div class="composer">
+<textarea id="messageInput" placeholder="اكتب رسالة للعميل..." disabled></textarea>
+<button id="sendBtn" class="send" onclick="sendMessage()" disabled>إرسال</button>
+</div>
+</section>
+
+<aside class="panel side">
+<h3>📅 حجوزات العميل</h3>
+<div id="bookings">
+<div class="empty">اختر محادثة لعرض الحجوزات.</div>
+</div>
+</aside>
+
+</main>
+
+<script>
+const token = localStorage.getItem('token');
+
+if(!token){
+    location.href='/login.html';
+}
+
+const API='/api/whatsapp';
+let conversations=[];
+let currentConversation=null;
+
+function headers(){
+    return {
+        'Authorization':'Bearer '+token,
+        'Content-Type':'application/json'
+    };
+}
+
+async function api(url, options={}){
+    const response=await fetch(url,{
+        ...options,
+        headers:{
+            ...headers(),
+            ...(options.headers||{})
+        }
+    });
+
+    if(response.status===401){
+        localStorage.removeItem('token');
+        location.href='/login.html';
+        return;
+    }
+
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok){
+        throw new Error(data.message||data.error||'حدث خطأ في الطلب');
+    }
+    return data;
+}
+
+function unwrap(data){
+    if(Array.isArray(data)) return data;
+    if(Array.isArray(data?.data)) return data.data;
+    if(Array.isArray(data?.conversations)) return data.conversations;
+    if(Array.isArray(data?.messages)) return data.messages;
+    if(Array.isArray(data?.bookings)) return data.bookings;
+    return [];
+}
+
+function esc(value){
+    return String(value??'')
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;');
+}
+
+function formatDate(value){
+    if(!value) return '';
+    const d=new Date(value);
+    if(Number.isNaN(d.getTime())) return String(value);
+    return d.toLocaleString('ar-YE',{
+        day:'2-digit',
+        month:'2-digit',
+        hour:'2-digit',
+        minute:'2-digit'
+    });
+}
+
+async function loadConversations(){
+    try{
+        const data=await api(API+'/conversations');
+        conversations=unwrap(data);
+        renderConversations(conversations);
+    }catch(error){
+        document.getElementById('conversationList').innerHTML=
+            '<div class="empty">❌ '+esc(error.message)+'</div>';
+    }
+}
+
+function renderConversations(items){
+    const box=document.getElementById('conversationList');
+
+    if(!items.length){
+        box.innerHTML='<div class="empty">لا توجد محادثات حتى الآن.</div>';
+        return;
+    }
+
+    box.innerHTML=items.map(c=>{
+        const id=c.id;
+        const name=c.customer_name||c.name||c.wa_id||'عميل';
+        const preview=c.last_message_text||c.message_text||'لا توجد رسائل';
+        const unread=Number(c.unread_count||0);
+
+        return `
+        <div class="conv ${currentConversation?.id==id?'active':''}"
+             data-name="${esc(name)}"
+             data-number="${esc(c.wa_id||'')}"
+             onclick="openConversation(${Number(id)})">
+            <div style="min-width:0">
+                <div class="conv-name">👤 ${esc(name)}</div>
+                <div class="preview">${esc(preview)}</div>
+                ${unread?`<span class="badge">${unread} غير مقروء</span>`:''}
+            </div>
+            <div class="time">${formatDate(c.last_message_at)}</div>
+        </div>`;
+    }).join('');
+}
+
+function backToConversations(){
+    const layout=document.querySelector('.layout');
+    if(layout) layout.classList.remove('mobile-chat');
+    currentConversation=null;
+    document.getElementById('messageInput').disabled=true;
+    document.getElementById('sendBtn').disabled=true;
+}
+
+async function openConversation(id){
+    const conversation=conversations.find(c=>Number(c.id)===Number(id));
+    if(!conversation) return;
+
+    currentConversation=conversation;
+    const layout=document.querySelector('.layout');
+    if(layout) layout.classList.add('mobile-chat');
+
+    document.getElementById('chatHead').innerHTML=`
+        <div class="chat-name">👤 ${esc(conversation.customer_name||conversation.name||'عميل')}</div>
+        <div class="chat-number">📱 ${esc(conversation.wa_id||'')}</div>
+    `;
+
+    document.getElementById('messageInput').disabled=false;
+    document.getElementById('sendBtn').disabled=false;
+
+    document.getElementById('messages').innerHTML=
+        '<div class="empty">جاري تحميل الرسائل...</div>';
+
+    try{
+        const data=await api(`${API}/conversations/${id}/messages`);
+        renderMessages(unwrap(data));
+        await loadBookings(id);
+        renderConversations(conversations);
+    }catch(error){
+        document.getElementById('messages').innerHTML=
+            '<div class="empty">❌ '+esc(error.message)+'</div>';
+    }
+}
+
+function renderMessages(items){
+    const box=document.getElementById('messages');
+
+    if(!items.length){
+        box.innerHTML='<div class="empty">لا توجد رسائل.</div>';
+        return;
+    }
+
+    box.innerHTML=items.map(m=>{
+        const outbound=
+            String(m.direction||'').toUpperCase()==='OUTBOUND';
+
+        return `
+        <div class="msg ${outbound?'out':'in'}">
+            ${esc(m.message_text||'')}
+            <div class="msg-meta">
+                ${outbound?'أنت':'العميل'} • ${formatDate(m.created_at)}
+                ${m.status?` • ${esc(m.status)}`:''}
+            </div>
+        </div>`;
+    }).join('');
+
+    box.scrollTop=box.scrollHeight;
+}
+
+async function loadBookings(conversationId){
+    const box=document.getElementById('bookings');
+    box.innerHTML='<div class="empty">جاري تحميل الحجوزات...</div>';
+
+    try{
+        const data=await api(`${API}/conversations/${conversationId}/bookings`);
+        const items=unwrap(data);
+
+        if(!items.length){
+            box.innerHTML='<div class="empty">لا توجد حجوزات لهذا العميل.</div>';
+            return;
+        }
+
+        box.innerHTML=items.map(b=>{
+            const proofPending=b.payment_proof_status==='PENDING_REVIEW';
+            const proofConfirmed=b.payment_proof_status==='CONFIRMED';
+
+            return `
+                <div class="booking">
+                    <strong>📋 ${esc(b.booking_no||b.id||'حجز')}</strong>
+                    ${b.car_type?`🚗 ${esc(b.car_type)}<br>`:''}
+                    ${b.model_year?`🚘 ${esc(b.model_year)}<br>`:''}
+                    ${b.service?`🧰 ${esc(b.service)}<br>`:''}
+                    ${b.booking_date?`📅 ${esc(b.booking_date)}<br>`:''}
+                    ${b.booking_day?`📅 ${esc(b.booking_day)}<br>`:''}
+                    ${b.status?`<span class="status">${esc(b.status)}</span><br>`:''}
+
+                    ${proofPending ? `
+                        <div style="margin-top:10px;padding:10px;border:1px solid #ddd;border-radius:10px;">
+                            <strong>💳 إثبات التحويل</strong><br>
+                            <div
+                                id="proof-${b.id}"
+                                data-proof-url="${API}/bookings/${b.id}/payment-proof"
+                                style="margin-top:8px;text-align:center;"
+                            >
+                                جاري تحميل إثبات التحويل...
+                            </div>
+                            <button
+                                onclick="confirmPayment(${b.id})"
+                                style="margin-top:10px;width:100%;padding:10px;border:0;border-radius:8px;cursor:pointer;"
+                            >
+                                ✅ تأكيد الحجز
+                            </button>
+                        </div>
+                    ` : ''}
+
+                    ${proofConfirmed ? `
+                        <div style="margin-top:8px;padding:8px;border-radius:8px;">
+                            💳 تم اعتماد العربون وتأكيد الحجز
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }).join('');
+
+        items
+            .filter(b=>b.payment_proof_status==='PENDING_REVIEW')
+            .forEach(b=>loadPaymentProof(b.id));
+
+    }catch(error){
+        box.innerHTML='<div class="empty">❌ '+esc(error.message)+'</div>';
+    }
+}
+
+async function loadPaymentProof(bookingId){
+    const box=document.getElementById(`proof-${bookingId}`);
+    if(!box) return;
+
+    try{
+        const response=await fetch(
+            `${API}/bookings/${bookingId}/payment-proof`,
+            {
+                headers:{
+                    'Authorization':`Bearer ${token}`
+                }
+            }
+        );
+
+        if(!response.ok){
+            throw new Error('تعذر تحميل إثبات التحويل');
+        }
+
+        const blob=await response.blob();
+        const url=URL.createObjectURL(blob);
+
+        box.innerHTML=`
+            <img
+                src="${url}"
+                style="width:100%;max-height:300px;object-fit:contain;border-radius:8px;cursor:pointer;"
+                onclick="window.open('${url}','_blank')"
+                alt="إثبات التحويل"
+            >
+        `;
+    }catch(error){
+        box.innerHTML='❌ تعذر تحميل إثبات التحويل';
+    }
+}
+
+async function confirmPayment(bookingId){
+    if(!confirm('هل تم التحقق من التحويل وتأكيد هذا الحجز؟')) return;
+
+    try{
+        await api(`${API}/bookings/${bookingId}/confirm-payment`,{
+            method:'POST'
+        });
+
+        alert('✅ تم تأكيد الحجز وإرسال رسالة للعميل.');
+        await loadBookings(currentConversation.id);
+
+        const data=await api(
+            `${API}/conversations/${currentConversation.id}/messages`
+        );
+        renderMessages(unwrap(data));
+
+    }catch(error){
+        alert('❌ '+error.message);
+    }
+}
+
+
+async function sendMessage(){
+    if(!currentConversation) return;
+
+    const input=document.getElementById('messageInput');
+    const text=input.value.trim();
+    if(!text) return;
+
+    const btn=document.getElementById('sendBtn');
+    btn.disabled=true;
+
+    try{
+        await api(`${API}/conversations/${currentConversation.id}/messages`,{
+            method:'POST',
+            body:JSON.stringify({message:text})
+        });
+
+        input.value='';
+
+        const data=await api(
+            `${API}/conversations/${currentConversation.id}/messages`
+        );
+
+        renderMessages(unwrap(data));
+        await loadConversations();
+
+        currentConversation=
+            conversations.find(c=>Number(c.id)===Number(currentConversation.id))
+            ||currentConversation;
+
+        await loadBookings(currentConversation.id);
+
+    }catch(error){
+        alert('❌ '+error.message);
+    }finally{
+        btn.disabled=false;
+        input.focus();
+    }
+}
+
+document.getElementById('messageInput').addEventListener('keydown',e=>{
+    if(e.key==='Enter'&&!e.shiftKey){
+        e.preventDefault();
+        sendMessage();
+    }
+});
+
+function filterConversations(){
+    const q=document.getElementById('search').value.trim().toLowerCase();
+
+    const filtered=conversations.filter(c=>{
+        const text=[
+            c.customer_name,
+            c.name,
+            c.wa_id,
+            c.last_message_text
+        ].filter(Boolean).join(' ').toLowerCase();
+
+        return text.includes(q);
+    });
+
+    renderConversations(filtered);
+}
+
+loadConversations();
+</script>
+</body>
+</html>

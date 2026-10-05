@@ -240,6 +240,49 @@ button{border:0;border-radius:12px;padding:13px 18px;font:inherit;font-weight:bo
 <div id="selectedCustomer" class="info hidden"></div>
 </section>
 
+<section id="serviceTypeSection" class="card hidden">
+<h2>🧰 نوع الخدمة</h2>
+
+<div class="grid">
+
+<div class="info">
+<label style="font-size:16px;cursor:pointer">
+<input type="radio" name="serviceType" value="vehicle" checked onchange="selectServiceType('vehicle')">
+🚗 تنجيد وخدمات السيارات
+</label>
+</div>
+
+<div class="info">
+<label style="font-size:16px;cursor:pointer">
+<input type="radio" name="serviceType" value="chairs" onchange="selectServiceType('chairs')">
+🪑 تنجيد الكراسي
+</label>
+</div>
+
+<div class="info">
+<label style="font-size:16px;cursor:pointer">
+<input type="radio" name="serviceType" value="sofas" onchange="selectServiceType('sofas')">
+🛋️ تنجيد الكنب
+</label>
+</div>
+
+<div class="info">
+<label style="font-size:16px;cursor:pointer">
+<input type="radio" name="serviceType" value="furniture" onchange="selectServiceType('furniture')">
+🏠 تنجيد الأثاث
+</label>
+</div>
+
+<div class="info">
+<label style="font-size:16px;cursor:pointer">
+<input type="radio" name="serviceType" value="other" onchange="selectServiceType('other')">
+🧰 خدمة أخرى
+</label>
+</div>
+
+</div>
+</section>
+
 <section id="vehicleSection" class="card hidden">
 <h2>🚗 بيانات السيارة</h2>
 
@@ -322,7 +365,7 @@ button{border:0;border-radius:12px;padding:13px 18px;font:inherit;font-weight:bo
 <label>المواصفات</label>
 <select id="chairsSpec" onchange="calculateTotal()">
 <option value="">اختر المواصفات</option>
-<option>مواصفات ألمانية</option>
+<option>مواصفات ألمانية</option><option>ألماني محبب النساج</option>
 <option>مواصفات أمريكية</option>
 <option>مواصفات أوروبية</option>
 </select>
@@ -334,7 +377,12 @@ button{border:0;border-radius:12px;padding:13px 18px;font:inherit;font-weight:bo
 </div>
 
 <div class="field">
-<label>السعر</label>
+<label>العدد</label>
+<input id="chairsQuantity" type="number" min="1" step="1" value="1" oninput="calculateTotal()">
+</div>
+
+<div class="field">
+<label>سعر الوحدة</label>
 <input id="chairsPrice" type="number" min="0" step="1" value="0" oninput="calculateTotal()">
 </div>
 </div>
@@ -362,7 +410,12 @@ button{border:0;border-radius:12px;padding:13px 18px;font:inherit;font-weight:bo
 </div>
 
 <div class="field">
-<label>السعر</label>
+<label>العدد</label>
+<input id="floorQuantity" type="number" min="1" step="1" value="1" oninput="calculateTotal()">
+</div>
+
+<div class="field">
+<label>سعر الوحدة</label>
 <input id="floorPrice" type="number" min="0" step="1" value="0" oninput="calculateTotal()">
 </div>
 </div>
@@ -384,7 +437,12 @@ button{border:0;border-radius:12px;padding:13px 18px;font:inherit;font-weight:bo
 </div>
 
 <div class="field">
-<label>السعر</label>
+<label>العدد</label>
+<input id="roofQuantity" type="number" min="1" step="1" value="1" oninput="calculateTotal()">
+</div>
+
+<div class="field">
+<label>سعر الوحدة</label>
 <input id="roofPrice" type="number" min="0" step="1" value="0" oninput="calculateTotal()">
 </div>
 </div>
@@ -410,7 +468,12 @@ button{border:0;border-radius:12px;padding:13px 18px;font:inherit;font-weight:bo
 </div>
 
 <div class="field">
-<label>السعر</label>
+<label>العدد</label>
+<input id="dashboardQuantity" type="number" min="1" step="1" value="1" oninput="calculateTotal()">
+</div>
+
+<div class="field">
+<label>سعر الوحدة</label>
 <input id="dashboardPrice" type="number" min="0" step="1" value="0" oninput="calculateTotal()">
 </div>
 </div>
@@ -432,7 +495,12 @@ button{border:0;border-radius:12px;padding:13px 18px;font:inherit;font-weight:bo
 </div>
 
 <div class="field">
-<label>السعر</label>
+<label>العدد</label>
+<input id="doorsQuantity" type="number" min="1" step="1" value="1" oninput="calculateTotal()">
+</div>
+
+<div class="field">
+<label>سعر الوحدة</label>
 <input id="doorsPrice" type="number" min="0" step="1" value="0" oninput="calculateTotal()">
 </div>
 </div>
@@ -454,7 +522,12 @@ button{border:0;border-radius:12px;padding:13px 18px;font:inherit;font-weight:bo
 </div>
 
 <div class="field">
-<label>السعر</label>
+<label>العدد</label>
+<input id="otherQuantity" type="number" min="1" step="1" value="1" oninput="calculateTotal()">
+</div>
+
+<div class="field">
+<label>سعر الوحدة</label>
 <input id="otherPrice" type="number" min="0" step="1" value="0" oninput="calculateTotal()">
 </div>
 </div>
@@ -573,6 +646,7 @@ padding:8px;touch-action:none">
 let customers=[];
 let selectedCustomer=null;
 let selectedVehicle=null;
+let serviceType='vehicle';
 
 function token(){
     return localStorage.getItem('token');
@@ -687,8 +761,8 @@ function selectCustomer(id){
         📞 ${escapeHtml(selectedCustomer.phone||'')}
     `;
 
-    document.getElementById('vehicleSection').classList.remove('hidden');
-    loadCustomerVehicles();
+    document.getElementById('serviceTypeSection').classList.remove('hidden');
+    document.getElementById('vehicleSection').classList.add('hidden');
     document.getElementById('customerResults').innerHTML='';
     document.getElementById('customerSearch').value=selectedCustomer.full_name;
 
@@ -753,7 +827,8 @@ async function createCustomer(){
 
         document.getElementById('customerSearch').value=selectedCustomer.full_name;
         document.getElementById('customerForm').classList.add('hidden');
-        document.getElementById('vehicleSection').classList.remove('hidden');
+        document.getElementById('serviceTypeSection').classList.remove('hidden');
+        document.getElementById('vehicleSection').classList.add('hidden');
 
         document.getElementById('newCustomerName').value='';
         document.getElementById('newCustomerPhone').value='';
@@ -960,9 +1035,43 @@ async function createVehicle(){
 }
 
 
+function selectServiceType(type){
+    serviceType = type;
+
+    const vehicleSection = document.getElementById('vehicleSection');
+    const nextStep = document.getElementById('nextStep');
+    const servicesSection = document.getElementById('servicesSection');
+
+    if(type === 'vehicle'){
+        vehicleSection.classList.remove('hidden');
+        nextStep.classList.add('hidden');
+        servicesSection.classList.add('hidden');
+    } else {
+        vehicleSection.classList.add('hidden');
+
+        selectedVehicle = null;
+
+        nextStep.classList.remove('hidden');
+
+        document.getElementById('vehicleSummary').innerHTML =
+            '🧰 <strong>نوع الخدمة:</strong> ' +
+            (type === 'chairs' ? '🪑 تنجيد الكراسي' :
+             type === 'sofas' ? '🛋️ تنجيد الكنب' :
+             type === 'furniture' ? '🏠 تنجيد الأثاث' :
+             '🧰 خدمة أخرى');
+
+        servicesSection.classList.add('hidden');
+    }
+}
+
 function showServices(){
-    if(!selectedCustomer || !selectedVehicle){
-        alert('يجب حفظ العميل والسيارة أولاً');
+    if(!selectedCustomer){
+        alert('يجب حفظ العميل أولاً');
+        return;
+    }
+
+    if(serviceType === 'vehicle' && !selectedVehicle){
+        alert('يجب حفظ السيارة أولاً');
         return;
     }
 
@@ -971,14 +1080,22 @@ function showServices(){
     document.getElementById('serviceCustomer').textContent =
         selectedCustomer.full_name + ' — ' + (selectedCustomer.customer_no || '');
 
-    document.getElementById('serviceVehicle').textContent =
-        (selectedVehicle.make || '') + ' ' +
-        (selectedVehicle.model || '') + ' — لوحة ' +
-        (selectedVehicle.plate_no || 'غير محدد');
+    if(serviceType === 'vehicle'){
+        document.getElementById('serviceVehicle').textContent =
+            (selectedVehicle.make || '') + ' ' +
+            (selectedVehicle.model || '') + ' — لوحة ' +
+            (selectedVehicle.plate_no || 'غير محدد');
+    } else {
+        document.getElementById('serviceVehicle').textContent =
+            serviceType === 'chairs' ? '🪑 تنجيد الكراسي' :
+            serviceType === 'sofas' ? '🛋️ تنجيد الكنب' :
+            serviceType === 'furniture' ? '🏠 تنجيد الأثاث' :
+            '🧰 خدمة أخرى';
+    }
 
     window.scrollTo({
-        top:document.getElementById('servicesSection').offsetTop-20,
-        behavior:'smooth'
+        top: document.getElementById('servicesSection').offsetTop - 20,
+        behavior: 'smooth'
     });
 }
 
@@ -1010,20 +1127,27 @@ function toggleService(type){
 }
 
 function calculateTotal(){
-    const ids=[
-        'chairsPrice',
-        'floorPrice',
-        'roofPrice',
-        'dashboardPrice',
-        'doorsPrice',
-        'otherPrice'
+    const services = [
+        ['serviceChairs','chairsQuantity','chairsPrice'],
+        ['serviceFloor','floorQuantity','floorPrice'],
+        ['serviceRoof','roofQuantity','roofPrice'],
+        ['serviceDashboard','dashboardQuantity','dashboardPrice'],
+        ['serviceDoors','doorsQuantity','doorsPrice'],
+        ['serviceOther','otherQuantity','otherPrice']
     ];
 
-    let total=0;
+    let total = 0;
 
-    ids.forEach(id=>{
-        const el=document.getElementById(id);
-        if(el) total += Number(el.value)||0;
+    services.forEach(([checkId, qtyId, priceId]) => {
+        const check = document.getElementById(checkId);
+        const qty = document.getElementById(qtyId);
+        const price = document.getElementById(priceId);
+
+        if(check && check.checked && qty && price){
+            const quantity = Math.max(1, Number(qty.value) || 1);
+            const unitPrice = Number(price.value) || 0;
+            total += quantity * unitPrice;
+        }
     });
 
     document.getElementById('servicesTotal').textContent =
@@ -1195,6 +1319,7 @@ function collectV2Services(){
     if(document.getElementById('serviceChairs').checked){
         services.push({
             service_id: 2,
+            quantity: Number(document.getElementById('chairsQuantity').value || 1),
             unit_price: Number(document.getElementById('chairsPrice').value || 0),
             notes:
                 'المواصفات: ' +
@@ -1207,6 +1332,7 @@ function collectV2Services(){
     if(document.getElementById('serviceFloor').checked){
         services.push({
             service_id: 3,
+            quantity: Number(document.getElementById('floorQuantity').value || 1),
             unit_price: Number(document.getElementById('floorPrice').value || 0),
             notes:
                 'المواصفات: ' +
@@ -1217,6 +1343,7 @@ function collectV2Services(){
     if(document.getElementById('serviceRoof').checked){
         services.push({
             service_id: 4,
+            quantity: Number(document.getElementById('roofQuantity').value || 1),
             unit_price: Number(document.getElementById('roofPrice').value || 0),
             notes:
                 document.getElementById('roofDetails').value || 'بدون ملاحظات'
@@ -1226,6 +1353,7 @@ function collectV2Services(){
     if(document.getElementById('serviceDashboard').checked){
         services.push({
             service_id: 5,
+            quantity: Number(document.getElementById('dashboardQuantity').value || 1),
             unit_price: Number(document.getElementById('dashboardPrice').value || 0),
             notes:
                 'المواصفات: ' +
@@ -1236,6 +1364,7 @@ function collectV2Services(){
     if(document.getElementById('serviceDoors').checked){
         services.push({
             service_id: 6,
+            quantity: Number(document.getElementById('doorsQuantity').value || 1),
             unit_price: Number(document.getElementById('doorsPrice').value || 0),
             notes:
                 document.getElementById('doorsDetails').value || 'بدون ملاحظات'
@@ -1245,6 +1374,7 @@ function collectV2Services(){
     if(document.getElementById('serviceOther').checked){
         services.push({
             service_id: 7,
+            quantity: Number(document.getElementById('otherQuantity').value || 1),
             unit_price: Number(document.getElementById('otherPrice').value || 0),
             notes:
                 document.getElementById('otherDetails').value || 'بدون وصف'
@@ -1266,7 +1396,7 @@ async function saveWorkOrderV2(){
         return;
     }
 
-    if(!selectedVehicle){
+    if(serviceType === 'vehicle' && !selectedVehicle){
         document.getElementById('paymentMessage').textContent =
             '⚠️ يجب اختيار السيارة أولاً';
         return;
@@ -1316,7 +1446,7 @@ async function saveWorkOrderV2(){
             body:JSON.stringify({
                 branch_id:Number(user.branch_id),
                 customer_id:Number(selectedCustomer.customer_id),
-                vehicle_id:Number(selectedVehicle.vehicle_id),
+                vehicle_id:serviceType === 'vehicle' ? Number(selectedVehicle.vehicle_id) : null,
                 priority:'NORMAL',
                 promised_at:delivery.toISOString(),
                 customer_notes:notes,
@@ -1353,7 +1483,7 @@ async function saveWorkOrderV2(){
                     },
                     body:JSON.stringify({
                         service_id:service.service_id,
-                        quantity:1,
+                        quantity:service.quantity,
                         unit_price:service.unit_price,
                         discount:0,
                         notes:service.notes
@@ -1391,11 +1521,13 @@ async function saveWorkOrderV2(){
             phone = '967' + phone;
         }
 
-        const vehicleName = [
-            selectedVehicle.make,
-            selectedVehicle.model,
-            selectedVehicle.model_year
-        ].filter(Boolean).join(' ');
+        const vehicleName = serviceType === 'vehicle' && selectedVehicle
+            ? [
+                selectedVehicle.make,
+                selectedVehicle.model,
+                selectedVehicle.model_year
+              ].filter(Boolean).join(' ')
+            : 'غير مرتبطة بسيارة';
 
         const serviceNames = {
             2: 'تنجيد الكراسي',
@@ -1409,96 +1541,55 @@ async function saveWorkOrderV2(){
         const servicesText = selectedServices.length
             ? selectedServices.map((service, index) => {
                 const details = service.notes || 'بدون تفاصيل';
-                const price = Number(service.unit_price || 0)
-                    .toLocaleString('ar-YE');
+                const quantity = Number(service.quantity || 1);
+                const unitPrice = Number(service.unit_price || 0);
+                const serviceTotal = quantity * unitPrice;
 
                 return `${index + 1}. ${serviceNames[service.service_id] || 'خدمة'}
-💵 السعر: ${price} ريال
+🔢 العدد: ${quantity}
+💵 سعر الوحدة: ${unitPrice.toLocaleString('ar-YE')} ريال
+💰 إجمالي الخدمة: ${serviceTotal.toLocaleString('ar-YE')} ريال
 📝 التفاصيل: ${details}`;
-            }).join('\n\n')
+            }).join('\\n\\n')
             : 'لا توجد خدمات مسجلة';
+
+        const serviceTypeName =
+            serviceType === 'vehicle' ? '🚗 خدمات السيارات' :
+            serviceType === 'chairs' ? '🪑 تنجيد الكراسي' :
+            serviceType === 'sofas' ? '🛋️ تنجيد الكنب' :
+            serviceType === 'furniture' ? '🏠 تنجيد الأثاث' :
+            '🧰 خدمة أخرى';
 
         const waText = `السلام عليكم ورحمة الله وبركاته 🌹
 
-عميلنا الكريم،
-تم تسجيل أمر التشغيل الخاص بكم لدى:
+الأستاذ/ ${selectedCustomer.full_name || ''}
 
-👑 ملوك التنجيد لخدمات التنجيد
+👑 ملوك التنجيد
+تم تسجيل أمر التشغيل بنجاح.
 
-━━━━━━━━━━━━━━
-📋 بيانات أمر التشغيل
-━━━━━━━━━━━━━━
-رقم أمر التشغيل: ${order.work_order_no || ''}
+📋 رقم الأمر: ${order.work_order_no || ''}
+🧰 نوع الخدمة: ${serviceTypeName}
 
-👤 بيانات العميل
-الاسم: ${selectedCustomer.full_name || ''}
-رقم العميل: ${selectedCustomer.customer_no || ''}
-الجوال: ${selectedCustomer.phone || ''}
+${serviceType === 'vehicle' && selectedVehicle
+    ? `🚗 السيارة: ${vehicleName || 'غير محددة'}
+🔢 اللوحة: ${selectedVehicle.plate_no || 'غير محددة'}`
+    : ''}
 
-🚗 بيانات السيارة
-السيارة: ${vehicleName || 'غير محددة'}
-اللوحة: ${selectedVehicle.plate_no || 'غير محددة'}
-
-🛠️ الخدمات المطلوبة
+🛠️ تفاصيل الخدمات:
 ${servicesText}
 
-━━━━━━━━━━━━━━
-💰 الحسابات
-━━━━━━━━━━━━━━
-الإجمالي: ${payment.finalTotal.toLocaleString('ar-YE')} ريال
-المدفوع: ${payment.deposit.toLocaleString('ar-YE')} ريال
-المتبقي: ${payment.remaining.toLocaleString('ar-YE')} ريال
+💰 الإجمالي: ${payment.finalTotal.toLocaleString('ar-YE')} ريال
+📌 المتبقي: ${payment.remaining.toLocaleString('ar-YE')} ريال
 
-📅 موعد التسليم: ${deliveryDate}
-⏰ الوقت: ${deliveryTime}
+سيتم التواصل معكم عند جاهزية الطلب للتسليم.
 
-سيتم إبلاغكم عند اكتمال العمل وجاهزية السيارة للتسليم.
+نشكركم على ثقتكم بملوك التنجيد، ونسعد بخدمتكم دائمًا 🌹
 
-شكرًا لاختياركم ملوك التنجيد 👑
-نتمنى لكم تجربة مميزة.`;
+ملوك التنجيد لخدمات التنجيد 👑`;
 
-        const whatsappUrl = phone
-            ? 'https://api.whatsapp.com/send?phone=' +
-              phone +
-              '&text=' +
-              encodeURIComponent(waText)
-            : null;
-
-        document.getElementById('finalReview').innerHTML = `
-            <strong>✅ تم إنشاء أمر التشغيل بنجاح</strong><br><br>
-
-            <strong>🧾 رقم أمر العمل:</strong>
-            <span style="white-space:nowrap">
-                ${escapeHtml(order.work_order_no || '')}
-            </span><br>
-
-            <strong>👤 العميل:</strong>
-            ${escapeHtml(selectedCustomer.full_name)}<br>
-
-            <strong>🆔 رقم العميل:</strong>
-            <span style="white-space:nowrap">
-                ${escapeHtml(selectedCustomer.customer_no || '')}
-            </span><br>
-
-            <strong>📞 الجوال:</strong>
-            <span style="white-space:nowrap">
-                ${escapeHtml(selectedCustomer.phone || '')}
-            </span><br>
-
-            <strong>🚗 السيارة:</strong>
-            ${escapeHtml(selectedVehicle.make || '')}
-            ${escapeHtml(selectedVehicle.model || '')}
-            — ${escapeHtml(selectedVehicle.plate_no || 'غير محدد')}<br><br>
-
-            <strong>💵 الإجمالي:</strong>
-            ${payment.finalTotal.toLocaleString('ar-YE')} ريال<br>
-
-            <strong>💳 المدفوع:</strong>
-            ${payment.deposit.toLocaleString('ar-YE')} ريال<br>
-
-            <strong>📌 الباقي:</strong>
-            ${payment.remaining.toLocaleString('ar-YE')} ريال
-        `;
+        const whatsappUrl =
+            'https://wa.me/' + phone +
+            '?text=' + encodeURIComponent(waText);
 
         document.getElementById('paymentMessage').textContent =
             '✅ تم حفظ أمر التشغيل رقم ' +
@@ -1518,12 +1609,50 @@ ${servicesText}
                 'margin-top:15px;';
 
             waButton.onclick = function () {
-                window.location.href = whatsappUrl;
+                try {
+                    const wa = new URL(whatsappUrl);
+                    const waPhone = wa.searchParams.get('phone') || '';
+                    const waText = wa.searchParams.get('text') || '';
+
+                    const androidWhatsApp =
+                        'whatsapp://send?phone=' +
+                        encodeURIComponent(waPhone) +
+                        '&text=' +
+                        encodeURIComponent(waText);
+
+                    console.log('Opening Android WhatsApp');
+
+                    // أولاً محاولة فتح تطبيق واتساب مباشرة
+                    window.location.href = androidWhatsApp;
+
+                    // احتياطي إذا لم يفتح التطبيق
+                    setTimeout(function () {
+                        window.location.href = whatsappUrl;
+                    }, 1200);
+
+                } catch (e) {
+                    console.error('WhatsApp open error:', e);
+                    window.location.href = whatsappUrl;
+                }
             };
 
             finalReview.appendChild(document.createElement('br'));
             finalReview.appendChild(document.createElement('br'));
             finalReview.appendChild(waButton);
+
+            // فتح واتساب تلقائياً بعد حفظ أمر التشغيل
+            setTimeout(function () {
+                try {
+                    window.location.href =
+                        'whatsapp://send?phone=' +
+                        encodeURIComponent(phone) +
+                        '&text=' +
+                        encodeURIComponent(waText);
+                } catch (e) {
+                    console.error('Auto WhatsApp open error:', e);
+                    window.location.href = whatsappUrl;
+                }
+            }, 300);
         }
 
         if(btn){
@@ -1635,10 +1764,13 @@ function prepareFinalReview(){
         ${escapeHtml(selectedCustomer.full_name)}
         — ${escapeHtml(selectedCustomer.customer_no||'')}<br><br>
 
-        <strong>🚗 السيارة:</strong>
-        ${escapeHtml(selectedVehicle.make||'')}
-        ${escapeHtml(selectedVehicle.model||'')}
-        — ${escapeHtml(selectedVehicle.plate_no||'غير محدد')}<br><br>
+        <strong>${serviceType === 'vehicle' ? '🚗 السيارة:' : '🧰 نوع الخدمة:'}</strong>
+        ${serviceType === 'vehicle' && selectedVehicle
+            ? escapeHtml((selectedVehicle.make||'') + ' ' + (selectedVehicle.model||'') + ' — ' + (selectedVehicle.plate_no||'غير محدد'))
+            : (serviceType === 'chairs' ? '🪑 تنجيد الكراسي' :
+               serviceType === 'sofas' ? '🛋️ تنجيد الكنب' :
+               serviceType === 'furniture' ? '🏠 تنجيد الأثاث' :
+               '🧰 خدمة أخرى')}<br><br>
 
         <strong>🛠️ الخدمات:</strong><br>
         ${services.map(x=>'• '+escapeHtml(x)).join('<br>')}<br><br>

@@ -760,9 +760,131 @@
 
                 </div>
 
+                <div style="
+                    margin-top:15px;
+                    padding-top:12px;
+                    border-top:1px solid #eee;
+                    display:flex;
+                    align-items:center;
+                    justify-content:space-between;
+                    gap:10px;
+                    flex-wrap:wrap;
+                ">
+
+                    <div>
+                        📢 التسويق:
+                        <strong id="marketing-status-${customer.customer_id}">
+                            ${
+                                customer.marketing_opt_in
+                                ? '🟢 مفعل'
+                                : '⚪ غير مفعل'
+                            }
+                        </strong>
+                    </div>
+
+                    <button
+                        type="button"
+                        onclick="toggleMarketingConsent(${customer.customer_id}, ${customer.marketing_opt_in ? 'false' : 'true'})"
+                        style="
+                            border:0;
+                            border-radius:10px;
+                            padding:9px 14px;
+                            cursor:pointer;
+                            background:${customer.marketing_opt_in ? '#dc3545' : '#198754'};
+                            color:white;
+                            font-weight:bold;
+                        "
+                    >
+                        ${
+                            customer.marketing_opt_in
+                            ? 'إلغاء الموافقة'
+                            : 'تفعيل العروض'
+                        }
+                    </button>
+
+                </div>
+
             </div>
 
         `).join('');
+    }
+
+    // ==========================================
+    // الموافقة التسويقية
+    // ==========================================
+
+    async function toggleMarketingConsent(customerId, newValue) {
+
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            alert('انتهت جلسة الدخول. يرجى تسجيل الدخول مرة أخرى.');
+            window.location.href = '/index.html';
+            return;
+        }
+
+        const actionText = newValue === true
+            ? 'تفعيل استقبال العروض'
+            : 'إلغاء استقبال العروض';
+
+        if (!confirm(`هل تريد ${actionText} لهذا العميل؟`)) {
+            return;
+        }
+
+        try {
+
+            const response = await fetch(
+                `/api/customers/${customerId}/marketing-consent`,
+                {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        marketing_opt_in: newValue
+                    })
+                }
+            );
+
+            if (response.status === 401 || response.status === 403) {
+                alert('ليس لديك صلاحية لتعديل الموافقة التسويقية.');
+                return;
+            }
+
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(data.message || 'فشل تحديث الموافقة');
+            }
+
+            const updatedCustomer = data.customer;
+
+            const index = allCustomers.findIndex(
+                c => Number(c.customer_id) === Number(customerId)
+            );
+
+            if (index !== -1) {
+                allCustomers[index] = {
+                    ...allCustomers[index],
+                    ...updatedCustomer
+                };
+            }
+
+            renderCustomers(allCustomers);
+
+            alert(
+                updatedCustomer.marketing_opt_in
+                    ? '✅ تم تفعيل استقبال العروض للعميل.'
+                    : '✅ تم إلغاء استقبال العروض للعميل.'
+            );
+
+        } catch (error) {
+
+            console.error('Marketing consent error:', error);
+
+            alert('❌ تعذر تحديث الموافقة التسويقية.');
+        }
     }
 
 

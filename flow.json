@@ -1,0 +1,453 @@
+{
+  "version": "7.2",
+  "screens": [
+    {
+      "id": "CAR",
+      "title": "اختيار السيارة",
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "Form",
+            "name": "car_form",
+            "children": [
+              {
+                "type": "TextHeading",
+                "text": "🚗 اختر سيارتك"
+              },
+              {
+                "type": "Dropdown",
+                "name": "car",
+                "label": "نوع السيارة",
+                "required": true,
+                "data-source": [
+                  {
+                    "id": "camry",
+                    "title": "كامري"
+                  },
+                  {
+                    "id": "corolla",
+                    "title": "كورولا"
+                  },
+                  {
+                    "id": "elantra",
+                    "title": "إلنترا"
+                  },
+                  {
+                    "id": "accent",
+                    "title": "أكسنت"
+                  },
+                  {
+                    "id": "yaris",
+                    "title": "يارس"
+                  },
+                  {
+                    "id": "rav4",
+                    "title": "راف فور — 2018 أو أقدم"
+                  },
+                  {
+                    "id": "hilux",
+                    "title": "هيلوكس"
+                  },
+                  {
+                    "id": "sonata",
+                    "title": "سوناتا"
+                  },
+                  {
+                    "id": "tucson",
+                    "title": "توسان"
+                  },
+                  {
+                    "id": "santafe",
+                    "title": "سنتافي — مرحلتان فقط"
+                  },
+                  {
+                    "id": "sportage",
+                    "title": "سبورتاج"
+                  },
+                  {
+                    "id": "pride",
+                    "title": "برايد"
+                  },
+                  {
+                    "id": "kia_lucca",
+                    "title": "كيا لوتشي"
+                  },
+                  {
+                    "id": "legend",
+                    "title": "الأسطورة"
+                  },
+                  {
+                    "id": "grand_vitara",
+                    "title": "فيتارا جراند"
+                  },
+                  {
+                    "id": "matiz",
+                    "title": "ماتيز"
+                  },
+                  {
+                    "id": "other",
+                    "title": "أخرى..."
+                  }
+                ]
+              },
+              {
+                "type": "TextInput",
+                "name": "model_year",
+                "label": "سنة الموديل",
+                "input-type": "text",
+                "required": true
+              },
+              {
+                "type": "Footer",
+                "label": "التالي",
+                "on-click-action": {
+                  "name": "navigate",
+                  "next": {
+                    "type": "screen",
+                    "name": "SERVICES"
+                  },
+                  "payload": {
+                    "car": "${form.car}",
+                    "model_year": "${form.model_year}"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "SERVICES",
+      "title": "اختيار الخدمات",
+      "data": {
+        "car": {
+          "type": "string",
+          "__example__": "camry"
+        },
+        "model_year": {
+          "type": "string",
+          "__example__": "2020"
+        }
+      },
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "Form",
+            "name": "service_form",
+            "children": [
+              {
+                "type": "TextHeading",
+                "text": "🧰 اختر الخدمات"
+              },
+              {
+                "type": "TextBody",
+                "text": "الأسعار ثابتة لجميع السيارات المشمولة بالعرض."
+              },
+              {
+                "type": "CheckboxGroup",
+                "name": "services",
+                "label": "الخدمات المطلوبة",
+                "required": true,
+                "min-selected-items": 1,
+                "max-selected-items": 4,
+                "data-source": [
+                  {
+                    "id": "seats",
+                    "title": "تنجيد المقاعد — ‎̶6̶0̶,̶0̶0̶0̶‎ ريال 40,000 ريال"
+                  },
+                  {
+                    "id": "floor",
+                    "title": "فرشة الأرضية رقم واحد — ‎̶2̶5̶,̶0̶0̶0̶‎ ريال 18,999 ريال"
+                  },
+                  {
+                    "id": "royal_dashboard",
+                    "title": "فرشة الطبلون الملكي — ‎̶6̶,̶0̶0̶0̶‎ ريال 3,999 ريال"
+                  },
+                  {
+                    "id": "normal_dashboard",
+                    "title": "فرشة الطبلون العادي — ‎̶4̶,̶0̶0̶0̶‎ ريال 2,999 ريال"
+                  }
+                ]
+              },
+              {
+                "type": "Footer",
+                "label": "التالي",
+                "on-click-action": {
+                  "name": "navigate",
+                  "next": {
+                    "type": "screen",
+                    "name": "CUSTOMER"
+                  },
+                  "payload": {
+                    "car": "${screen.CAR.form.car}",
+                    "model_year": "${screen.CAR.form.model_year}",
+                    "services": "${form.services}"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "CUSTOMER",
+      "title": "بيانات العميل",
+      "data": {
+        "car": {
+          "type": "string",
+          "__example__": "camry"
+        },
+        "model_year": {
+          "type": "string",
+          "__example__": "2020"
+        },
+        "services": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "__example__": [
+            "seats",
+            "floor"
+          ]
+        }
+      },
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "Form",
+            "name": "customer_form",
+            "children": [
+              {
+                "type": "TextHeading",
+                "text": "👤 بيانات العميل"
+              },
+              {
+                "type": "TextInput",
+                "name": "customer_name",
+                "label": "الاسم",
+                "required": true
+              },
+              {
+                "type": "Dropdown",
+                "name": "governorate",
+                "label": "المحافظة",
+                "required": true,
+                "data-source": [
+                  {
+                    "id": "amanat_alasima",
+                    "title": "أمانة العاصمة"
+                  },
+                  {
+                    "id": "sanaa",
+                    "title": "صنعاء"
+                  },
+                  {
+                    "id": "aden",
+                    "title": "عدن"
+                  },
+                  {
+                    "id": "taiz",
+                    "title": "تعز"
+                  },
+                  {
+                    "id": "ibb",
+                    "title": "إب"
+                  },
+                  {
+                    "id": "hodeidah",
+                    "title": "الحديدة"
+                  },
+                  {
+                    "id": "hadramout",
+                    "title": "حضرموت"
+                  },
+                  {
+                    "id": "marib",
+                    "title": "مأرب"
+                  },
+                  {
+                    "id": "dhamar",
+                    "title": "ذمار"
+                  },
+                  {
+                    "id": "al_bayda",
+                    "title": "البيضاء"
+                  },
+                  {
+                    "id": "lahj",
+                    "title": "لحج"
+                  },
+                  {
+                    "id": "abyan",
+                    "title": "أبين"
+                  },
+                  {
+                    "id": "shabwah",
+                    "title": "شبوة"
+                  },
+                  {
+                    "id": "saada",
+                    "title": "صعدة"
+                  },
+                  {
+                    "id": "hajjah",
+                    "title": "حجة"
+                  },
+                  {
+                    "id": "amran",
+                    "title": "عمران"
+                  },
+                  {
+                    "id": "al_mahwit",
+                    "title": "المحويت"
+                  },
+                  {
+                    "id": "raymah",
+                    "title": "ريمة"
+                  },
+                  {
+                    "id": "al_jawf",
+                    "title": "الجوف"
+                  },
+                  {
+                    "id": "al_dhale",
+                    "title": "الضالع"
+                  },
+                  {
+                    "id": "al_mahrah",
+                    "title": "المهرة"
+                  },
+                  {
+                    "id": "socotra",
+                    "title": "سقطرى"
+                  }
+                ]
+              },
+              {
+                "type": "Footer",
+                "label": "مراجعة الطلب",
+                "on-click-action": {
+                  "name": "navigate",
+                  "next": {
+                    "type": "screen",
+                    "name": "REVIEW"
+                  },
+                  "payload": {
+                    "car": "${screen.CAR.form.car}",
+                    "model_year": "${screen.CAR.form.model_year}",
+                    "services": "${data.services}",
+                    "customer_name": "${form.customer_name}",
+                    "governorate": "${form.governorate}"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "REVIEW",
+      "title": "مراجعة الطلب",
+      "data": {
+        "car": {
+          "type": "string",
+          "__example__": "camry"
+        },
+        "model_year": {
+          "type": "string",
+          "__example__": "2020"
+        },
+        "services": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "__example__": [
+            "seats",
+            "floor"
+          ]
+        },
+        "customer_name": {
+          "type": "string",
+          "__example__": "محمد"
+        },
+        "governorate": {
+          "type": "string",
+          "__example__": "taiz"
+        }
+      },
+      "terminal": true,
+      "success": true,
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "TextHeading",
+            "text": "✅ مراجعة الطلب"
+          },
+          {
+            "type": "TextBody",
+            "text": "سيتم إرسال طلبك إلى ملوك التنجيد للمراجعة وتحديد الموعد لاحقًا."
+          },
+          {
+            "type": "TextBody",
+            "text": "👤 الاسم:"
+          },
+          {
+            "type": "TextBody",
+            "text": "${data.customer_name}"
+          },
+          {
+            "type": "TextBody",
+            "text": "🚗 السيارة:"
+          },
+          {
+            "type": "TextBody",
+            "text": "${data.car}"
+          },
+          {
+            "type": "TextBody",
+            "text": "📅 سنة الموديل:"
+          },
+          {
+            "type": "TextBody",
+            "text": "${data.model_year}"
+          },
+          {
+            "type": "TextBody",
+            "text": "📍 المحافظة:"
+          },
+          {
+            "type": "TextBody",
+            "text": "${data.governorate}"
+          },
+          {
+            "type": "TextBody",
+            "text": "💰 الأسعار: المقاعد ‎̶6̶0̶,̶0̶0̶0̶‎ → 40,000 — الأرضية رقم واحد ‎̶2̶5̶,̶0̶0̶0̶‎ → 18,999 — الطبلون الملكي ‎̶6̶,̶0̶0̶0̶‎ → 3,999 — الطبلون العادي ‎̶4̶,̶0̶0̶0̶‎ → 2,999 ريال"
+          },
+          {
+            "type": "Footer",
+            "label": "إرسال الطلب",
+            "on-click-action": {
+              "name": "complete",
+              "payload": {
+                "car": "${screen.CAR.form.car}",
+                "model_year": "${screen.CAR.form.model_year}",
+                "services": "${data.services}",
+                "customer_name": "${screen.CUSTOMER.form.customer_name}",
+                "governorate": "${screen.CUSTOMER.form.governorate}"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

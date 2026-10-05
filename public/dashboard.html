@@ -953,6 +953,23 @@ button{
     background: rgba(220,53,69,.16);
 }
 
+/* إصلاح القائمة الجانبية على الجوال */
+.sidebar{
+    overflow-y:auto !important;
+    overflow-x:hidden !important;
+    -webkit-overflow-scrolling:touch;
+}
+
+.sidebar .nav-item{
+    flex-shrink:0;
+}
+
+.sidebar .nav-item[onclick*="whatsapp"]{
+    display:flex !important;
+    visibility:visible !important;
+    opacity:1 !important;
+}
+
 @media(max-width:700px) {
     .sidebar-brand img {
         width: 62px;
@@ -1024,7 +1041,13 @@ button{
 
     <div class="nav-label">التشغيل</div>
 
-    <button class="nav-item" onclick="openSection('customers')">
+    <button class="nav-item" onclick="openSection('offers')">
+        📢 العروض
+    </button>
+    <button class="nav-item" onclick="openSection('whatsapp')">
+        💬 واتساب
+    </button>
+<button class="nav-item" onclick="openSection('customers')">
         <span class="nav-icon">👥</span> العملاء
     </button>
 
@@ -1397,6 +1420,12 @@ button{
     </button>
 
     <button class="bottom-item"
+            onclick="openSection('whatsapp')">
+        <span class="icon">💬</span>
+        واتساب
+    </button>
+
+    <button class="bottom-item"
             onclick="toggleSidebar()">
         <span class="icon">▦</span>
         المزيد
@@ -1429,6 +1458,8 @@ function go(url){
 function openSection(section){
 
     const routes={
+        whatsapp:'/whatsapp.html',
+        offers:'/offers.html',
         customers:'/customers.html',
         vehicles:'/vehicles.html',
         'work-orders':'/work-orders.html',
